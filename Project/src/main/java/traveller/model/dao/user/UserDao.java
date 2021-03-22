@@ -1,9 +1,6 @@
 package traveller.model.dao.user;
 
-import exceptions.BadRequestException;
 import traveller.model.POJOs.User;
-
-import java.util.ArrayList;
 
 public interface UserDao {
 

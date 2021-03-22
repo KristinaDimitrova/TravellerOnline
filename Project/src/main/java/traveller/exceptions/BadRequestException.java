@@ -1,4 +1,4 @@
-package exceptions;
+package traveller.exceptions;
 
 public class BadRequestException extends Exception {
 

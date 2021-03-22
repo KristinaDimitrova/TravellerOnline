@@ -1,4 +1,4 @@
-package utilities;
+package traveller.utilities;
 
 
 public class ValidPattern {

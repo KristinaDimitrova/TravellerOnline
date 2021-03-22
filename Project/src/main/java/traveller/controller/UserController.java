@@ -1,11 +1,11 @@
 package traveller.controller;
 
-import exceptions.InvalidRegistrationInputException;
+import traveller.exceptions.InvalidRegistrationInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.POJOs.User;
 import traveller.model.dao.user.UserDBDao;
-import utilities.ValidPattern;
+import traveller.utilities.ValidPattern;
 
 
 @RestController
