@@ -1,5 +1,9 @@
 package traveller.model.dao.user;
 
+<<<<<<< Updated upstream
+=======
+import traveller.exceptions.BadRequestException;
+>>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -19,6 +23,16 @@ public class UserDBDao implements UserDao{ //todo
     @Override
     public User insertUser(User user) {
         //dark magic ...
+        return null;
+    }
+
+    @Override
+    public User getByName(String firstName, String lastName) {
+        return null;
+    }
+
+    @Override
+    public User getById(long id) throws BadRequestException {
         return null;
     }
 
