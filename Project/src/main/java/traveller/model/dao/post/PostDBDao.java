@@ -9,4 +9,6 @@ public class PostDBDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
 }
