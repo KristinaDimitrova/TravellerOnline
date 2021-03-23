@@ -2,24 +2,25 @@ package traveller.utilities;
 
 
 public class ValidPattern {
-    public static boolean name(String name) {
-        /* Names cannot include TODO
-        Symbols, numbers, unusual capitalization, repeating characters or punctuation.
-        Characters from multiple languages.
-        Titles of any kind (example: professional, religious).
-        Words or phrases in place of a name.
-        Offensive or suggestive words of any kind.*/
-        return true;
+
+    public static boolean names(String firstName, String lastName) {
+        String cyrPattern = "[А-Я][а-я][^#&<>\\\"~;$^%{}?]{1,20}$"; //cyrilic alphabet
+        String latPattern = "[A-Z][a-z][^#&<>\\\"~;$^%{}?]{1,20}$"; //latin alphabet
+        if(firstName.matches(cyrPattern) && lastName.matches(cyrPattern) ||
+            firstName.matches(latPattern) && lastName.matches(latPattern)){
+            return true;
+        }
+        return false;
     }
     public static boolean username(String username) {
+        // source :  https://mkyong.com/regular-expressions/how-to-validate-username-with-regular-expression/
         String userNamePattern = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
-       // source :  https://mkyong.com/regular-expressions/how-to-validate-username-with-regular-expression/
         return username.matches(userNamePattern);
     }
 
     public static boolean password(String password) {
-        String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
         // source : https://mkyong.com/regular-expressions/how-to-validate-password-with-regular-expression/
+        String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
         return password.matches(pattern);
     }
 

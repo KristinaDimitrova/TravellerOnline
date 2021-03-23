@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 @Getter
-/*@Entity fixme
-@Table(name="posts")*/
+
 public class Post {
     @Id
     private long id;

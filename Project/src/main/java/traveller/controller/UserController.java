@@ -1,24 +1,24 @@
 package traveller.controller;
 
-<<<<<<< Updated upstream
-=======
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import traveller.exceptions.BadRequestException;
->>>>>>> Stashed changes
 import traveller.exceptions.InvalidRegistrationInputException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import traveller.exceptions.LoginException;
+import traveller.exceptions.UnauthorizedException;
+import traveller.model.DTO.LoginUserDTO;
+import traveller.model.DTO.SignupUserDTO;
 import traveller.model.POJOs.User;
 import traveller.model.dao.user.UserDBDao;
-import traveller.utilities.ValidPattern;
-<<<<<<< Updated upstream
-=======
+import traveller.utilities.Validate;
 
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
->>>>>>> Stashed changes
+import java.io.IOException;
+import java.sql.SQLException;
 
 
 @RestController
@@ -27,26 +27,26 @@ public class UserController { //todo Moni
     @Autowired //=> turns it into singleton
     private UserDBDao userDao;
 
-    @GetMapping(value="/accounts/signup") //todo test
-    public String register(@RequestBody User user, BindingResult bindingResult) throws InvalidRegistrationInputException { //fixme exception
-        if(bindingResult.hasErrors()){//todo test if it works
-            return"Sorry, try again later";
-        }else {
-            validateFirstName(user.getFirstName());
-            validateLastName(user.getLastName(), user.getFirstName());
-            validateEmail(user.getEmail());
-            validateUsername(user.getUsername());
-            validatePassword(user.getPassword());
-            //todo encryptPassword()
-            userDao.insertUser(user);
-            //todo outcome from successful registration
-            //& outcome from failure
-            return "New registration created.";
+    @PostMapping(value="/singup") //fixme does not work
+    public String register(@RequestBody SignupUserDTO dto, HttpServletResponse response) throws InvalidRegistrationInputException {
+        Validate.firstLastNames(dto.getFirstName(), dto.getLastName());
+        Validate.email(dto.getEmail());
+        Validate.username(dto.getUsername());
+        if(!dto.getRepeatedPassword().equals(dto.getPassword())){
+            throw new InvalidRegistrationInputException("Passwords do not match.");
         }
+        Validate.password(dto.getPassword());
+        //todo encryptPassword()
+        //User user = new User(); todo
+        //userDao.insertUser(user); todo
+        //todo mailService.sendRegistrationEmail(user);
+        response.setStatus(200);
+        response.setHeader("Yes", "Success");
+        return "You're almost done! Please verify your email.";
     }
 
-    @GetMapping(value="/search?{firstName}{lastName}") //todo test PathVariable АКО СЕ НАМИРА В URL-a
-    public User getByName(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName){
+    @GetMapping(value="/search/{firstName}&{lastName}")
+    public User getByName(@PathVariable String firstName, @PathVariable String lastName){
         return userDao.getByName(firstName, lastName);
     }
 
@@ -55,79 +55,55 @@ public class UserController { //todo Moni
         return password;
     }
 
-    //register todo
+    @PostMapping(value="/login") //RequestParam АКО СЕ НАМИРА В формуляра за попълване
+    public void logIn(@RequestBody LoginUserDTO loginUserDto, HttpSession session, HttpServletResponse resp) throws BadRequestException, LoginException, IOException {
+        //does user by this id exist ?
+        /*if(userDao.getById(userId) == null || !userDao.getById(userId).getPassword().matches(password)){
+            throw new LoginException("Username and password do not match.");
+        }*/
+        String password = loginUserDto.getPassword();
+        String username = loginUserDto.getUsername();
+        resp.getWriter().append("Your username is " + loginUserDto.getUsername() + " and you password - " + password);
+        if(SessionManager.isUserLoggedIn(session)){//ако вече е логнат
+            throw new LoginException("Already logged in.");
+        }
+        if (username.isEmpty() || password.isEmpty()) {
+            resp.setStatus(400);
+            resp.getWriter().append("Email or password field is empty.");
+            return;
+        }
+        try {
+            User user = userDao.getByUsername(username);
+            if (user == null || !user.getPassword().equals(loginUserDto.getPassword())) {
+                resp.setStatus(400);
+                resp.getWriter().append("Combination of password and username is incorrect.");
+                return;
+            }
+            SessionManager.userLogsIn(session, user.getId());
+        } catch (SQLException throwables) {
+            resp.getWriter().append("Please try again later.");
+        }
 
+        //redirection to home page
+        //resp.sendRedirect("http://localhost:7878/newsfeed"); //todo sends to newsfeed servlet
 
-
-
-    //validate email
-    private void validateEmail(String email) throws InvalidRegistrationInputException {
-        if(!ValidPattern.email(email)){
-            throw new InvalidRegistrationInputException("Please enter a valid email.");
-        }
-        if(userDao.emailExists(email)){
-            throw new InvalidRegistrationInputException("A Trivadu account already exists with this email address.");
-        }
-    }
-    //validate username -> no spaces, no strange characters
-    private void validateUsername(String username) throws InvalidRegistrationInputException {
-        //correct pattern & username does not exist
-        if(!ValidPattern.username(username)){
-            throw new InvalidRegistrationInputException("Please enter a valid username.");
-        }
-        if(userDao.usernameExists(username)){
-            throw new InvalidRegistrationInputException("A Trivadu account already exists with this username.");
-        }
-    }
-    //validate names
-    private void validateFirstName(String firstName) throws InvalidRegistrationInputException {
-        if(!ValidPattern.name(firstName)){
-            throw new InvalidRegistrationInputException("Please enter a valid first name.");
-        }
-    }
-
-    private void validateLastName(String lastName, String firstName) throws InvalidRegistrationInputException {
-        //todo has to check whether lastName uses the same alphabet
-        if(!ValidPattern.name(lastName)){
-            throw new InvalidRegistrationInputException("Please enter a valid last name.");
-            //todo appropriate message
-            //The validator must throw some specific exception depending on the type of mistake
-            //e.g. "Names on Facebook can't have characters from more than one alphabet."
-        }
-    }
-    //validate password -> has to be longer than 6 characters extra: strong password
-    private void validatePassword(String password) throws InvalidRegistrationInputException {
-        if(!ValidPattern.password(password)){ //todo Can controller classes throw exception?
-            //extra task:
-            //validator can throw specific exception messages depending on the type of irregularity
-            //e.g., Your password must be at least 6 characters long. Please try another.
-            throw new InvalidRegistrationInputException("Please enter a valid password.");
-        }
     }
 
-    //login todo
-    @PostMapping(value="/login/{userId}") //RequestParam АКО СЕ НАМИРА В формуляра за попълване
-    public void logIn(@RequestBody User user, HttpSession session, @RequestParam("username") String username,
-                      @RequestParam("password") String password){
-
-        if(userDao.getById(user.getId()) == null || !userDao.getById(user.getId()).getPassword().matches(password)){
-            //username and password do not match
+    @PostMapping(value="/logout/{userId}") //id, session
+    public void logOut(HttpSession session, @PathVariable("userId") String userId, HttpServletResponse resp) throws IOException, LoginException { //Path variable OR RequestBody User user
+        //confirm that the person who is accessing this url is one with the same id
+        if(!SessionManager.isUserLoggedIn(session)){
+            throw new LoginException("You have already logged out.");
         }
-
-        if(SessionManager.validateLogin(session)){
-            //ако вече е логнат
-        } else{
-            SessionManager.userLogsIn(session, user);
-            //redirection to home page
-        }
+        SessionManager.userLogsOut(session);
+        resp.sendRedirect("http://localhost:7878/homepage"); //todo service
     }
 
-    @PostMapping(value="/exit/{userId}")
-    public void
 
     //edit profile todo
         //make sure the person is logged in
         //make sure the input is valid
+
     @PostMapping(value="/edit/password")
     @ResponseBody //това казва на Spring, че ние ще определим какъв ще е отговора
     public void editPassword(HttpServletRequest req, HttpServletResponse resp, @RequestParam("old password") String oldPassword, @RequestParam("new password") String newPassword, @RequestParam("new password2") String newPasswordRep){
@@ -140,14 +116,32 @@ public class UserController { //todo Moni
         //ако !newPassword.equals(newPasswordRep) => Passwords do not match
     }
 
+    @DeleteMapping(value="/users/{id}/deleteAccount")
+    public String deleteAccount(@PathVariable long id, HttpSession session) throws BadRequestException {
+        //session must save user id
+        //actor authentication -> are you the same person ?
+        if(!SessionManager.isUserLoggedIn(session)){
+            throw new
+        }
 
-    //delete todo
+        User user = null;
+        user = userDao.getById(id);
+        userDao.deleteUser(user);
+        return "Trivadu will miss you. Hope to see you soon.";
+    }
 
     //follow user todo
-
+    @PostMapping(value="/users/{id}/follow")
+    public String followUser(@PathVariable long id, HttpSession session){
+        //do both users exist ?
+        //session must save user id => extracting userId from session object
+        long actorId = 12345; //delete me
+        User follower = userDao.getById(actorId);
+        User followed = userDao.getById()
+    }
 
     @GetMapping(value="/users/{id}")
-    public User getById(@PathVariable("id") String id){
+    public User getById(@PathVariable long id){
         //get by id todo
         long idNum = Long.valueOf(id);
         try {
@@ -171,7 +165,27 @@ public class UserController { //todo Moni
 
     }
 
-    //todo user is logged => session manager
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleException(BadRequestException e){
+        return "Sorry, bad request! -> " + e.getMessage();
+    }
 
+    @ExceptionHandler(InvalidRegistrationInputException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public String handleException(InvalidRegistrationInputException e){
+        return "We couldn't create an account for you. "  + e.getMessage();
+    }
 
+    @ExceptionHandler(LoginException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleException(LoginException e){
+        return "Forbidden operation - " + e.getMessage();
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleException(UnauthorizedException e){
+        return "Unathorized operation - " + e.getMessage();
+    }
 }

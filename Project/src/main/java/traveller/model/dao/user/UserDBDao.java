@@ -1,9 +1,8 @@
 package traveller.model.dao.user;
 
-<<<<<<< Updated upstream
-=======
+
+
 import traveller.exceptions.BadRequestException;
->>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -12,6 +11,7 @@ import traveller.model.POJOs.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @Component
 public class UserDBDao implements UserDao{ //todo
@@ -32,8 +32,44 @@ public class UserDBDao implements UserDao{ //todo
     }
 
     @Override
-    public User getById(long id) throws BadRequestException {
+    public User getByUsername(String username) throws SQLException {
         return null;
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public User getById(long id) throws BadRequestException {
+        // interacting with db
+        return null;
+    }
+
+    @Override
+    public ArrayList<User> getAllUsers() {
+        return null;
+    }
+
+    @Override
+    public User editUser(User u) {
+        return null;
+    }
+
+    @Override
+    public void deleteUser(User u) {
+
+    }
+
+    @Override
+    public void unfollow(User follower, User followed) {
+
+    }
+
+    @Override
+    public void follow(User follower, User followed) {
+
     }
 
     @Override
