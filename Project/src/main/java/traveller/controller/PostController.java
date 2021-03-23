@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import traveller.model.dao.post.PostDBDao;
 
 @RestController
-public class PostController {
+public class PostController extends MotherController{
 
     @Autowired
     private PostDBDao postDBDao;

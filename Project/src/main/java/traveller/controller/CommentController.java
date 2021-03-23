@@ -10,7 +10,7 @@ import traveller.model.dao.comment.CommentDBDao;
 import javax.xml.stream.events.Comment; //delete
 
 @RestController
-public class CommentController { //todo Moni
+public class CommentController extends MotherController{ //todo Moni
     @Autowired
     private CommentDBDao commentDao;
 

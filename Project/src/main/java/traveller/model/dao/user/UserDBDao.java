@@ -42,8 +42,10 @@ public class UserDBDao implements UserDao{ //todo
     }
 
     @Override
-    public User getById(long id) throws BadRequestException {
+    public User getById(long id) {
         // interacting with db
+        //counts amount of users with this id : 0 or 1
+        //if its 0, then returns null
         return null;
     }
 
@@ -63,13 +65,13 @@ public class UserDBDao implements UserDao{ //todo
     }
 
     @Override
-    public void unfollow(User follower, User followed) {
-
+    public boolean unfollow(long followerId, long followedId) {
+        return false;
     }
 
     @Override
-    public void follow(User follower, User followed) {
-
+    public boolean follow(long followerId, long followedId) {
+        return false;
     }
 
     @Override
