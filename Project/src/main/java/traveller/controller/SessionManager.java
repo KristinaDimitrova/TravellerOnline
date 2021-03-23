@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class SessionManager {
-    private static final String LOGGED_IN = "in";
+    static final String LOGGED_IN = "in";
 
     public static boolean isUserLoggedIn(HttpSession session){
         if(session.isNew()) {

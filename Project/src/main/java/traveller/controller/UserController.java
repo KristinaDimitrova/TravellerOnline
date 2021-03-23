@@ -2,23 +2,21 @@ package traveller.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
-import traveller.exceptions.BadRequestException;
-import traveller.exceptions.InvalidRegistrationInputException;
+import traveller.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import traveller.exceptions.LoginException;
-import traveller.exceptions.UnauthorizedException;
 import traveller.model.DTO.LoginUserDTO;
 import traveller.model.DTO.SignupUserDTO;
 import traveller.model.POJOs.User;
 import traveller.model.dao.user.UserDBDao;
 import traveller.utilities.Validate;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+
+import static traveller.controller.SessionManager.LOGGED_IN;
 
 
 @RestController
@@ -27,8 +25,8 @@ public class UserController { //todo Moni
     @Autowired //=> turns it into singleton
     private UserDBDao userDao;
 
-    @PostMapping(value="/singup") //fixme does not work
-    public String register(@RequestBody SignupUserDTO dto, HttpServletResponse response) throws InvalidRegistrationInputException {
+    @PostMapping(value="/singup")
+    public String register(@RequestBody SignupUserDTO dto) throws InvalidRegistrationInputException {
         Validate.firstLastNames(dto.getFirstName(), dto.getLastName());
         Validate.email(dto.getEmail());
         Validate.username(dto.getUsername());
@@ -40,8 +38,6 @@ public class UserController { //todo Moni
         //User user = new User(); todo
         //userDao.insertUser(user); todo
         //todo mailService.sendRegistrationEmail(user);
-        response.setStatus(200);
-        response.setHeader("Yes", "Success");
         return "You're almost done! Please verify your email.";
     }
 
@@ -56,7 +52,7 @@ public class UserController { //todo Moni
     }
 
     @PostMapping(value="/login") //RequestParam АКО СЕ НАМИРА В формуляра за попълване
-    public void logIn(@RequestBody LoginUserDTO loginUserDto, HttpSession session, HttpServletResponse resp) throws BadRequestException, LoginException, IOException {
+    public void logIn(@RequestBody LoginUserDTO loginUserDto, HttpSession session, HttpServletResponse resp) throws LoginException, IOException {
         //does user by this id exist ?
         /*if(userDao.getById(userId) == null || !userDao.getById(userId).getPassword().matches(password)){
             throw new LoginException("Username and password do not match.");
@@ -80,7 +76,7 @@ public class UserController { //todo Moni
                 return;
             }
             SessionManager.userLogsIn(session, user.getId());
-        } catch (SQLException throwables) {
+        } catch (SQLException e) {
             resp.getWriter().append("Please try again later.");
         }
 
@@ -106,7 +102,7 @@ public class UserController { //todo Moni
 
     @PostMapping(value="/edit/password")
     @ResponseBody //това казва на Spring, че ние ще определим какъв ще е отговора
-    public void editPassword(HttpServletRequest req, HttpServletResponse resp, @RequestParam("old password") String oldPassword, @RequestParam("new password") String newPassword, @RequestParam("new password2") String newPasswordRep){
+    public void editPassword(HttpServletRequest req, @RequestParam("old password") String oldPassword, @RequestParam("new password") String newPassword, @RequestParam("new password2") String newPasswordRep){
         if(req.getSession().isNew() || req.getAttribute("LOGGED") == null){
             //изритваш потребителя и му пращаш съобщение да се логне
         }
@@ -117,11 +113,11 @@ public class UserController { //todo Moni
     }
 
     @DeleteMapping(value="/users/{id}/deleteAccount")
-    public String deleteAccount(@PathVariable long id, HttpSession session) throws BadRequestException {
+    public String deleteAccount(@PathVariable long id, HttpSession session) throws UnauthorizedException {
         //session must save user id
         //actor authentication -> are you the same person ?
         if(!SessionManager.isUserLoggedIn(session)){
-            throw new
+            throw new UnauthorizedException("You must log in first.");
         }
 
         User user = null;
@@ -132,60 +128,57 @@ public class UserController { //todo Moni
 
     //follow user todo
     @PostMapping(value="/users/{id}/follow")
-    public String followUser(@PathVariable long id, HttpSession session){
-        //do both users exist ?
-        //session must save user id => extracting userId from session object
-        long actorId = 12345; //delete me
-        User follower = userDao.getById(actorId);
-        User followed = userDao.getById()
+    public String followUser(@PathVariable long id, HttpSession session) throws UnauthorizedException, NotFoundException, BadRequestException {
+        long actor = userHasLoggedInt(session);
+        userExists(id);
+        notTheSameUser(actor, id);
+        if(userDao.follow(actor,id)){
+            return "Followed";
+        } else{ //this block emulates a 'follow' button.
+            userDao.unfollow(actor, id);
+            return "Unfollowed";
+        }
+    }
+
+    private void notTheSameUser(long actor, long id) throws BadRequestException {
+        if(actor == id){
+            throw new BadRequestException("You cannot follow you own account.");
+        }
+    }
+
+    @PostMapping(value="users/{id}/unfollow")
+    public String unfollowUser(@PathVariable("id") long id, HttpSession session) throws UnauthorizedException, NotFoundException, BadRequestException {
+        //do we have to validate the existence of both users ? (Here?)
+        long actor = userHasLoggedInt(session);
+        userExists(id);
+        notTheSameUser(actor, id);
+        if(userDao.unfollow(actor,id)){
+            return "Unfollowed";
+        } else{ //this block emulates a 'follow' button.
+            userDao.follow(actor, id);
+            return "Followed";
+        }
+
+    }
+
+    private void userExists(long id) throws NotFoundException {
+        if(userDao.getById(id) == null){
+            throw new NotFoundException("User not found");
+        }
+    }
+
+    private long userHasLoggedInt(HttpSession session) throws UnauthorizedException {
+        if(!SessionManager.isUserLoggedIn(session)){
+            throw new UnauthorizedException("You must log in first.");
+        }
+        return (Long) session.getAttribute(LOGGED_IN);
     }
 
     @GetMapping(value="/users/{id}")
     public User getById(@PathVariable long id){
-        //get by id todo
-        long idNum = Long.valueOf(id);
-        try {
-            return userDao.getById(idNum);
-        }catch (BadRequestException e) {
-            //outcome to the response
-        }
-        return null;
-
+        return userDao.getById(id);
     }
-
     //unfollow user todo
-    @GetMapping(value="users/{id}/unfollow")
-    public void unfollowUser(@PathVariable("id") String id){
-        long idUnfollowed = Long.valueOf(id);
-        //has to validate the existence of this user
-        //has to validate the existence of the other user
-        //has to validate session attribute Logged in
 
-        //userDao.unfollow()fixme
 
-    }
-
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleException(BadRequestException e){
-        return "Sorry, bad request! -> " + e.getMessage();
-    }
-
-    @ExceptionHandler(InvalidRegistrationInputException.class)
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    public String handleException(InvalidRegistrationInputException e){
-        return "We couldn't create an account for you. "  + e.getMessage();
-    }
-
-    @ExceptionHandler(LoginException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handleException(LoginException e){
-        return "Forbidden operation - " + e.getMessage();
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleException(UnauthorizedException e){
-        return "Unathorized operation - " + e.getMessage();
-    }
 }
