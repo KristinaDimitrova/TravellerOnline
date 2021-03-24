@@ -1,7 +1,5 @@
 package traveller.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import traveller.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,12 +7,14 @@ import traveller.model.DTO.LoginUserDTO;
 import traveller.model.DTO.SignupUserDTO;
 import traveller.model.POJOs.User;
 import traveller.model.dao.user.UserDBDao;
+import traveller.utilities.ValidPattern;
 import traveller.utilities.Validate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static traveller.controller.SessionManager.LOGGED_IN;
 
@@ -65,7 +65,7 @@ public class UserController { //todo Moni
         }
         if (username.isEmpty() || password.isEmpty()) {
             resp.setStatus(400);
-            resp.getWriter().append("Email or password field is empty.");
+            resp.getWriter().append("Username or password field is empty.");
             return;
         }
         try {
@@ -79,20 +79,15 @@ public class UserController { //todo Moni
         } catch (SQLException e) {
             resp.getWriter().append("Please try again later.");
         }
-
-        //redirection to home page
-        //resp.sendRedirect("http://localhost:7878/newsfeed"); //todo sends to newsfeed servlet
+        //resp.sendRedirect("http://localhost:7878/newsfeed"); //must send to newsfeed servlet todo
 
     }
 
     @PostMapping(value="/logout/{userId}") //id, session
-    public void logOut(HttpSession session, @PathVariable("userId") String userId, HttpServletResponse resp) throws IOException, LoginException { //Path variable OR RequestBody User user
-        //confirm that the person who is accessing this url is one with the same id
-        if(!SessionManager.isUserLoggedIn(session)){
-            throw new LoginException("You have already logged out.");
-        }
+    public void logOut(HttpSession session, @PathVariable("userId") String userId, HttpServletResponse resp) throws IOException, UnauthorizedException { //Path variable OR RequestBody User user
+        userHasLoggedIn(session);
         SessionManager.userLogsOut(session);
-        resp.sendRedirect("http://localhost:7878/homepage"); //todo service
+        //resp.sendRedirect("http://localhost:7878/homepage"); //todo service
     }
 
 
@@ -102,34 +97,47 @@ public class UserController { //todo Moni
 
     @PostMapping(value="/edit/password")
     @ResponseBody //това казва на Spring, че ние ще определим какъв ще е отговора
-    public void editPassword(HttpServletRequest req, @RequestParam("old password") String oldPassword, @RequestParam("new password") String newPassword, @RequestParam("new password2") String newPasswordRep){
-        if(req.getSession().isNew() || req.getAttribute("LOGGED") == null){
-            //изритваш потребителя и му пращаш съобщение да се логне
-        }
-        //ако oldPassword не е вярна => Enter a valid password and try again
-
-        //ako newPassword e <= 5 символа => Too short //todo Кога ми е нужно да слагам код в response?
-        //ако !newPassword.equals(newPasswordRep) => Passwords do not match
+    public String editPassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
+                             @RequestParam("repeatedNewPassword") String repeatedNewPassword) throws UnauthorizedException, InvalidRegistrationInputException, BadRequestException {
+        long actor = userHasLoggedIn(session);
+        //check user's password
+        passwordMatches(oldPassword, userDao.getById(actor).getPassword());
+        Validate.password(newPassword);
+        userDao.changePassword(actor, newPassword);
+        //todo optional send email with notification
+        return "Password changed.";
+        //todo Кога ми е нужно да слагам код в response и кога мога да си хвърля Exception?
     }
 
-    @DeleteMapping(value="/users/{id}/deleteAccount")
-    public String deleteAccount(@PathVariable long id, HttpSession session) throws UnauthorizedException {
-        //session must save user id
-        //actor authentication -> are you the same person ?
-        if(!SessionManager.isUserLoggedIn(session)){
-            throw new UnauthorizedException("You must log in first.");
+    private void passwordMatches(String passwordOne, String passwordTwo) throws BadRequestException {
+        if(!passwordOne.equals(passwordTwo)){
+            throw new BadRequestException("Passwords must match.");
         }
+    }
 
-        User user = null;
-        user = userDao.getById(id);
+    @PostMapping(value="/edit/username")
+    public void editUsername(HttpSession session, @RequestParam("newUsername") String newUsername, @RequestParam("password") String password) throws UnauthorizedException {
+        userHasLoggedIn(session);
+        //new username is taken
+        try {
+            if (userDao.getByUsername(newUsername) != null);
+        }catch(SQLException e){
+            //todo
+        }
+        //password is incorrect
+    }
+
+
+    @DeleteMapping(value="/users/deleteAccount")
+    public String deleteAccount(HttpSession session) throws UnauthorizedException {
+        long user = userHasLoggedIn(session);
         userDao.deleteUser(user);
         return "Trivadu will miss you. Hope to see you soon.";
     }
 
-    //follow user todo
     @PostMapping(value="/users/{id}/follow")
     public String followUser(@PathVariable long id, HttpSession session) throws UnauthorizedException, NotFoundException, BadRequestException {
-        long actor = userHasLoggedInt(session);
+        long actor = userHasLoggedIn(session);
         userExists(id);
         notTheSameUser(actor, id);
         if(userDao.follow(actor,id)){
@@ -140,25 +148,18 @@ public class UserController { //todo Moni
         }
     }
 
-    private void notTheSameUser(long actor, long id) throws BadRequestException {
-        if(actor == id){
-            throw new BadRequestException("You cannot follow you own account.");
-        }
-    }
-
     @PostMapping(value="users/{id}/unfollow")
     public String unfollowUser(@PathVariable("id") long id, HttpSession session) throws UnauthorizedException, NotFoundException, BadRequestException {
         //do we have to validate the existence of both users ? (Here?)
-        long actor = userHasLoggedInt(session);
+        long actor = userHasLoggedIn(session);
         userExists(id);
         notTheSameUser(actor, id);
         if(userDao.unfollow(actor,id)){
             return "Unfollowed";
-        } else{ //this block emulates a 'follow' button.
+        } else{         //this block emulates a 'follow' button.
             userDao.follow(actor, id);
             return "Followed";
         }
-
     }
 
     private void userExists(long id) throws NotFoundException {
@@ -167,7 +168,13 @@ public class UserController { //todo Moni
         }
     }
 
-    private long userHasLoggedInt(HttpSession session) throws UnauthorizedException {
+    private void notTheSameUser(long actor, long id) throws BadRequestException {
+        if(actor == id){
+            throw new BadRequestException("You cannot follow you own account.");
+        }
+    }
+
+    private long userHasLoggedIn(HttpSession session) throws UnauthorizedException {
         if(!SessionManager.isUserLoggedIn(session)){
             throw new UnauthorizedException("You must log in first.");
         }
@@ -178,7 +185,5 @@ public class UserController { //todo Moni
     public User getById(@PathVariable long id){
         return userDao.getById(id);
     }
-    //unfollow user todo
-
 
 }

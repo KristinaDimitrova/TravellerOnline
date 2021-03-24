@@ -13,8 +13,8 @@ public interface UserDao {
     User getByEmail(String email) throws SQLException;
     User getById(long id); //return null if user does not exist => can be used to verify the existence of someone in db
     ArrayList<User> getAllUsers();
-    User editUser(User u);
-    void deleteUser(User u);
+    User editUser(long userId);
+    void deleteUser(long userId);
     /*Follow and unfollow methods return TRUE
       if the corresponding database table creates a new record
       of the action and return FALSE
@@ -25,4 +25,6 @@ public interface UserDao {
     boolean usernameExists(String username);
 
     boolean emailExists(String email);
+
+    void changePassword(long userId, String newPassword);
 }

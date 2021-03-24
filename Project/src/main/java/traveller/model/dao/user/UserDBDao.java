@@ -55,14 +55,15 @@ public class UserDBDao implements UserDao{ //todo
     }
 
     @Override
-    public User editUser(User u) {
+    public User editUser(long userId) {
         return null;
     }
 
     @Override
-    public void deleteUser(User u) {
+    public void deleteUser(long userId) {
 
     }
+
 
     @Override
     public boolean unfollow(long followerId, long followedId) {
@@ -100,5 +101,10 @@ public class UserDBDao implements UserDao{ //todo
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public void changePassword(long userId, String newPassword) {
+
     }
 }
