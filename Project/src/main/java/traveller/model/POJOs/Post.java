@@ -4,14 +4,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+//<<<<<<< HEAD
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+//=======
 import javax.persistence.*;
+//>>>>>>> c0b50d11bc6e4eb84187b069ec682629cb719384
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Setter
 @Getter
 @Entity
-@Table(name="posts")
+//@Table(name="posts")
 public class Post {
 
     public Post(String locationType, String videoUrl, long ownerId, LocalDateTime createdAt, String latitude, String longitude) {

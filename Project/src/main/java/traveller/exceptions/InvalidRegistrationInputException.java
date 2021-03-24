@@ -6,3 +6,4 @@ public class InvalidRegistrationInputException extends Exception {
         super(message);
     }
 }
+
