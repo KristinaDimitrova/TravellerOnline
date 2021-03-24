@@ -1,49 +1,47 @@
 package traveller.model.POJOs;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//<<<<<<< HEAD
-import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-//=======
 import javax.persistence.*;
-//>>>>>>> c0b50d11bc6e4eb84187b069ec682629cb719384
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
 @Getter
 @Entity
-//@Table(name="posts")
+@Table(name="posts")
 public class Post {
 
-    public Post(String locationType, String videoUrl, long ownerId, LocalDateTime createdAt, String latitude, String longitude) {
-        this.locationType = locationType;
-        this.videoUrl = videoUrl;
-        this.ownerId = ownerId;
+    public Post( LocalDateTime createdAt, String latitude, String longitude) {
         this.createdAt = createdAt;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
-    private String locationType; //fixme това е foreign key в таблицата
-    @Column
     private String videoUrl;
-    @Column
-    private long ownerId;
-    @Column
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
-    @Column
     private String latitude;
-    @Column
     private String longitude;
+    @ManyToOne
+    @JoinColumn(name = "location_type_id")
+    private LocationType locationType;
+    @ManyToOne
+    @JoinColumn(name = "owner_id" )
+    private User owner;
+    @OneToMany(mappedBy = "post_id")
+    private List<Image> images;
+    @OneToMany(mappedBy = "post_id")
+    private List<Comment> comments;
 }
 
 

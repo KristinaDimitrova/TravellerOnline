@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface PostDao {
 
-    Post getPostById(int id);
-    List<Post> getNewsfeedOrderByParameter(String param, long userId) throws SQLException;
-    List<Post> getPostsByParameterOrderByParam(String s1, String s2);
+    List<Post> getNewsFeed(long id);
+
+
 
 }

@@ -5,14 +5,19 @@ import org.springframework.web.bind.annotation.*;
 import traveller.exceptions.BadRequestException;
 import traveller.model.POJOs.Post;
 import traveller.model.dao.post.PostDBDao;
+import traveller.model.services.PostService;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
 public class PostController extends MotherController{
 
+    @Autowired
+    private PostService postService;
     @Autowired
     private PostDBDao postDBDao;
 
@@ -30,7 +35,14 @@ public class PostController extends MotherController{
 
     @GetMapping("/post/get/{id}")
     public Post getById(@PathVariable int id ){
-        return postDBDao.getPostById(id);
+        Optional<Post> post =  postService.getPostById(id);
+        if(post.isPresent()){
+            return post.get() ;
+        }
+        else {
+            throw new BadRequestException("Post not found");
+        }
+
     }
 
     @DeleteMapping("post/delete")
@@ -59,11 +71,10 @@ public class PostController extends MotherController{
         return ":D";
     }
 
-    @GetMapping("post/get-all/{param}")
-    public List<Post> getNewsfeed(@PathVariable String param) throws SQLException {
-
-        int id = 0;// get user id from session
-        return postDBDao.getNewsfeedOrderByParameter(param ,id);
+    @GetMapping("post/newsfeed")
+    public List<Post> getNewsfeed(HttpSession session) throws SQLException {
+        long id = (long) session.getAttribute(SessionManager.LOGGED_IN);
+        return postService.getNewsFeed(id);
     }
 
     @GetMapping("post/search/{by}/{ordered}")

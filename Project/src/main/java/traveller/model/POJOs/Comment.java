@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Comment {
    @Id
-   private int id;
+   private long id;
    @Column
    private int ownerId;
    @Column
