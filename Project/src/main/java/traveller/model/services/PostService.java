@@ -26,15 +26,19 @@ public class PostService {
     @Autowired
     UserRepository userRepository;
 
-    public Post addNewPost(PostDTO postDTO, User user){
+    public Post addNewPost(PostDTO postDTO, long userId){
         Post post = new Post(postDTO);
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
-        post.setOwner(user);
+        post.setOwner(userRepository.getById(userId));
         return postRepo.save(post);
     }
 
-    public Optional<Post> getPostById(int id) {
-        return postRepo.findById(id);
+    public Post getPostById(int id) {
+        Optional<Post> optionalPost = postRepo.findById(id);
+        if(optionalPost.isPresent()){
+            return optionalPost.get();
+        }
+        else throw new NotFoundException("There is no post with this ID!");
     }
 
     public Post editPost(int postId, PostDTO postDTO ){
@@ -50,6 +54,10 @@ public class PostService {
         else {
             throw new NotFoundException("There is no post with this ID!");
         }
+    }
+
+    public void deletePost (long postId){
+        postRepo.deletePost(postId);
     }
 
     public List<Post> getNewsFeed( long userId){

@@ -5,15 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import traveller.exceptions.BadRequestException;
 import traveller.model.DTO.postDTO.PostDTO;
 import traveller.model.POJOs.Post;
-import traveller.model.dao.post.PostDBDao;
-import traveller.model.repositoriesUser.UserRepository;
 import traveller.model.services.PostService;
-
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 public class PostController extends AbstractController {
@@ -21,21 +16,28 @@ public class PostController extends AbstractController {
     @Autowired
     private PostService postService;
     @Autowired
-    private UserRepository userRepository;
+    private SessionManager sessionManager;
 
-    @PostMapping("/post/{id}")
-    public Post createPost(@PathVariable int id, @RequestBody PostDTO postDTO, HttpSession session){
-        if(SessionManager.isUserLoggedIn(session)){
-
-
+    @PostMapping("/post")
+    public Post createPost( @RequestBody PostDTO postDTO, HttpSession session){
+        if(sessionManager.isUserLoggedIn(session)){
+            return postService.addNewPost(postDTO, sessionManager.userHasLoggedIn(session) );
         }
         else{
             throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
         }
-
-
-        return postService.addNewPost(postDTO, );
     }
+
+    @GetMapping("/post/{id}")
+    public Post getById(@PathVariable int id, HttpSession session ){
+        if(sessionManager.isUserLoggedIn(session)){
+            return postService.getPostById(id);
+        }
+        else{
+            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
+        }
+    }
+
 
     @PutMapping("/post/{id}")
     public Post editPost(){
@@ -43,12 +45,6 @@ public class PostController extends AbstractController {
         return new Post();
     }
 
-    @GetMapping("/post/{id}")
-    public Post getById(@PathVariable int id ){
-
-
-        return new Post();
-    }
 
     @DeleteMapping("post/{id}")
     public String deletePost(){
@@ -56,7 +52,7 @@ public class PostController extends AbstractController {
         return "Post was deleted successfully!";
     }
 
-    @GetMapping("/post/like-or-unlike/{id}")
+    @GetMapping("/post/like/{id}")
     public String likeOrUnlikePost(@PathVariable int id ) throws BadRequestException{
         //if post does not exist throws BAD_REQUEST Exception
         // -if post is NOT liked and is NOT disliked : -> insert
@@ -66,7 +62,7 @@ public class PostController extends AbstractController {
         return ":D";
     }
 
-    @GetMapping("/post/like-or-unlike/{id}")
+    @GetMapping("/post/dislike/{id}")
     public String dislikeOrUndislikePost(@PathVariable int id ) throws BadRequestException {
         //if post does not exist throws BAD_REQUEST Exception
         // -if post is NOT liked and is NOT disliked : -> insert
