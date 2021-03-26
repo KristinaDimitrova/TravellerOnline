@@ -18,34 +18,27 @@ public class PostController extends MotherController{
 
     @Autowired
     private PostService postService;
-    @Autowired
-    private PostDBDao postDBDao;
 
-    @PostMapping("/post/create")
+    @PostMapping("/post")
     public Post createPost(@RequestBody Post post){
         //insert post into DB
         return post;
     }
 
-    @PutMapping("/post/edit")
+    @PutMapping("/post/{id}")
     public Post editPost(){
         // edit post
         return new Post();
     }
 
-    @GetMapping("/post/get/{id}")
+    @GetMapping("/post/{id}")
     public Post getById(@PathVariable int id ){
-        Optional<Post> post =  postService.getPostById(id);
-        if(post.isPresent()){
-            return post.get() ;
-        }
-        else {
-            throw new BadRequestException("Post not found");
-        }
 
+
+        return new Post();
     }
 
-    @DeleteMapping("post/delete")
+    @DeleteMapping("post/{id}")
     public String deletePost(){
         //delete post (comments delete cascade)
         return "Post was deleted successfully!";
@@ -77,8 +70,8 @@ public class PostController extends MotherController{
         return postService.getNewsFeed(id);
     }
 
-    @GetMapping("post/search/{by}/{ordered}")
-    public List<Post> search(@PathVariable String by, @PathVariable String ordered) throws SQLException {
+    @GetMapping("post/search")
+    public List<Post> search() throws SQLException {
         return null;
     }
 

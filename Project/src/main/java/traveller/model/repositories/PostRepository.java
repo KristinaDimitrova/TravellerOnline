@@ -7,7 +7,7 @@ import traveller.model.POJOs.Post;
 import java.util.List;
 
 @Repository
-public interface PostRepo extends JpaRepository<Post, Integer> {
+public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findByOwnerUsernameOrderByCreatedAt(String username);
     List<Post> findByLocationType_NameOrderByCreatedAt(String locationTypeName);

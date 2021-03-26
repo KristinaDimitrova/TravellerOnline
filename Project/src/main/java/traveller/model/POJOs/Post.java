@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+import traveller.model.DTO.postDTO.PostDTO;
 
 import javax.persistence.Id;
 
@@ -11,6 +13,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Component
 @NoArgsConstructor
 @Setter
 @Getter
@@ -18,10 +21,11 @@ import java.util.List;
 @Table(name="posts")
 public class Post {
 
-    public Post( LocalDateTime createdAt, String latitude, String longitude) {
-        this.createdAt = createdAt;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public Post(PostDTO postDTO) {
+        this.createdAt = LocalDateTime.now();
+        this.latitude = postDTO.getLatitude();
+        this.longitude = postDTO.getLongitude();
+        this.description = postDTO.getDescription();
     }
 
     @Id
@@ -32,15 +36,16 @@ public class Post {
     private LocalDateTime createdAt;
     private String latitude;
     private String longitude;
+    private String description;
     @ManyToOne
     @JoinColumn(name = "location_type_id")
     private LocationType locationType;
     @ManyToOne
     @JoinColumn(name = "owner_id" )
     private User owner;
-    @OneToMany(mappedBy = "post_id")
+    @OneToMany(mappedBy = "post")
     private List<Image> images;
-    @OneToMany(mappedBy = "post_id")
+    @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 }
 
