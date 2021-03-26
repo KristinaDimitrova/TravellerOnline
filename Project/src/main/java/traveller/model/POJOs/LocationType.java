@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
+import traveller.model.DTO.locationTypeDTO.LocationTypeDTO;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,6 +26,10 @@ public class LocationType {
     private List<Post> posts;
     public LocationType(String name){
         this.name = name;
+    }
+
+    public LocationType(LocationTypeDTO locationTypeDTO){
+        this.name = locationTypeDTO.getName();
     }
 
 }
