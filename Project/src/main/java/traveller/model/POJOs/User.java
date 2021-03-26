@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import traveller.model.DTO.SignupUserDTO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -21,6 +19,7 @@ import java.time.LocalDateTime;
 @Table(name="users")
 public class User { //todo Moni
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
     private String firstName;
@@ -31,10 +30,11 @@ public class User { //todo Moni
     @Column
     private String username;
     @Column
-    @JsonIgnore
     private String password;
     @Column
     private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "owner")
+    List<Post> posts;
 
     public User(SignupUserDTO userDTO) {
         firstName = userDTO.getFirstName();

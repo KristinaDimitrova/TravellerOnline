@@ -3,9 +3,9 @@ package traveller.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import traveller.exceptions.AuthenticationException;
 import traveller.exceptions.BadRequestException;
 import traveller.exceptions.InvalidRegistrationInputException;
-import traveller.exceptions.LoginException;
 import traveller.exceptions.AuthorizationException;
 
 public class AbstractController {
@@ -21,10 +21,10 @@ public class AbstractController {
         return "We couldn't create an account for you. "  + e.getMessage();
     }
 
-    @ExceptionHandler(LoginException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handleException(LoginException e){
-        return "Forbidden operation - " + e.getMessage();
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public String handleException(AuthenticationException e){
+        return "Service unavailable - " + e.getMessage();
     }
 
     @ExceptionHandler(AuthorizationException.class)
