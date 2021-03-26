@@ -5,13 +5,10 @@ import org.springframework.stereotype.Service;
 import traveller.exceptions.NotFoundException;
 import traveller.model.DTO.postDTO.PostDTO;
 import traveller.model.POJOs.Post;
-import traveller.model.POJOs.User;
 import traveller.model.dao.post.PostDBDao;
 import traveller.model.repositories.PostRepository;
-import traveller.model.repositoriesUser.UserRepository;
-import traveller.service.UserService;
+import traveller.model.repositories.UserRepository;
 
-import java.io.NotActiveException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,15 +30,15 @@ public class PostService {
         return postRepo.save(post);
     }
 
-    public Post getPostById(int id) {
+    public Post getPostById(long id) {
         Optional<Post> optionalPost = postRepo.findById(id);
         if(optionalPost.isPresent()){
             return optionalPost.get();
         }
-        else throw new NotFoundException("There is no post with this ID!");
+        else throw new NotFoundException("Post not found.");
     }
 
-    public Post editPost(int postId, PostDTO postDTO ){
+    public Post editPost(long postId, PostDTO postDTO ){
         Optional<Post> postOptional = postRepo.findById(postId);
         if(postOptional.isPresent()){
             Post post = postOptional.get();
@@ -52,7 +49,7 @@ public class PostService {
             return postRepo.save(post);
         }
         else {
-            throw new NotFoundException("There is no post with this ID!");
+            throw new NotFoundException("Post not found.");
         }
     }
 

@@ -18,17 +18,19 @@ public class PostController extends AbstractController {
     @Autowired
     private SessionManager sessionManager;
 
+/*
     @PostMapping("/post")
     public Post createPost( @RequestBody PostDTO postDTO, HttpSession session){
         if(sessionManager.isUserLoggedIn(session)){
-            return postService.addNewPost(postDTO, sessionManager.userHasLoggedIn(session) );
+            return postService.addNewPost(postDTO, sessionManager.isUserLoggedIn(session) );
         }
         else{
             throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
         }
     }
+*/
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/posts/{id}")
     public Post getById(@PathVariable int id, HttpSession session ){
         if(sessionManager.isUserLoggedIn(session)){
             return postService.getPostById(id);
@@ -39,20 +41,20 @@ public class PostController extends AbstractController {
     }
 
 
-    @PutMapping("/post/{id}")
+    @PutMapping("/posts/{id}")
     public Post editPost(){
         // edit post
         return new Post();
     }
 
 
-    @DeleteMapping("post/{id}")
+    @DeleteMapping("posts/{id}")
     public String deletePost(){
         //delete post (comments delete cascade)
         return "Post was deleted successfully!";
     }
 
-    @GetMapping("/post/like/{id}")
+    @GetMapping("/posts/like/{id}")
     public String likeOrUnlikePost(@PathVariable int id ) throws BadRequestException{
         //if post does not exist throws BAD_REQUEST Exception
         // -if post is NOT liked and is NOT disliked : -> insert
@@ -62,7 +64,7 @@ public class PostController extends AbstractController {
         return ":D";
     }
 
-    @GetMapping("/post/dislike/{id}")
+    @GetMapping("/posts/dislike/{id}")
     public String dislikeOrUndislikePost(@PathVariable int id ) throws BadRequestException {
         //if post does not exist throws BAD_REQUEST Exception
         // -if post is NOT liked and is NOT disliked : -> insert
@@ -72,16 +74,15 @@ public class PostController extends AbstractController {
         return ":D";
     }
 
-    @GetMapping("post/newsfeed")
+    @GetMapping("posts/newsfeed")
     public List<Post> getNewsfeed(HttpSession session) throws SQLException {
         long id = (long) session.getAttribute(SessionManager.LOGGED_IN);
         return postService.getNewsFeed(id);
     }
 
-    @GetMapping("post/search")
+    @GetMapping("posts/search")
     public List<Post> search() throws SQLException {
         return null;
     }
-
 
 }

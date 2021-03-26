@@ -57,4 +57,9 @@ public class Validate {
             System.out.println("Please enter a valid email address.");
         }
     }
+
+    public static void comment(String text) {
+        //must be longer than 0 characters
+        //must not contain
+    }
 }

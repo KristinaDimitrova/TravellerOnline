@@ -1,4 +1,4 @@
-package traveller.service;
+package traveller.model.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,12 +8,13 @@ import traveller.controller.SessionManager;
 import traveller.exceptions.AuthenticationException;
 import traveller.exceptions.InvalidRegistrationInputException;
 import traveller.exceptions.NotFoundException;
-import traveller.model.DTO.EditDetailsUserDTO;
-import traveller.model.DTO.SignupResponseUserDTO;
-import traveller.model.DTO.SignupUserDTO;
-import traveller.model.DTO.UserWithoutPasswordDTO;
+import traveller.model.DTO.*;
+import traveller.model.DTO.userDTO.EditDetailsUserDTO;
+import traveller.model.DTO.userDTO.SignupResponseUserDTO;
+import traveller.model.DTO.userDTO.SignupUserDTO;
+import traveller.model.DTO.userDTO.UserWithoutPasswordDTO;
 import traveller.model.POJOs.User;
-import traveller.model.repositoriesUser.UserRepository;
+import traveller.model.repositories.UserRepository;
 import traveller.utilities.Validate;
 
 import javax.servlet.http.HttpSession;
@@ -116,7 +117,7 @@ public class UserService {
         return new UserWithoutPasswordDTO(userRep.save(user));
     }
 
-    public void unfollowUser(long follower, long followed){
+    public MessageDTO unfollowUser(long follower, long followed){
         userRep.getById(followed); //does followed user exist ?
         //TODO
 
@@ -127,12 +128,14 @@ public class UserService {
         //            userDao.follow(actor, id);
         //            return "Followed";
         //        }
-
+        return new MessageDTO("Followed");
     }
 
-    public void followUser(long follower, long followed){
+    public MessageDTO followUser(long follower, long followed){
         userRep.getById(followed); //does followed user exist ?
         //TODO
+
+        return new MessageDTO("Unfollowed");
     }
 
 }

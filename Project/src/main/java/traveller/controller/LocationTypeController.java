@@ -1,3 +1,4 @@
+/*
 package traveller.controller;
 
 
@@ -52,3 +53,4 @@ public class LocationTypeController extends AbstractController{
 
 
 
+*/

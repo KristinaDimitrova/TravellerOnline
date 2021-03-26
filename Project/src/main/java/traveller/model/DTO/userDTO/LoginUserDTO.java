@@ -1,4 +1,4 @@
-package traveller.model.DTO;
+package traveller.model.DTO.userDTO;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +8,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class LoginUserDTO {
-    //user can login using email or password
-    private String email;
     private String username;
     private String password;
 }

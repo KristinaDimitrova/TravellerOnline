@@ -4,11 +4,10 @@ import traveller.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.DTO.*;
+import traveller.model.DTO.userDTO.*;
 import traveller.model.dao.user.UserDBDao;
-import traveller.model.repositoriesUser.UserRepository;
-import traveller.service.UserService;
-import traveller.utilities.Validate;
-import javax.servlet.http.HttpServletResponse;
+import traveller.model.repositories.UserRepository;
+import traveller.model.services.UserService;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class UserController { //todo Moni
     }
 
     @PostMapping(value="/login") //RequestParam АКО СЕ НАМИРА В формуляра за попълване
-    public UserWithoutPasswordDTO logIn(@RequestBody LoginUserDTO loginUserDTO, HttpSession session, HttpServletResponse resp){
+    public UserWithoutPasswordDTO logIn(@RequestBody LoginUserDTO loginUserDTO, HttpSession session){
         String password = loginUserDTO.getPassword();
         String username = loginUserDTO.getUsername();
         if(sessManager.isUserLoggedIn(session)){//ако вече е логнат
@@ -50,14 +49,16 @@ public class UserController { //todo Moni
     }
 
     @PostMapping(value="/logout") //id, session
-    public void logOut(HttpSession session) throws AuthorizationException { //Path variable OR RequestBody User user
+    public MessageDTO logOut(HttpSession session) { //Path variable OR RequestBody User user
         sessManager.authorizeLogin(session);
         sessManager.userLogsOut(session);
+        return new MessageDTO("You logged out.");
     }
 
     @PostMapping(value="users/edit")
-    public UserWithoutPasswordDTO editProfile(HttpSession session, @PathVariable("id") long id,@RequestBody EditDetailsUserDTO requestDTO){
+    public UserWithoutPasswordDTO editProfile(HttpSession session,@RequestBody EditDetailsUserDTO requestDTO){
         long actorId = sessManager.authorizeLogin(session);
+        requestDTO.setId(actorId);
         return userService.changeDetails(actorId, requestDTO);
     }
 
@@ -75,19 +76,20 @@ public class UserController { //todo Moni
         }
     }
 
-    @DeleteMapping(value="/users/deleteAccount")
-    public void deleteAccount(HttpSession session, @PathVariable(name="id") long id) {
+    @DeleteMapping(value="/users/delete")
+    public MessageDTO deleteAccount(HttpSession session, @PathVariable(name="id") long id) {
         long actorId = sessManager.authorizeLogin(session);
         theSameUser(id, actorId);
         userService.deleteUser(actorId);
         sessManager.userLogsOut(session);
+        return new MessageDTO("Account successfully deleted.");
     }
 
     @PostMapping(value="/users/{id}/follow")
-    public void followUser(@PathVariable long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
+    public MessageDTO followUser(@PathVariable long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
         long actor = sessManager.authorizeLogin(session);
         notTheSameUser(actor, id);
-        userService.followUser(actor, id);
+        return userService.followUser(actor, id);
     }
 
     @PostMapping(value="users/{id}/unfollow")
@@ -105,7 +107,7 @@ public class UserController { //todo Moni
 
     private void theSameUser(long id, long actorId) {
         if(actorId != id){
-            throw new BadRequestException("You cannot make changes to another person's account.");
+            throw new AuthorizationException("You cannot make changes to another person's account.");
         }
     }
 
@@ -113,5 +115,4 @@ public class UserController { //todo Moni
     public UserWithoutPasswordDTO findById(@PathVariable long id){
         return userService.findById(id);
     }
-
 }

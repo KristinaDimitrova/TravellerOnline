@@ -50,12 +50,8 @@ public class Post {
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Image> images;
-<<<<<<< Updated upstream
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
-=======
-    @OneToMany(mappedBy = "post") //NB name of reference from other POJO
->>>>>>> Stashed changes
     private List<Comment> comments;
 
 }
