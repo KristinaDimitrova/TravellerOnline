@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Table(name="comments")
 public class Comment {
    @Id
-   private int id;
+   private long id;
    @Column
    private int ownerId;
    @Column
