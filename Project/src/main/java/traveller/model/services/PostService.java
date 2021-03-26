@@ -2,22 +2,16 @@ package traveller.model.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import traveller.exceptions.AuthenticationException;
 import traveller.exceptions.AuthorizationException;
 import traveller.exceptions.NotFoundException;
 import traveller.model.DTO.MessageDTO;
 import traveller.model.DTO.postDTO.PostDTO;
 import traveller.model.POJOs.Post;
-import traveller.model.POJOs.User;
 import traveller.model.dao.post.PostDBDao;
 import traveller.model.repositories.PostRepository;
 import traveller.model.repositoriesUser.UserRepository;
-import traveller.service.UserService;
-
-import java.io.NotActiveException;
 import java.util.List;
 import java.util.Optional;
-import java.util.prefs.BackingStoreException;
 
 @Service
 public class PostService {
@@ -76,6 +70,28 @@ public class PostService {
         else {
             throw new NotFoundException("There is no post with this ID!");
         }
+    }
+
+    public MessageDTO likeOrUnlikePost(int postId, long userId){
+        String message = "";
+        getPostById(postId);
+
+        // -if post is NOT liked and is NOT disliked : -> insert
+        // user id(get from session), and post id (from path ) into users_likes_posts(ulp)
+        // - if post is NOT liked and IS disliked -> delete from users_dislikes_posts and insert into ulp
+        // - if  post IS liked -> delete from ulp
+
+        return new MessageDTO(message);
+    }
+
+    public MessageDTO dislikeOrUndislikePost(long postId, long userId){
+        String message = "";
+        //if post does not exist throws BAD_REQUEST Exception
+        // -if post is NOT liked and is NOT disliked : -> insert
+        // user id(get from session), and post id (from path ) into users_dislikes_posts(udp)
+        // - if post is NOT liked and IS disliked -> delete from users_dislikes_post s
+        // - if  post IS liked delete from ulp -> delete from users_likes_posts and insert into udp
+        return new MessageDTO(message);
     }
 
     public List<Post> getNewsFeed( long userId){

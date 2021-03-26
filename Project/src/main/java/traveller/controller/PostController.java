@@ -21,12 +21,7 @@ public class PostController extends AbstractController {
 
     @PostMapping("/post")
     public Post createPost( @RequestBody PostDTO postDTO, HttpSession session){
-        if(sessionManager.isUserLoggedIn(session)){
-            return postService.addNewPost(postDTO, sessionManager.userHasLoggedIn(session) );
-        }
-        else{
-            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
-        }
+        return postService.addNewPost(postDTO, sessionManager.authorizeLogin(session) );
     }
 
     @GetMapping("/post/{id}")
@@ -39,58 +34,38 @@ public class PostController extends AbstractController {
         }
     }
 
-
     @PutMapping("/post/{id}")
     public Post editPost(@RequestBody PostDTO postDTO, @PathVariable (name = "id") int postId, HttpSession session){
-        if(sessionManager.isUserLoggedIn(session)){
-            long userId = sessionManager.userHasLoggedIn(session);
-            return postService.editPost(postId, postDTO, userId);
-        }
-        else{
-            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
-        }
+        long userId = sessionManager.authorizeLogin(session);
+        return postService.editPost(postId, postDTO, userId);
     }
-
 
     @DeleteMapping("post/{id}")
-    public MessageDTO deletePost(@PathVariable (name = "id") int postId, HttpSession session){
-        if(sessionManager.isUserLoggedIn(session)){
-            long userId = sessionManager.userHasLoggedIn(session);
-            return postService.deletePost(postId, userId);
-        }
-        else{
-            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
-        }
+    public MessageDTO deletePost(@PathVariable (name = "id") int postId, HttpSession session) {
+        long userId = sessionManager.authorizeLogin(session);
+        return postService.deletePost(postId, userId);
     }
 
-    @GetMapping("/post/like/{id}")
-    public String likeOrUnlikePost(@PathVariable (name = "id") int postId, HttpSession session){
-        //if post does not exist throws BAD_REQUEST Exception
-        // -if post is NOT liked and is NOT disliked : -> insert
-        // user id(get from session), and post id (from path ) into users_likes_posts(ulp)
-        // - if post is NOT liked and IS disliked -> delete from users_dislikes_posts and insert into ulp
-        // - if  post IS liked -> delete from ulp
-        return ":D";
+    @PostMapping("/post/like/{id}")
+    public MessageDTO likeOrUnlikePost(@PathVariable (name = "id") int postId, HttpSession session){
+        long userId = sessionManager.authorizeLogin(session);
+        return postService.likeOrUnlikePost(postId, userId);
     }
 
-    @GetMapping("/post/dislike/{id}")
-    public String dislikeOrUndislikePost(@PathVariable int id ) throws BadRequestException {
-        //if post does not exist throws BAD_REQUEST Exception
-        // -if post is NOT liked and is NOT disliked : -> insert
-        // user id(get from session), and post id (from path ) into users_dislikes_posts(udp)
-        // - if post is NOT liked and IS disliked -> delete from users_dislikes_post s
-        // - if  post IS liked delete from ulp -> delete from users_likes_posts and insert into udp
-        return ":D";
+    @PostMapping("/post/dislike/{id}")
+    public MessageDTO dislikeOrUndislikePost(@PathVariable (name = "id") int postId, HttpSession session)  {
+        long userId = sessionManager.authorizeLogin(session);
+        return postService.dislikeOrUndislikePost(postId, userId);
     }
 
     @GetMapping("post/newsfeed")
-    public List<Post> getNewsfeed(HttpSession session) throws SQLException {
+    public List<Post> getNewsfeed(HttpSession session) {
         long id = (long) session.getAttribute(SessionManager.LOGGED_IN);
         return postService.getNewsFeed(id);
     }
 
     @GetMapping("post/search")
-    public List<Post> search() throws SQLException {
+    public List<Post> search() {
         return null;
     }
 

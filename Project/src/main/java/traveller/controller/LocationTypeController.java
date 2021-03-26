@@ -18,32 +18,20 @@ public class LocationTypeController extends AbstractController{
 
     @PostMapping("/locationType")
     public LocationType addLocationType(@RequestBody LocationTypeDTO locationTypeDTO, HttpSession session)  {
-        if(sessionManager.isUserLoggedIn(session)){
-            return locationTypeService.addLocationType(locationTypeDTO);
-        }
-        else{
-            throw new AuthenticationException("You need to be logged in!");
-        }
+        sessionManager.authorizeLogin(session);
+        return locationTypeService.addLocationType(locationTypeDTO);
     }
 
     @GetMapping("/locationType/all")
     public List<LocationType> getAllLocationTypes(HttpSession session) {
-        if(sessionManager.isUserLoggedIn(session)){
-            return locationTypeService.getAllLocationTypes();
-        }
-        else{
-            throw new AuthenticationException("You need to be logged in!");
-        }
+        sessionManager.authorizeLogin(session);
+        return locationTypeService.getAllLocationTypes();
     }
 
     @GetMapping("/locationType/{id}")
     public LocationType getById (@PathVariable int id,HttpSession session )  {
-        if(sessionManager.isUserLoggedIn(session)){
-            return locationTypeService.getById(id);
-        }
-        else{
-            throw new AuthenticationException("You need to be logged in!");
-        }
+        sessionManager.authorizeLogin(session);
+        return locationTypeService.getById(id);
     }
 }
 

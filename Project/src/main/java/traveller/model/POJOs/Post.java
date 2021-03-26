@@ -13,7 +13,9 @@ import javax.persistence.Id;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @NoArgsConstructor
@@ -43,16 +45,28 @@ public class Post {
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Image> images;
-<<<<<<< Updated upstream
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
-=======
-    @OneToMany(mappedBy = "post") //NB name of reference from other POJO
->>>>>>> Stashed changes
     private List<Comment> comments;
 
-<<<<<<< Updated upstream
-=======
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "users_like_posts",
+            joinColumns = { @JoinColumn(name = "post_id") },
+            inverseJoinColumns = { @JoinColumn(name = "owner_id") }
+    )
+    @JsonManagedReference
+    Set<User>likers = new HashSet<>();
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "users_dislike_posts",
+            joinColumns = { @JoinColumn(name = "post_id") },
+            inverseJoinColumns = { @JoinColumn(name = "owner_id") }
+    )
+    @JsonManagedReference
+    Set<User>dislikers = new HashSet<>();
+
+
     public Post(PostDTO postDTO) {
         this.createdAt = LocalDateTime.now();
         this.latitude = postDTO.getLatitude();
@@ -60,7 +74,6 @@ public class Post {
         this.description = postDTO.getDescription();
     }
 
->>>>>>> Stashed changes
 }
 
 
