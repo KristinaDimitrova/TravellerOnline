@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name="users")
-public class User { //todo Moni
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -35,6 +35,10 @@ public class User { //todo Moni
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "owner")
     List<Post> posts;
+    @ManyToMany //todo
+    private List<User> followers;
+    @ManyToMany //todo
+    private List<User> followedUsers;
 
     public User(SignupUserDTO userDTO) {
         firstName = userDTO.getFirstName();
@@ -44,4 +48,5 @@ public class User { //todo Moni
         password = userDTO.getPassword();
         createdAt = LocalDateTime.now();
     }
+
 }

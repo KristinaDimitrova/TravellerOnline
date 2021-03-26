@@ -51,77 +51,50 @@ public class UserController { //todo Moni
 
     @PostMapping(value="/logout") //id, session
     public void logOut(HttpSession session) throws AuthorizationException { //Path variable OR RequestBody User user
-        sessManager.userHasLoggedIn(session);
+        sessManager.authorizeLogin(session);
         sessManager.userLogsOut(session);
     }
 
-    //edit profile todo
-    @PostMapping(value="users/{id}/edit")
+    @PostMapping(value="users/edit")
     public UserWithoutPasswordDTO editProfile(HttpSession session, @PathVariable("id") long id,@RequestBody EditDetailsUserDTO requestDTO){
-        long actorId = sessManager.userHasLoggedIn(session);
-        //theSameUser(id, actorId); potentially redundant
-        //to make changes one must enter their password
+        long actorId = sessManager.authorizeLogin(session);
         return userService.changeDetails(actorId, requestDTO);
     }
 
-    @PostMapping(value="users/{id}/change")
-    public String changePassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
-                                 @RequestParam("repeatedNewPassword") String repeatedNewPassword) throws AuthorizationException, InvalidRegistrationInputException, BadRequestException {
-        long actor = sessManager.userHasLoggedIn(session);
-        //check user's password
-        passwordMatches(oldPassword, userDao.getById(actor).getPassword());
-        Validate.password(newPassword);
-        userDao.changePassword(actor, newPassword);
-        //todo optional send email with notification
-        return "Password changed.";
-        //todo Кога ми е нужно да слагам код в response и кога мога да си хвърля Exception?
+    @PostMapping(value="users/change") //TODO postman
+    public UserWithoutPasswordDTO changePassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("repeatedNewPassword") String repeatedNewPassword)  {
+        long actorId = sessManager.authorizeLogin(session);
+        passwordMatches(repeatedNewPassword, newPassword);
+        return userService.changePassword(actorId, oldPassword, newPassword);
     }
 
     private void passwordMatches(String passwordOne, String passwordTwo) throws BadRequestException {
         if(!passwordOne.equals(passwordTwo)){
-            throw new BadRequestException("Passwords must match.");
+            throw new BadRequestException("Passwords do not match.");
         }
     }
 
-    @DeleteMapping(value="/users/{id}/deleteAccount") //т.е. userId е на човека акаунта
+    @DeleteMapping(value="/users/deleteAccount")
     public void deleteAccount(HttpSession session, @PathVariable(name="id") long id) {
-        long actorId = sessManager.userHasLoggedIn(session);
+        long actorId = sessManager.authorizeLogin(session);
         theSameUser(id, actorId);
         userService.deleteUser(actorId);
         sessManager.userLogsOut(session);
     }
 
     @PostMapping(value="/users/{id}/follow")
-    public String followUser(@PathVariable long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
-        long actor = sessManager.userHasLoggedIn(session);
-        userExists(id);
+    public void followUser(@PathVariable long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
+        long actor = sessManager.authorizeLogin(session);
         notTheSameUser(actor, id);
-        if(userDao.follow(actor,id)){
-            return "Followed";
-        } else{ //this block emulates a 'follow' button.
-            userDao.unfollow(actor, id);
-            return "Unfollowed";
-        }
+        userService.followUser(actor, id);
     }
 
     @PostMapping(value="users/{id}/unfollow")
-    public String unfollowUser(@PathVariable("id") long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
-        //do we have to validate the existence of both users ? (Here?)
-        long actor = sessManager.userHasLoggedIn(session);
-        userExists(id);
+    public void unfollowUser(@PathVariable("id") long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
+        long actor = sessManager.authorizeLogin(session);
         notTheSameUser(actor, id);
-        if(userDao.unfollow(actor,id)){
-            return "Unfollowed";
-        } else{         //this block emulates a 'follow' button.
-            userDao.follow(actor, id);
-            return "Followed";
-        }
-    }
-
-    private void userExists(long id) throws NotFoundException {
-        if(userDao.getById(id) == null){
-            throw new NotFoundException("User not found");
-        }
+        userService.unfollowUser(actor, id);
     }
 
     private void notTheSameUser(long actor, long id) {

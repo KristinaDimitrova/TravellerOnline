@@ -7,10 +7,7 @@ public class SessionManager {
     static final String LOGGED_IN = "in";
 
     public boolean isUserLoggedIn(HttpSession session){
-        if(session.isNew()) {
-            return false;
-        }
-        else if(session.getAttribute(LOGGED_IN) == null) {
+        if(session.isNew() || session.getAttribute(LOGGED_IN) == null) {
             return false;
         }
         return true;
@@ -24,7 +21,7 @@ public class SessionManager {
         session.invalidate();
     }
 
-    public long userHasLoggedIn(HttpSession session){
+    public long authorizeLogin(HttpSession session){
         if(!isUserLoggedIn(session)){
             throw new AuthorizationException("You must log in first.");
         }

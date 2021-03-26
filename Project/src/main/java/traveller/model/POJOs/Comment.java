@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -16,7 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="comments")
 public class Comment {
+
    @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
    @Column
    private int ownerId;
@@ -26,4 +25,7 @@ public class Comment {
    private String text;
    @Column
    private LocalDateTime createdAt;
+   @ManyToOne
+   @JoinColumn(name="post_id")
+   private Post post;
 }
