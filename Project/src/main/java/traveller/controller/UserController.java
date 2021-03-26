@@ -95,7 +95,7 @@ public class UserController { //todo Moni
         User user = userRep.getById(actorId);
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         if(!encoder.matches(requestDTO.getPassword(), user.getPassword())){
-            throw new AuthenticationExc("Wrong password.");
+            throw new AuthenticationException("Wrong password.");
         }
         //if first name is the same => it remains, the same for other details
         userService.changeDetails(actorId, requestDTO); //changes details that are different

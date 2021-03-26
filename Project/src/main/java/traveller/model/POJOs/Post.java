@@ -1,6 +1,8 @@
 package traveller.model.POJOs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,13 +40,17 @@ public class Post {
     private String longitude;
     private String description;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "location_type_id")
     private LocationType locationType;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "owner_id" )
     private User owner;
+    @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Image> images;
+    @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 }

@@ -1,5 +1,6 @@
 package traveller.model.POJOs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,9 +20,9 @@ public class LocationType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @JsonBackReference
     @OneToMany(mappedBy = "location_type_id")
     private List<Post> posts;
-
     public LocationType(String name){
         this.name = name;
     }

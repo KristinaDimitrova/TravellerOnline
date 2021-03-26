@@ -10,10 +10,10 @@ public class SessionManager {
     static final String LOGGED_IN = "in";
 
     public static boolean isUserLoggedIn(HttpSession session){
-        if(session.isNew()) {
+        if(session.isNew() ) {
             return false;
         }
-        if(session.getAttribute(LOGGED_IN) == null) {
+        else if(session.getAttribute(LOGGED_IN) == null) {
             return false;
         }
         return true;

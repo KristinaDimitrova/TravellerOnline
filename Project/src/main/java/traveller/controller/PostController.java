@@ -3,8 +3,10 @@ package traveller.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.exceptions.BadRequestException;
+import traveller.model.DTO.postDTO.PostDTO;
 import traveller.model.POJOs.Post;
 import traveller.model.dao.post.PostDBDao;
+import traveller.model.repositoriesUser.UserRepository;
 import traveller.model.services.PostService;
 
 import javax.servlet.http.HttpSession;
@@ -18,11 +20,21 @@ public class PostController extends AbstractController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private UserRepository userRepository;
 
-    @PostMapping("/post")
-    public Post createPost(@RequestBody Post post){
-        //insert post into DB
-        return post;
+    @PostMapping("/post/{id}")
+    public Post createPost(@PathVariable int id, @RequestBody PostDTO postDTO, HttpSession session){
+        if(SessionManager.isUserLoggedIn(session)){
+
+           
+        }
+        else{
+            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
+        }
+
+
+        return postService.addNewPost(postDTO, );
     }
 
     @PutMapping("/post/{id}")

@@ -29,7 +29,7 @@ public class LocationTypeService {
             return optionalLocationType.get();
         }
         else {
-            throw new BadRequestException("Invalid location type id!");
+            throw new BadRequestException("There is not location type with this id!");
         }
     }
 
@@ -42,7 +42,5 @@ public class LocationTypeService {
             LocationType locationType = new LocationType(name);
             return locationTypeRepo.save(locationType);
         }
-
     }
-
 }

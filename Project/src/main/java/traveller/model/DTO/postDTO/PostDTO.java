@@ -14,5 +14,4 @@ public class PostDTO {
     private String latitude;
     private String longitude;
     private String description;
-
 }
