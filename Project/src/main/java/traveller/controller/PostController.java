@@ -27,7 +27,7 @@ public class PostController extends AbstractController {
     public Post createPost(@PathVariable int id, @RequestBody PostDTO postDTO, HttpSession session){
         if(SessionManager.isUserLoggedIn(session)){
 
-           
+
         }
         else{
             throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
