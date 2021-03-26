@@ -27,4 +27,6 @@ public class SessionManager {
         }
         return (Long) session.getAttribute(LOGGED_IN);
     }
+
+
 }

@@ -3,6 +3,7 @@ package traveller.model.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import traveller.exceptions.BadRequestException;
+import traveller.model.DTO.locationTypeDTO.LocationTypeDTO;
 import traveller.model.POJOs.LocationType;
 import traveller.model.repositories.LocationTypeRepository;
 
@@ -15,7 +16,8 @@ public class LocationTypeService {
     @Autowired
     LocationTypeRepository locationTypeRepo;
 
-    public LocationType addLocationType(LocationType locationType) {
+    public LocationType addLocationType(LocationTypeDTO locationTypeDTO) {
+        LocationType locationType = new LocationType(locationTypeDTO);
        return locationTypeRepo.save(locationType);
     }
 

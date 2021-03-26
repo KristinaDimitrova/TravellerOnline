@@ -23,13 +23,6 @@ import java.util.List;
 @Table(name="posts")
 public class Post {
 
-    public Post(PostDTO postDTO) {
-        this.createdAt = LocalDateTime.now();
-        this.latitude = postDTO.getLatitude();
-        this.longitude = postDTO.getLongitude();
-        this.description = postDTO.getDescription();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -58,6 +51,16 @@ public class Post {
 >>>>>>> Stashed changes
     private List<Comment> comments;
 
+<<<<<<< Updated upstream
+=======
+    public Post(PostDTO postDTO) {
+        this.createdAt = LocalDateTime.now();
+        this.latitude = postDTO.getLatitude();
+        this.longitude = postDTO.getLongitude();
+        this.description = postDTO.getDescription();
+    }
+
+>>>>>>> Stashed changes
 }
 
 

@@ -3,6 +3,7 @@ package traveller.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.exceptions.BadRequestException;
+import traveller.model.DTO.MessageDTO;
 import traveller.model.DTO.postDTO.PostDTO;
 import traveller.model.POJOs.Post;
 import traveller.model.services.PostService;
@@ -29,9 +30,9 @@ public class PostController extends AbstractController {
     }
 
     @GetMapping("/post/{id}")
-    public Post getById(@PathVariable int id, HttpSession session ){
+    public Post getById(@PathVariable (name = "id") int postId, HttpSession session){
         if(sessionManager.isUserLoggedIn(session)){
-            return postService.getPostById(id);
+            return postService.getPostById(postId);
         }
         else{
             throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
@@ -40,20 +41,30 @@ public class PostController extends AbstractController {
 
 
     @PutMapping("/post/{id}")
-    public Post editPost(){
-        // edit post
-        return new Post();
+    public Post editPost(@RequestBody PostDTO postDTO, @PathVariable (name = "id") int postId, HttpSession session){
+        if(sessionManager.isUserLoggedIn(session)){
+            long userId = sessionManager.userHasLoggedIn(session);
+            return postService.editPost(postId, postDTO, userId);
+        }
+        else{
+            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
+        }
     }
 
 
     @DeleteMapping("post/{id}")
-    public String deletePost(){
-        //delete post (comments delete cascade)
-        return "Post was deleted successfully!";
+    public MessageDTO deletePost(@PathVariable (name = "id") int postId, HttpSession session){
+        if(sessionManager.isUserLoggedIn(session)){
+            long userId = sessionManager.userHasLoggedIn(session);
+            return postService.deletePost(postId, userId);
+        }
+        else{
+            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
+        }
     }
 
     @GetMapping("/post/like/{id}")
-    public String likeOrUnlikePost(@PathVariable int id ) throws BadRequestException{
+    public String likeOrUnlikePost(@PathVariable (name = "id") int postId, HttpSession session){
         //if post does not exist throws BAD_REQUEST Exception
         // -if post is NOT liked and is NOT disliked : -> insert
         // user id(get from session), and post id (from path ) into users_likes_posts(ulp)

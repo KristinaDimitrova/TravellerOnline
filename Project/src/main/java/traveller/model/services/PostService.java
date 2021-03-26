@@ -2,7 +2,10 @@ package traveller.model.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import traveller.exceptions.AuthenticationException;
+import traveller.exceptions.AuthorizationException;
 import traveller.exceptions.NotFoundException;
+import traveller.model.DTO.MessageDTO;
 import traveller.model.DTO.postDTO.PostDTO;
 import traveller.model.POJOs.Post;
 import traveller.model.POJOs.User;
@@ -14,6 +17,7 @@ import traveller.service.UserService;
 import java.io.NotActiveException;
 import java.util.List;
 import java.util.Optional;
+import java.util.prefs.BackingStoreException;
 
 @Service
 public class PostService {
@@ -41,10 +45,13 @@ public class PostService {
         else throw new NotFoundException("There is no post with this ID!");
     }
 
-    public Post editPost(int postId, PostDTO postDTO ){
+    public Post editPost(int postId, PostDTO postDTO, long userId){
         Optional<Post> postOptional = postRepo.findById(postId);
         if(postOptional.isPresent()){
             Post post = postOptional.get();
+            if(post.getOwner().getId() != userId ){
+                throw new AuthorizationException("You can not edit a post that you do not own!");
+            }
             post.setLatitude(postDTO.getLatitude());
             post.setLongitude(postDTO.getLongitude());
             post.setDescription(postDTO.getDescription());
@@ -56,8 +63,19 @@ public class PostService {
         }
     }
 
-    public void deletePost (long postId){
-        postRepo.deletePost(postId);
+    public MessageDTO deletePost (int postId, long userId){
+        Optional<Post> postOptional = postRepo.findById(postId);
+        if(postOptional.isPresent()){
+            Post post = postOptional.get();
+            if(post.getOwner().getId() != userId ){
+                throw new AuthorizationException("You can not delete a post that you do not own!");
+            }
+            postRepo.deletePost(postId);
+            return new MessageDTO("Post deleted successfully!");
+        }
+        else {
+            throw new NotFoundException("There is no post with this ID!");
+        }
     }
 
     public List<Post> getNewsFeed( long userId){
