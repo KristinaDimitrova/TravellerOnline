@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import traveller.exceptions.BadRequestException;
 import traveller.exceptions.InvalidRegistrationInputException;
 import traveller.exceptions.LoginException;
-import traveller.exceptions.UnauthorizedException;
+import traveller.exceptions.AuthorizationException;
 
-public class MotherController {
+public class AbstractController {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleException(BadRequestException e){
@@ -27,9 +27,9 @@ public class MotherController {
         return "Forbidden operation - " + e.getMessage();
     }
 
-    @ExceptionHandler(UnauthorizedException.class)
+    @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleException(UnauthorizedException e){
+    public String handleException(AuthorizationException e){
         return "Unathorized operation - " + e.getMessage();
     }
 }

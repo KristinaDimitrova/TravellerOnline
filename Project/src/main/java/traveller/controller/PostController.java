@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @RestController
-public class PostController extends MotherController{
+public class PostController extends AbstractController {
 
     @Autowired
     private PostService postService;

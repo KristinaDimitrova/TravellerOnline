@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
 @NoArgsConstructor
-public class LoginUserDTO {
-    //user can login using email or password
+@Getter
+@Setter
+public class EditDetailsUserDTO { //username cannot be changed
+    private String firstName;
+    private String lastName;
     private String email;
-    private String username;
     private String password;
+
 }

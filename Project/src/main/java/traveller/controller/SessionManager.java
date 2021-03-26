@@ -24,7 +24,6 @@ public class SessionManager {
     }
 
     public static void userLogsOut(HttpSession session){
-        session.setAttribute(LOGGED_IN, null);
-
+        session.invalidate();
     }
 }

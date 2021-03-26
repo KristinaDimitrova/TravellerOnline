@@ -6,13 +6,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import traveller.model.dao.comment.CommentDBDao;
+import traveller.model.repositoriesUser.CommentRepository;
 
 import javax.xml.stream.events.Comment; //delete
 
 @RestController
-public class CommentController extends MotherController{ //todo Moni
+public class CommentController extends AbstractController { //todo Moni
     @Autowired
     private CommentDBDao commentDao;
+    @Autowired
+    private CommentRepository commentRep;
 
     //create comment todo
     @PostMapping(value="user/{userId}/{postId}")

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import traveller.model.DTO.SignupUserDTO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,4 +35,13 @@ public class User { //todo Moni
     private String password;
     @Column
     private LocalDateTime createdAt;
+
+    public User(SignupUserDTO userDTO) {
+        firstName = userDTO.getFirstName();
+        lastName = userDTO.getLastName();
+        email = userDTO.getEmail();
+        username = userDTO.getUsername();
+        password = userDTO.getPassword();
+        createdAt = LocalDateTime.now();
+    }
 }

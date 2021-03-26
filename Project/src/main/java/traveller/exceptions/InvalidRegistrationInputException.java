@@ -1,6 +1,6 @@
 package traveller.exceptions;
 
-public class InvalidRegistrationInputException extends Exception {
+public class InvalidRegistrationInputException extends RuntimeException {
 
     public InvalidRegistrationInputException(String message){
         super(message);
