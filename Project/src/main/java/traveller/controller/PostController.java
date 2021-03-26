@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @RestController
-public class PostController extends MotherController{
+public class PostController extends AbstractController {
 
     @Autowired
     private PostDBDao postDBDao;

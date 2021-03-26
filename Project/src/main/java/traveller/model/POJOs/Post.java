@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Entity
-//@Table(name="posts")
+@Table(name="posts")
 public class Post {
 
     public Post(String locationType, String videoUrl, long ownerId, LocalDateTime createdAt, String latitude, String longitude) {

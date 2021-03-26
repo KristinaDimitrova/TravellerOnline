@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import traveller.model.dao.location.LocationDBDao;
 
 @RestController
-public class LocationController extends MotherController{
+public class LocationController extends AbstractController {
     @Autowired
     private LocationDBDao locationDBDao ;
 }
