@@ -19,19 +19,17 @@ public class PostController extends AbstractController {
     @Autowired
     private SessionManager sessionManager;
 
+
     @PostMapping("/post")
     public Post createPost( @RequestBody PostDTO postDTO, HttpSession session){
+        sessionManager.authorizeLogin(session);
         return postService.addNewPost(postDTO, sessionManager.authorizeLogin(session) );
     }
 
-    @GetMapping("/post/{id}")
-    public Post getById(@PathVariable (name = "id") int postId, HttpSession session){
-        if(sessionManager.isUserLoggedIn(session)){
-            return postService.getPostById(postId);
-        }
-        else{
-            throw new traveller.exceptions.AuthenticationException("You need to be logged in!");
-        }
+    @GetMapping("/posts/{id}")
+    public Post getById(@PathVariable(name="id") long postId, HttpSession session ){
+        sessionManager.authorizeLogin(session);
+        return postService.getPostById(postId);
     }
 
     @PutMapping("/post/{id}")
@@ -63,14 +61,14 @@ public class PostController extends AbstractController {
 
     @GetMapping("post/newsfeed")
     public List<Post> getNewsfeed(HttpSession session) {
-        long id = (long) session.getAttribute(SessionManager.LOGGED_IN);
+        long id = sessionManager.authorizeLogin(session);
         return postService.getNewsFeed(id);
     }
 
+
     @GetMapping("post/search")
-    public List<Post> search() {
+    public List<Post> search(){
         return null;
     }
-
 
 }

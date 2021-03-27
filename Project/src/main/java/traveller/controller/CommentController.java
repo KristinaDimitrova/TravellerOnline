@@ -1,39 +1,71 @@
 package traveller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import traveller.model.dao.comment.CommentDBDao;
-import traveller.model.repositoriesUser.CommentRepository;
+import org.springframework.web.bind.annotation.*;
+import traveller.model.DTO.MessageDTO;
+import traveller.model.DTO.commentDTO.CommentCreationRequestDto;
+import traveller.model.DTO.commentDTO.CommentEditRequestDTO;
+import traveller.model.DTO.commentDTO.CommentResponseDTO;
+import traveller.model.services.CommentService;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.stream.events.Comment; //delete
+import java.util.List;
 
 @RestController
 public class CommentController extends AbstractController { //todo Moni
     @Autowired
-    private CommentDBDao commentDao;
+    private CommentService comService;
     @Autowired
-    private CommentRepository commentRep;
+    private SessionManager sessManager;
 
     //create comment todo
-    @PostMapping(value="user/{userId}/{postId}")
-    public Comment commentPost(@PathVariable("userId") String userId, @PathVariable("postId") String postId, @RequestParam("text") String text, @RequestParam("actor_id") String id){
+    @PostMapping(value="posts/{postId}/comments")
+    public CommentResponseDTO commentPost(@PathVariable("postId") long postId, @RequestParam("text") String text,
+                               HttpSession session){
+        long actorId = sessManager.authorizeLogin(session);
+        return comService.addComment(new CommentCreationRequestDto(text, postId, actorId));
         //if userId exists
-        return null;
     }
 
 
     //edit comment todo
+    @PutMapping(value="/comments/{id}")
+    public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long id, @RequestBody CommentEditRequestDTO commentReqDto){
+        long actorId = sessManager.authorizeLogin(session);
 
-    //delete comment todo
+        return null;
+    }
 
-    //get by id todo
+    @DeleteMapping(value="/comments/{id}")
+    public MessageDTO delete(@PathVariable("id") long commentId, HttpSession session){
+        long actorId = sessManager.authorizeLogin(session);
+        return comService.delete(commentId, actorId);
+    }
+
+    @GetMapping(value="/comments/{id}")
+    public CommentResponseDTO getById(@PathVariable("id") long id, HttpSession session){
+        long actorId = sessManager.authorizeLogin(session);
+        return comService.getById(id);
+    }
 
     //like todo
+    @PostMapping(value="/comments/{id}/1")
+    public CommentResponseDTO like(@PathVariable("id") long commentId, HttpSession session){
+        long actorId = sessManager.authorizeLogin(session);
+        return comService.hitLike(commentId, actorId);
+    }
 
     //unlike todo
+    @PostMapping(value="/comments/{id}/0")
+    public CommentResponseDTO unlike(@PathVariable("id") long commentId, HttpSession session){
+        long actorId = sessManager.authorizeLogin(session);
+        return comService.removeLike(commentId, actorId);
+    }
 
-    //view comments by post todo
+    @GetMapping(value="/posts/{id}/comments") //postman todo
+    public List<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
+        long actorId = sessManager.authorizeLogin(session);
+        return comService.getComments(postId);
+    }
 }

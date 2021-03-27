@@ -10,7 +10,8 @@ import traveller.model.POJOs.Post;
 import traveller.model.POJOs.User;
 import traveller.model.dao.post.PostDBDao;
 import traveller.model.repositories.PostRepository;
-import traveller.model.repositoriesUser.UserRepository;
+import traveller.model.repositories.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +33,21 @@ public class PostService {
         return postRepo.save(post);
     }
 
+<<<<<<< HEAD
     public Post getPostById(int id) {
         return  postRepo.getPostById(id);
 
+=======
+    public Post getPostById(long id) {
+        Optional<Post> optionalPost = postRepo.findById(id);
+        if(optionalPost.isPresent()){
+            return optionalPost.get();
+        }
+        else throw new NotFoundException("Post not found.");
+>>>>>>> 0ba598c188e5f4ef7ab348eb15d8e7e6fc79b057
     }
 
-    public Post editPost(int postId, PostDTO postDTO, long userId){
+    public Post editPost(long postId, PostDTO postDTO, long userId){
         Optional<Post> postOptional = postRepo.findById(postId);
         if(postOptional.isPresent()){
             Post post = postOptional.get();
@@ -51,7 +61,11 @@ public class PostService {
             return postRepo.save(post);
         }
         else {
+<<<<<<< HEAD
             throw new NotFoundException("Post not found!");
+=======
+            throw new NotFoundException("Post not found.");
+>>>>>>> 0ba598c188e5f4ef7ab348eb15d8e7e6fc79b057
         }
     }
 

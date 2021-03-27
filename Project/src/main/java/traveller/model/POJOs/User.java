@@ -1,11 +1,10 @@
 package traveller.model.POJOs;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import traveller.model.DTO.SignupUserDTO;
+import traveller.model.DTO.userDTO.SignupUserDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -39,6 +38,10 @@ public class User {
     private List<User> followers;
     @ManyToMany //todo
     private List<User> followedUsers;
+    @ManyToMany(mappedBy = "likers")
+    private List<Post> likedPosts;
+    @ManyToMany(mappedBy = "dislikers")
+    private List<Post> dislikedPosts;
 
     public User(SignupUserDTO userDTO) {
         firstName = userDTO.getFirstName();
