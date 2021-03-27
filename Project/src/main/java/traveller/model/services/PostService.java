@@ -7,6 +7,7 @@ import traveller.exceptions.NotFoundException;
 import traveller.model.DTO.MessageDTO;
 import traveller.model.DTO.postDTO.PostDTO;
 import traveller.model.POJOs.Post;
+import traveller.model.POJOs.User;
 import traveller.model.dao.post.PostDBDao;
 import traveller.model.repositories.PostRepository;
 import traveller.model.repositoriesUser.UserRepository;
@@ -32,11 +33,8 @@ public class PostService {
     }
 
     public Post getPostById(int id) {
-        Optional<Post> optionalPost = postRepo.findById(id);
-        if(optionalPost.isPresent()){
-            return optionalPost.get();
-        }
-        else throw new NotFoundException("There is no post with this ID!");
+        return  postRepo.getPostById(id);
+
     }
 
     public Post editPost(int postId, PostDTO postDTO, long userId){
@@ -53,7 +51,7 @@ public class PostService {
             return postRepo.save(post);
         }
         else {
-            throw new NotFoundException("There is no post with this ID!");
+            throw new NotFoundException("Post not found!");
         }
     }
 
@@ -68,20 +66,24 @@ public class PostService {
             return new MessageDTO("Post deleted successfully!");
         }
         else {
-            throw new NotFoundException("There is no post with this ID!");
+            throw new NotFoundException("Post not found!");
         }
     }
 
     public MessageDTO likeOrUnlikePost(int postId, long userId){
-        String message = "";
-        getPostById(postId);
+
+        Post post = getPostById(postId);
+        User u = userRepository.getById(userId);
+        if(post.getLikers().contains(u)){
+
+        }
 
         // -if post is NOT liked and is NOT disliked : -> insert
         // user id(get from session), and post id (from path ) into users_likes_posts(ulp)
         // - if post is NOT liked and IS disliked -> delete from users_dislikes_posts and insert into ulp
         // - if  post IS liked -> delete from ulp
 
-        return new MessageDTO(message);
+        return new MessageDTO("m");
     }
 
     public MessageDTO dislikeOrUndislikePost(long postId, long userId){
