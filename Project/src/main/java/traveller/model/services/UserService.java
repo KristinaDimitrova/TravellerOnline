@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import traveller.controller.SessionManager;
 import traveller.exceptions.AuthenticationException;
+import traveller.exceptions.BadRequestException;
 import traveller.exceptions.InvalidRegistrationInputException;
 import traveller.exceptions.NotFoundException;
 import traveller.model.DTO.*;
@@ -51,6 +52,7 @@ public class UserService {
         dto.setPassword(encoder.encode(dto.getPassword()));
         User user = new User(dto);
         SignupResponseUserDTO responseDTO = new SignupResponseUserDTO(user);
+        //todo send email with a thread
         return responseDTO;
     }
 
@@ -107,7 +109,6 @@ public class UserService {
     }
 
     public UserWithoutPasswordDTO changePassword(long userId, String oldPassword, String newPassword) {
-        //has to authenticate
         User user = userRep.getById(userId);
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         if(!encoder.matches(oldPassword, user.getPassword())){
@@ -117,24 +118,25 @@ public class UserService {
         return new UserWithoutPasswordDTO(userRep.save(user));
     }
 
-    public MessageDTO unfollowUser(long follower, long followed){
-        userRep.getById(followed); //does followed user exist ?
-        //TODO
-
-
-        //if(userDao.unfollow(actor,id)){
-        //            return "Unfollowed";
-        //        } else{         //this block emulates a 'follow' button.
-        //            userDao.follow(actor, id);
-        //            return "Followed";
-        //        }
-        return new MessageDTO("Followed");
+    public MessageDTO followUser(long follower, long followed){
+        User followedUser = userRep.getById(followed); //followed user exists
+        User actingUser = userRep.getById(follower);
+        if(actingUser.getFollowedUsers().contains(followedUser)){
+            throw new BadRequestException("You have already followed this user.");
+        }
+        actingUser.getFollowedUsers().add(followedUser);
+        userRep.save(actingUser);
+        return new MessageDTO("Followed.");
     }
 
-    public MessageDTO followUser(long follower, long followed){
-        userRep.getById(followed); //does followed user exist ?
-        //TODO
-
+    public MessageDTO unfollowUser(long follower, long followed){
+        User followedUser = userRep.getById(followed); //does followed user exist ?
+        User actingUser = userRep.getById(follower);
+        if(!actingUser.getFollowedUsers().contains(followedUser)){
+            throw new BadRequestException("You are not following this user.");
+        }
+        actingUser.getFollowedUsers().remove(followedUser);
+        userRep.save(actingUser);
         return new MessageDTO("Unfollowed");
     }
 

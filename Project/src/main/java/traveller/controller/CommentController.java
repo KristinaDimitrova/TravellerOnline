@@ -11,6 +11,7 @@ import traveller.model.services.CommentService;
 import javax.servlet.http.HttpSession;
 import javax.xml.stream.events.Comment; //delete
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class CommentController extends AbstractController { //todo Moni
@@ -19,22 +20,19 @@ public class CommentController extends AbstractController { //todo Moni
     @Autowired
     private SessionManager sessManager;
 
-    //create comment todo
     @PostMapping(value="posts/{postId}/comments")
-    public CommentResponseDTO commentPost(@PathVariable("postId") long postId, @RequestParam("text") String text,
+    public CommentResponseDTO commentPost(@RequestBody CommentCreationRequestDto commentDto, @PathVariable("postId") long postId, @RequestParam("text") String text,
                                HttpSession session){
-        long actorId = sessManager.authorizeLogin(session);
-        return comService.addComment(new CommentCreationRequestDto(text, postId, actorId));
-        //if userId exists
+        long actorId = sessManager.authorizeLogin(session); //user has logged in
+        return comService.addComment(commentDto, actorId);
+        //TODO validate text
     }
 
-
-    //edit comment todo
     @PutMapping(value="/comments/{id}")
     public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long id, @RequestBody CommentEditRequestDTO commentReqDto){
         long actorId = sessManager.authorizeLogin(session);
-
-        return null;
+        commentReqDto.setId(id);
+        return comService.editComment(commentReqDto, actorId);
     }
 
     @DeleteMapping(value="/comments/{id}")
@@ -49,22 +47,20 @@ public class CommentController extends AbstractController { //todo Moni
         return comService.getById(id);
     }
 
-    //like todo
     @PostMapping(value="/comments/{id}/1")
-    public CommentResponseDTO like(@PathVariable("id") long commentId, HttpSession session){
+    public MessageDTO like(@PathVariable("id") long commentId, HttpSession session){
         long actorId = sessManager.authorizeLogin(session);
         return comService.hitLike(commentId, actorId);
     }
 
-    //unlike todo
     @PostMapping(value="/comments/{id}/0")
-    public CommentResponseDTO unlike(@PathVariable("id") long commentId, HttpSession session){
+    public MessageDTO unlike(@PathVariable("id") long commentId, HttpSession session){
         long actorId = sessManager.authorizeLogin(session);
         return comService.removeLike(commentId, actorId);
     }
 
-    @GetMapping(value="/posts/{id}/comments") //postman todo
-    public List<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
+    @GetMapping(value="/posts/{id}/comments")
+    public Set<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
         long actorId = sessManager.authorizeLogin(session);
         return comService.getComments(postId);
     }

@@ -13,11 +13,11 @@ import java.util.List;
 
 
 @RestController
-public class UserController { //todo Moni
+public class UserController {
 
-    @Autowired //=> turns it into singleton
+    @Autowired
     private UserDBDao userDao;
-    @Autowired //-> намира имплементация на интерфейса
+    @Autowired
     private UserRepository userRep;
     @Autowired
     private UserService userService;
@@ -25,12 +25,12 @@ public class UserController { //todo Moni
     private SessionManager sessManager;
 
 
-    @PostMapping(value="/singup") //todo postman
+    @PostMapping(value="/singup")
     public SignupResponseUserDTO register(@RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
-    @GetMapping(value="/search/{firstName}&{lastName}") //todo postman
+    @GetMapping(value="/search/{firstName}&{lastName}")
     public List<UserWithoutPasswordDTO> getByName(@PathVariable String firstName, @PathVariable String lastName){
         return userService.getUsersByName(firstName, lastName);
     }
@@ -48,7 +48,7 @@ public class UserController { //todo Moni
         return userService.loginWtUsername(username, password, session);
     }
 
-    @PostMapping(value="/logout") //id, session
+    @PostMapping(value="/logout")
     public MessageDTO logOut(HttpSession session) { //Path variable OR RequestBody User user
         sessManager.authorizeLogin(session);
         sessManager.userLogsOut(session);
@@ -115,4 +115,6 @@ public class UserController { //todo Moni
     public UserWithoutPasswordDTO findById(@PathVariable long id){
         return userService.findById(id);
     }
+
+    //if changes don't work, this might be the reason -> https://youtu.be/n8z_Ds_zgP4?t=7376
 }

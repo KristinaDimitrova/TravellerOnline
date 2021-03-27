@@ -10,11 +10,4 @@ import lombok.Setter;
 public class CommentCreationRequestDto {
     private String text;
     private long postId;
-    private long ownerId;
-
-    public CommentCreationRequestDto(String text, long postId, long ownerId) {
-        this.text = text;
-        this.postId = postId;
-        this.ownerId = ownerId;
-    }
 }

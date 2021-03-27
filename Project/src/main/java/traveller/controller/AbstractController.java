@@ -1,6 +1,7 @@
 package traveller.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import traveller.exceptions.AuthenticationException;
@@ -31,5 +32,10 @@ public class AbstractController {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String handleException(AuthorizationException e){
         return "Unathorized operation - " + e.getMessage();
+    }
+
+    @Scheduled(fixedDelay = 1000) //every minute
+    public void ScheduledLogs(){
+        //TODO -> use logs
     }
 }

@@ -33,18 +33,8 @@ public class PostService {
         return postRepo.save(post);
     }
 
-<<<<<<< HEAD
-    public Post getPostById(int id) {
-        return  postRepo.getPostById(id);
-
-=======
     public Post getPostById(long id) {
-        Optional<Post> optionalPost = postRepo.findById(id);
-        if(optionalPost.isPresent()){
-            return optionalPost.get();
-        }
-        else throw new NotFoundException("Post not found.");
->>>>>>> 0ba598c188e5f4ef7ab348eb15d8e7e6fc79b057
+        return  postRepo.getPostById(id);
     }
 
     public Post editPost(long postId, PostDTO postDTO, long userId){
@@ -61,11 +51,7 @@ public class PostService {
             return postRepo.save(post);
         }
         else {
-<<<<<<< HEAD
             throw new NotFoundException("Post not found!");
-=======
-            throw new NotFoundException("Post not found.");
->>>>>>> 0ba598c188e5f4ef7ab348eb15d8e7e6fc79b057
         }
     }
 

@@ -28,7 +28,9 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String videoUrl;
+    @OneToOne
+    @JsonManagedReference
+    private Video video;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
     private String latitude;
@@ -40,7 +42,7 @@ public class Post {
     private LocationType locationType;
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "owner_id" )
+    @JoinColumn(name = "owner_id")
     private User owner;
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
@@ -56,7 +58,7 @@ public class Post {
             inverseJoinColumns = { @JoinColumn(name = "owner_id") }
     )
     @JsonManagedReference
-    Set<User>likers = new HashSet<>();
+    Set<User> likers = new HashSet<>();
 
 
     @ManyToMany(cascade = { CascadeType.ALL })
