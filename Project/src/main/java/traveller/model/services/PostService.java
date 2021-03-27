@@ -104,10 +104,11 @@ public class PostService {
         return new MessageDTO("Dislike was removed from post!");
     }
 
+
     public List<ResponsePostDTO> filter(SearchDTO searchDTO) throws SQLException {
         List<ResponsePostDTO> responseList = new ArrayList<>();
         List<Post> posts = postDBDao.filter(searchDTO.getName(), searchDTO.getLocationType());
-        for(Post p : posts){
+        for (Post p : posts) {
             responseList.add(new ResponsePostDTO(p));
         }
         return responseList;

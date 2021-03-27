@@ -1,12 +1,13 @@
 package traveller.model.POJOs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -17,6 +18,7 @@ public class Comment {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
+   //USER
    @ManyToOne
    @JoinColumn(name="owner_id")
    private User owner;
@@ -24,9 +26,14 @@ public class Comment {
    private String text;
    @Column
    private LocalDateTime createdAt;
+   //POST
    @ManyToOne
    @JoinColumn(name="post_id")
+   @JsonBackReference
    private Post post;
-   //TODO
-   private List<User> likers;
+   //People who hit like
+   @OneToMany
+   @JsonBackReference
+   private Set<User> likers;
+
 }

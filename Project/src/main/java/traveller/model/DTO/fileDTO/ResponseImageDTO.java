@@ -1,4 +1,4 @@
-package traveller.model.DTO;
+package traveller.model.DTO.fileDTO;
 
 
 import lombok.AllArgsConstructor;

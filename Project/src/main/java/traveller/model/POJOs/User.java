@@ -1,5 +1,7 @@
 package traveller.model.POJOs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,16 +34,31 @@ public class User {
     private String password;
     @Column
     private LocalDateTime createdAt;
-    @OneToMany(mappedBy = "owner")
+            //POSTS
+    @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
+    @JsonManagedReference
     List<Post> posts;
-    @ManyToMany //todo
+            //FOLLOWERS
+    @ManyToMany(mappedBy = "followedUsers")
     private List<User> followers;
-    @ManyToMany //todo
+            //FOLLOWED USERS
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "users_subscribe_users",
+            joinColumns = {@JoinColumn(name="subscriber_id")},
+            inverseJoinColumns = {@JoinColumn(name="subscribed_id")}
+    )
     private List<User> followedUsers;
-    @ManyToMany(mappedBy = "likers")
+            //LIKED POSTS
+    @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })
     private List<Post> likedPosts;
-    @ManyToMany(mappedBy = "dislikers")
+            //DISLIKED POSTS
+    @ManyToMany(mappedBy = "dislikers", cascade = { CascadeType.ALL })
     private List<Post> dislikedPosts;
+            //COMMENTS
+    @JsonBackReference
+    @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
+    private List<Comment> comments;
 
     public User(SignupUserDTO userDTO) {
         firstName = userDTO.getFirstName();
@@ -51,5 +68,7 @@ public class User {
         password = userDTO.getPassword();
         createdAt = LocalDateTime.now();
     }
+
+    //PUT is idempodent => calling it many times will result in the same outcome as calling it once
 
 }
