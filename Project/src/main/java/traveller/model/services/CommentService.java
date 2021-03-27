@@ -11,6 +11,7 @@ import traveller.model.POJOs.Post;
 import traveller.model.POJOs.User;
 import traveller.model.dao.comment.CommentDBDao;
 import traveller.model.repositories.CommentRepository;
+import traveller.model.repositories.PostRepository;
 import traveller.model.repositories.UserRepository;
 import traveller.utilities.Validate;
 
@@ -25,6 +26,8 @@ public class CommentService {
     private PostService postServ;
     @Autowired
     private CommentDBDao commentDao;
+    @Autowired
+    private PostRepository postRepo;
 
     public CommentResponseDTO getById(long id) {
         return new CommentResponseDTO(commentRep.getById(id));
@@ -42,7 +45,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDTO> getComments(long postId) {
-        Post post = postServ.getPostById(postId); //post exists
+        Post post = postRepo.getPostById(postId); //post exists
         List<CommentResponseDTO> commentsDto = new ArrayList<>();
         for (Comment c : commentRep.findCommentsByPost_Id(postId)){
             commentsDto.add(new CommentResponseDTO(c));

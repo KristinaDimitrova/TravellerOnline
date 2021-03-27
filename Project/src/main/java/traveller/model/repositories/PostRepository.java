@@ -12,8 +12,6 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    List<Post> findByOwnerUsernameOrderByCreatedAt(String username);
-    List<Post> findByLocationType_NameOrderByCreatedAt(String locationTypeName);
     void deletePost(long id);
     Optional<Post> findById(long id);
 

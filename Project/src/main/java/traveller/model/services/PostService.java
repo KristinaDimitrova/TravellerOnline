@@ -13,6 +13,9 @@ import traveller.model.POJOs.User;
 import traveller.model.dao.post.PostDBDao;
 import traveller.model.repositories.PostRepository;
 import traveller.model.repositories.UserRepository;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,19 +29,20 @@ public class PostService {
     @Autowired
     UserRepository userRepository;
 
-    public Post addNewPost(RequestPostDTO postDTO, long userId){
+
+    public ResponsePostDTO addNewPost(RequestPostDTO postDTO, long userId){
         Post post = new Post(postDTO);
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         post.setOwner(userRepository.getById(userId));
-        return postRepo.save(post);
+        return new ResponsePostDTO(postRepo.save(post));
     }
 
-    public Post getPostById(long id) {
-        return postRepo.getPostById(id);
+    public ResponsePostDTO getPostById(long id) {
+        return  new ResponsePostDTO(postRepo.getPostById(id));
     }
 
-    public Post editPost(long postId, RequestPostDTO postDTO, long userId) {
-        Post post = getPostById(postId);
+    public ResponsePostDTO editPost(long postId, RequestPostDTO postDTO, long userId) {
+        Post post = postRepo.getPostById(postId);
         if (post.getOwner().getId() != userId) {
             throw new AuthorizationException("You can not edit a post that you do not own!");
         }
@@ -46,11 +50,11 @@ public class PostService {
         post.setLongitude(postDTO.getLongitude());
         post.setDescription(postDTO.getDescription());
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
-        return postRepo.save(post);
+        return new ResponsePostDTO(postRepo.save(post));
     }
 
     public MessageDTO deletePost ( long postId, long userId){
-        Post post = getPostById(postId);
+        Post post = postRepo.getPostById(postId);
         if (post.getOwner().getId() != userId) {
             throw new AuthorizationException("You can not delete a post that you do not own!");
         }
@@ -60,7 +64,7 @@ public class PostService {
 
 
     public MessageDTO likePost(int postId, long userId){
-        Post post = getPostById(postId);
+        Post post = postRepo.getPostById(postId);
         User u = userRepository.getById(userId);
         if(post.getLikers().contains(u)){
             throw  new BadRequestException("Post is already liked! ");
@@ -71,7 +75,7 @@ public class PostService {
     }
 
     public MessageDTO unlikePost(long postId, long userId){
-        Post post = getPostById(postId);
+        Post post =postRepo.getPostById(postId);
         User u = userRepository.getById(userId);
         if(!post.getLikers().contains(u)){
             throw  new BadRequestException("You need to like post before unlike it! ");
@@ -81,7 +85,7 @@ public class PostService {
     }
 
     public MessageDTO dislikePost(long postId, long userId){
-        Post post = getPostById(postId);
+        Post post = postRepo.getPostById(postId);
         User u = userRepository.getById(userId);
         if(post.getDislikers().contains(u)){
             throw  new BadRequestException("Post is already disliked!");
@@ -92,7 +96,7 @@ public class PostService {
     }
 
     public MessageDTO removeDislikeFromPost(long postId, long userId){
-        Post post = getPostById(postId);
+        Post post = postRepo.getPostById(postId);
         User u = userRepository.getById(userId);
         if(!post.getDislikers().contains(u)){
             throw new BadRequestException("You need to dislike post before remove dislike!");
@@ -100,12 +104,22 @@ public class PostService {
         return new MessageDTO("Dislike was removed from post!");
     }
 
-    public List<ResponsePostDTO> filter(SearchDTO searchDTO){
-
+    public List<ResponsePostDTO> filter(SearchDTO searchDTO) throws SQLException {
+        List<ResponsePostDTO> responseList = new ArrayList<>();
+        List<Post> posts = postDBDao.filter(searchDTO.getName(), searchDTO.getLocationType());
+        for(Post p : posts){
+            responseList.add(new ResponsePostDTO(p));
+        }
+        return responseList;
     }
 
-    public List<Post> getNewsFeed( long userId){
-        return postDBDao.getNewsFeed(userId);
+    public List<ResponsePostDTO> getNewsFeed( long userId) throws SQLException {
+        List<Post> postList = postDBDao.getNewsFeed(userId);
+        List<ResponsePostDTO> responsePostDTOs = new ArrayList<>();
+        for(Post p :postList){
+            responsePostDTOs.add(new ResponsePostDTO(p));
+        }
+        return responsePostDTOs;
     }
 }
 

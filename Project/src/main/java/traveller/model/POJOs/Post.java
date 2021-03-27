@@ -25,15 +25,17 @@ import java.util.Set;
 @Table(name="posts")
 public class Post {
 
+    public static final int IMAGES_LIMIT = 3;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String videoUrl;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
     private String latitude;
     private String longitude;
     private String description;
+
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "location_type_id")
@@ -45,6 +47,8 @@ public class Post {
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Image> images;
+//    @OneToOne(mappedBy = "post")
+//    private Video video;
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;

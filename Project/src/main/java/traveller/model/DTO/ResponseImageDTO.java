@@ -12,7 +12,6 @@ import traveller.model.POJOs.Image;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseImageDTO {
-    private long id;
     private String pictureUrl;
 
     public ResponseImageDTO(Image picture) {

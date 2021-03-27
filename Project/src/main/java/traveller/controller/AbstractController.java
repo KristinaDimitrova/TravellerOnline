@@ -8,6 +8,8 @@ import traveller.exceptions.BadRequestException;
 import traveller.exceptions.InvalidRegistrationInputException;
 import traveller.exceptions.AuthorizationException;
 
+import java.sql.SQLException;
+
 public class AbstractController {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -19,6 +21,11 @@ public class AbstractController {
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public String handleException(InvalidRegistrationInputException e){
         return "We couldn't create an account for you. "  + e.getMessage();
+    }
+    @ExceptionHandler(SQLException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(SQLException e){
+        return "Database maintenance... Try again later!";
     }
 
     @ExceptionHandler(AuthenticationException.class)

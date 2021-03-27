@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @NoArgsConstructor
 public class SearchDTO {
-    private String searchBy;
-    private String searchByValue;
-    private boolean orderedByDateOfCreation;
-    private boolean orderedByLikes;
+    private String name;
+    private String locationType;
+
 }

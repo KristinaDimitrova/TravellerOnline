@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.*;
 import traveller.model.DTO.MessageDTO;
 import traveller.model.DTO.SearchDTO;
 import traveller.model.DTO.postDTO.RequestPostDTO;
+import traveller.model.DTO.postDTO.ResponsePostDTO;
 import traveller.model.POJOs.Post;
 import traveller.model.services.PostService;
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -20,19 +22,19 @@ public class PostController extends AbstractController {
 
 
     @PostMapping("/post")
-    public Post createPost(@RequestBody RequestPostDTO postDTO, HttpSession session){
-        sessionManager.authorizeLogin(session);
-        return postService.addNewPost(postDTO, sessionManager.authorizeLogin(session) );
+    public ResponsePostDTO createPost(@RequestBody RequestPostDTO postDTO, HttpSession session){
+        long userId = sessionManager.authorizeLogin(session);
+        return postService.addNewPost(postDTO, userId );
     }
 
     @GetMapping("/posts/{id}")
-    public Post getById(@PathVariable(name="id") long postId, HttpSession session ){
+    public ResponsePostDTO getById(@PathVariable(name="id") long postId, HttpSession session ){
         sessionManager.authorizeLogin(session);
         return postService.getPostById(postId);
     }
 
     @PutMapping("/post/{id}")
-    public Post editPost(@RequestBody RequestPostDTO postDTO, @PathVariable (name = "id") int postId, HttpSession session){
+    public ResponsePostDTO editPost(@RequestBody RequestPostDTO postDTO, @PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.editPost(postId, postDTO, userId);
     }
@@ -66,15 +68,15 @@ public class PostController extends AbstractController {
         return postService.removeDislikeFromPost(postId, userId);
     }
 
-    @PostMapping("post/search")
-    public List<Post> search(@RequestBody SearchDTO searchDTO, HttpSession session){
+    @PostMapping("post/filter")
+    public List<ResponsePostDTO> filter(@RequestBody SearchDTO searchDTO, HttpSession session) throws SQLException {
         sessionManager.authorizeLogin(session);
-        return null;
+        return postService.filter(searchDTO);
     }
 
 
     @GetMapping("post/newsfeed")
-    public List<Post> getNewsfeed(HttpSession session) {
+    public List<ResponsePostDTO> getNewsfeed(HttpSession session) throws SQLException {
         long id = sessionManager.authorizeLogin(session);
         return postService.getNewsFeed(id);
     }
