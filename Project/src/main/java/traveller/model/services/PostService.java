@@ -3,17 +3,17 @@ package traveller.model.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import traveller.exceptions.AuthorizationException;
-import traveller.exceptions.NotFoundException;
+import traveller.exceptions.BadRequestException;
 import traveller.model.DTO.MessageDTO;
-import traveller.model.DTO.postDTO.PostDTO;
+import traveller.model.DTO.SearchDTO;
+import traveller.model.DTO.postDTO.RequestPostDTO;
+import traveller.model.DTO.postDTO.ResponsePostDTO;
 import traveller.model.POJOs.Post;
 import traveller.model.POJOs.User;
 import traveller.model.dao.post.PostDBDao;
 import traveller.model.repositories.PostRepository;
 import traveller.model.repositories.UserRepository;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostService {
@@ -26,7 +26,7 @@ public class PostService {
     @Autowired
     UserRepository userRepository;
 
-    public Post addNewPost(PostDTO postDTO, long userId){
+    public Post addNewPost(RequestPostDTO postDTO, long userId){
         Post post = new Post(postDTO);
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         post.setOwner(userRepository.getById(userId));
@@ -34,69 +34,78 @@ public class PostService {
     }
 
     public Post getPostById(long id) {
-        return  postRepo.getPostById(id);
+        return postRepo.getPostById(id);
     }
 
-    public Post editPost(long postId, PostDTO postDTO, long userId){
-        Optional<Post> postOptional = postRepo.findById(postId);
-        if(postOptional.isPresent()){
-            Post post = postOptional.get();
-            if(post.getOwner().getId() != userId ){
-                throw new AuthorizationException("You can not edit a post that you do not own!");
-            }
-            post.setLatitude(postDTO.getLatitude());
-            post.setLongitude(postDTO.getLongitude());
-            post.setDescription(postDTO.getDescription());
-            post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
-            return postRepo.save(post);
+    public Post editPost(long postId, RequestPostDTO postDTO, long userId) {
+        Post post = getPostById(postId);
+        if (post.getOwner().getId() != userId) {
+            throw new AuthorizationException("You can not edit a post that you do not own!");
         }
-        else {
-            throw new NotFoundException("Post not found!");
-        }
+        post.setLatitude(postDTO.getLatitude());
+        post.setLongitude(postDTO.getLongitude());
+        post.setDescription(postDTO.getDescription());
+        post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
+        return postRepo.save(post);
     }
 
-    public MessageDTO deletePost (int postId, long userId){
-        Optional<Post> postOptional = postRepo.findById(postId);
-        if(postOptional.isPresent()){
-            Post post = postOptional.get();
-            if(post.getOwner().getId() != userId ){
-                throw new AuthorizationException("You can not delete a post that you do not own!");
-            }
-            postRepo.deletePost(postId);
-            return new MessageDTO("Post deleted successfully!");
+    public MessageDTO deletePost ( long postId, long userId){
+        Post post = getPostById(postId);
+        if (post.getOwner().getId() != userId) {
+            throw new AuthorizationException("You can not delete a post that you do not own!");
         }
-        else {
-            throw new NotFoundException("Post not found!");
-        }
+        postRepo.deletePost(postId);
+        return new MessageDTO("Post deleted successfully!");
     }
 
-    public MessageDTO likeOrUnlikePost(int postId, long userId){
 
+    public MessageDTO likePost(int postId, long userId){
         Post post = getPostById(postId);
         User u = userRepository.getById(userId);
         if(post.getLikers().contains(u)){
-
+            throw  new BadRequestException("Post is already liked! ");
         }
-
-        // -if post is NOT liked and is NOT disliked : -> insert
-        // user id(get from session), and post id (from path ) into users_likes_posts(ulp)
-        // - if post is NOT liked and IS disliked -> delete from users_dislikes_posts and insert into ulp
-        // - if  post IS liked -> delete from ulp
-
-        return new MessageDTO("m");
+        post.getDislikers().remove(u);
+        post.getLikers().add(u);
+        return new MessageDTO("Post was liked!");
     }
 
-    public MessageDTO dislikeOrUndislikePost(long postId, long userId){
-        String message = "";
-        //if post does not exist throws BAD_REQUEST Exception
-        // -if post is NOT liked and is NOT disliked : -> insert
-        // user id(get from session), and post id (from path ) into users_dislikes_posts(udp)
-        // - if post is NOT liked and IS disliked -> delete from users_dislikes_post s
-        // - if  post IS liked delete from ulp -> delete from users_likes_posts and insert into udp
-        return new MessageDTO(message);
+    public MessageDTO unlikePost(long postId, long userId){
+        Post post = getPostById(postId);
+        User u = userRepository.getById(userId);
+        if(!post.getLikers().contains(u)){
+            throw  new BadRequestException("You need to like post before unlike it! ");
+        }
+        post.getLikers().remove(u);
+        return new MessageDTO("Post was unliked!");
+    }
+
+    public MessageDTO dislikePost(long postId, long userId){
+        Post post = getPostById(postId);
+        User u = userRepository.getById(userId);
+        if(post.getDislikers().contains(u)){
+            throw  new BadRequestException("Post is already disliked!");
+        }
+        post.getLikers().remove(u);
+        post.getDislikers().add(u);
+        return new MessageDTO("Post was disliked!");
+    }
+
+    public MessageDTO removeDislikeFromPost(long postId, long userId){
+        Post post = getPostById(postId);
+        User u = userRepository.getById(userId);
+        if(!post.getDislikers().contains(u)){
+            throw new BadRequestException("You need to dislike post before remove dislike!");
+        }
+        return new MessageDTO("Dislike was removed from post!");
+    }
+
+    public List<ResponsePostDTO> filter(SearchDTO searchDTO){
+        return null; //TODO
     }
 
     public List<Post> getNewsFeed( long userId){
         return postDBDao.getNewsFeed(userId);
     }
 }
+
