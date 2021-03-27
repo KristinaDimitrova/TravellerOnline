@@ -18,7 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Optional<Post> findById(long id);
 
     default
-    Post getPostById(int id) {
+    Post getPostById(long id) {
         Optional<Post> optionalPost = findById(id);
         if(optionalPost.isPresent()){
             return optionalPost.get();

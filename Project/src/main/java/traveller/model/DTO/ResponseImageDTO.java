@@ -11,12 +11,11 @@ import traveller.model.POJOs.Image;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageDTO {
+public class ResponseImageDTO {
     private long id;
     private String pictureUrl;
 
-    public ImageDTO(Image picture) {
-        this.id = picture.getId();
+    public ResponseImageDTO(Image picture) {
         this.pictureUrl = picture.getUrl();
     }
 }

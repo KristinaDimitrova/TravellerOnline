@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PostDTO {
+public class RequestPostDTO {
     private String locationType;
     private String latitude;
     private String longitude;

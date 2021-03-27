@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import traveller.model.DTO.postDTO.PostDTO;
+import traveller.model.DTO.postDTO.RequestPostDTO;
 
 import javax.persistence.Id;
 
@@ -69,7 +69,7 @@ public class Post {
     Set<User>dislikers = new HashSet<>();
 
 
-    public Post(PostDTO postDTO) {
+    public Post(RequestPostDTO postDTO) {
         this.createdAt = LocalDateTime.now();
         this.latitude = postDTO.getLatitude();
         this.longitude = postDTO.getLongitude();
