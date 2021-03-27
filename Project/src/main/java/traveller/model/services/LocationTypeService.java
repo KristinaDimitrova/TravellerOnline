@@ -26,7 +26,7 @@ public class LocationTypeService {
     }
 
     public LocationType getById(long id){
-        Optional<LocationType> optionalLocationType = locationTypeRepo.findById((int) id);
+        Optional<LocationType> optionalLocationType = locationTypeRepo.findById(id);
         if(optionalLocationType.isPresent()){
             return optionalLocationType.get();
         }

@@ -7,7 +7,7 @@ import traveller.model.POJOs.LocationType;
 import java.util.Optional;
 
 @Repository
-public interface LocationTypeRepository extends JpaRepository<LocationType, Integer> {
+public interface LocationTypeRepository extends JpaRepository<LocationType, Long> {
 
      Optional<LocationType> findByName(String name);
 }

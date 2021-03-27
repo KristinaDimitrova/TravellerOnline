@@ -31,10 +31,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
-    @JsonManagedReference
-    private Video video;
-
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
     private String latitude;
@@ -45,15 +41,20 @@ public class Post {
     @JsonBackReference
     @JoinColumn(name = "location_type_id")
     private LocationType locationType;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Image> images;
-//    @OneToOne(mappedBy = "post")
-//    private Video video;
+
+    @JsonManagedReference
+    @OneToOne(mappedBy = "post")
+    private Video video;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;

@@ -62,7 +62,6 @@ public class PostService {
         return new MessageDTO("Post deleted successfully!");
     }
 
-
     public MessageDTO likePost(int postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepository.getById(userId);
@@ -75,7 +74,7 @@ public class PostService {
     }
 
     public MessageDTO unlikePost(long postId, long userId){
-        Post post =postRepo.getPostById(postId);
+        Post post = postRepo.getPostById(postId);
         User u = userRepository.getById(userId);
         if(!post.getLikers().contains(u)){
             throw  new BadRequestException("You need to like post before unlike it! ");
@@ -103,7 +102,6 @@ public class PostService {
         }
         return new MessageDTO("Dislike was removed from post!");
     }
-
 
     public List<ResponsePostDTO> filter(SearchDTO searchDTO) throws SQLException {
         List<ResponsePostDTO> responseList = new ArrayList<>();

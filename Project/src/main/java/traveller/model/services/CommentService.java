@@ -33,13 +33,10 @@ public class CommentService {
     @Autowired
     private CommentDBDao commentDao;
     @Autowired
-<<<<<<< HEAD
     private PostRepository postRepo;
-=======
     private PostRepository postRep;
     @Autowired
     private UserRepository userRep;
->>>>>>> dcc846f275ef36f79faced6aa518b1d7b1a6d6d4
 
     public CommentResponseDTO getById(long id) {
         return new CommentResponseDTO(commentRep.getById(id));
@@ -56,15 +53,9 @@ public class CommentService {
         return new MessageDTO("You deleted the comment.");
     }
 
-<<<<<<< HEAD
-    public List<CommentResponseDTO> getComments(long postId) {
-        Post post = postRepo.getPostById(postId); //post exists
-        List<CommentResponseDTO> commentsDto = new ArrayList<>();
-=======
     public Set<CommentResponseDTO> getComments(long postId) {
         Post post = postRep.getPostById(postId); //post exists
         TreeSet<CommentResponseDTO> commentsDto = new TreeSet<>();
->>>>>>> dcc846f275ef36f79faced6aa518b1d7b1a6d6d4
         for (Comment c : commentRep.findCommentsByPost_Id(postId)){
             commentsDto.add(new CommentResponseDTO(c));
         }
