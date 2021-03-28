@@ -40,9 +40,13 @@ public class ResponsePostDTO {
         this.longitude = post.getLongitude();
         this.description = post.getDescription();
         this.locationTypeDTO = new LocationTypeDTO(post.getLocationType());
-        downloadVideo(post);
-        for(Image i : post.getImages()){
-            images.add(new ResponseImageDTO(i));
+        if(post.getVideoUrl()!=null){
+            downloadVideo(post);
+        }
+        if(post.getImages() != null){
+            for(Image i : post.getImages()){
+                images.add(new ResponseImageDTO(i));
+            }
         }
         for(Comment c : post.getComments()){
             comments.add(new CommentResponseDTO(c));

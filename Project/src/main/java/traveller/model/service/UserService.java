@@ -32,7 +32,6 @@ import java.util.Optional;
 public class UserService implements UserDetailsService { //TODO try it without this implementation
     @Autowired
     private UserRepository userRep;
-
     @Autowired
     private SessionManager sessManager;
 

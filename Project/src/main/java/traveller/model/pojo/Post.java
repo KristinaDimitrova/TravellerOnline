@@ -13,6 +13,7 @@ import javax.persistence.Id;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,14 +50,14 @@ public class Post {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
-    private List<Image> images;
+    private List<Image> images = new ArrayList<>();
 
 
     private String videoUrl;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(

@@ -41,6 +41,7 @@ public class LocationTypeService {
             return optionalLocationType.get();
         }
         else {
+            System.out.println("--------------------------------");
             LocationType locationType = new LocationType(name);
             return locationTypeRepo.save(locationType);
         }

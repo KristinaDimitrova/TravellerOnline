@@ -42,6 +42,7 @@ public class PostService {
 
     public ResponsePostDTO addNewPost(RequestPostDTO postDTO, long userId){
         Post post = new Post(postDTO);
+
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         post.setOwner(userRepo.getById(userId));
         return new ResponsePostDTO(postRepo.save(post));
