@@ -68,7 +68,7 @@ public class PostService {
         if (post.getOwner().getId() != userId) {
             throw new AuthorizationException("You can not delete a post that you do not own!");
         }
-        postRepo.deletePost(postId);
+        postRepo.delete(postRepo.getPostById(postId));
         return new MessageDTO("Post deleted successfully!");
     }
 
