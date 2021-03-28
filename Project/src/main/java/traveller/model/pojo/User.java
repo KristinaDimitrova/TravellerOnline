@@ -65,6 +65,7 @@ public class User implements UserDetails {
     )
     private List<User> followedUsers;
             //LIKED POSTS
+
     @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })
     private Set<Post> likedPosts;
             //DISLIKED POSTS

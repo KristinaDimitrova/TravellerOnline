@@ -27,7 +27,7 @@ public class ResponsePostDTO {
     private String latitude;
     private String longitude;
     private String description;
-    private LocationTypeDTO locationTypeDTO;
+    private String locationType;
     private byte[] video;
     private List<ResponseImageDTO> images;
     private List<CommentResponseDTO> comments;
@@ -39,7 +39,7 @@ public class ResponsePostDTO {
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
         this.description = post.getDescription();
-        this.locationTypeDTO = new LocationTypeDTO(post.getLocationType());
+        this.locationType = new LocationTypeDTO(post.getLocationType()).getName();
         if(post.getVideoUrl()!=null){
             downloadVideo(post);
         }

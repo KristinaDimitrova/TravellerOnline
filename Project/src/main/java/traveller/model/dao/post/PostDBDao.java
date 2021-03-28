@@ -58,14 +58,16 @@ public class PostDBDao implements PostDao {
         if(name == null && locationType == null){
             throw new BadRequestException("At least one parameter is required!");
         }
+        else
         if(locationType == null){
              sql += "WHERE u.username LIKE ?  \n" +
                     "ORDER BY likes DESC, p.created_at DESC";
             ps = c.prepareStatement(sql);
             ps.setString(1, name);
         }
+        else
         if(name == null){
-            sql += "WHERE u.username LIKE ? AND lt.name LIKE ? \n" +
+            sql += "WHERE lt.name LIKE ? \n" +
                     "ORDER BY likes DESC, p.created_at DESC";
             ps = c.prepareStatement(sql);
             ps.setString(1, locationType);
@@ -84,4 +86,6 @@ public class PostDBDao implements PostDao {
         }
         return postList;
     }
+
+
 }

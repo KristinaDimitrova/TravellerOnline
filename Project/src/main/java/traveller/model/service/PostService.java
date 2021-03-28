@@ -18,6 +18,7 @@ import traveller.model.repository.ImageRepository;
 import traveller.model.repository.PostRepository;
 import traveller.model.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class PostService {
         return new MessageDTO("Post deleted successfully!");
     }
 
+    @Transactional
     public MessageDTO likePost(int postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
@@ -81,9 +83,11 @@ public class PostService {
         }
         post.getDislikers().remove(u);
         post.getLikers().add(u);
+        postRepo.save(post);
         return new MessageDTO("Post was liked!");
     }
 
+    @Transactional
     public MessageDTO unlikePost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
@@ -91,9 +95,11 @@ public class PostService {
             throw  new BadRequestException("You need to like post before unlike it! ");
         }
         post.getLikers().remove(u);
+        postRepo.save(post);
         return new MessageDTO("Post was unliked!");
     }
 
+    @Transactional
     public MessageDTO dislikePost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
@@ -102,15 +108,19 @@ public class PostService {
         }
         post.getLikers().remove(u);
         post.getDislikers().add(u);
+        postRepo.save(post);
         return new MessageDTO("Post was disliked!");
     }
 
+    @Transactional
     public MessageDTO removeDislikeFromPost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
         if(!post.getDislikers().contains(u)){
             throw new BadRequestException("You need to dislike post before remove dislike!");
         }
+        post.getDislikers().remove(u);
+        postRepo.save(post);
         return new MessageDTO("Dislike was removed from post!");
     }
 

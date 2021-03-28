@@ -29,13 +29,13 @@ public class PostController extends AbstractController {
 
 
     @PutMapping( "/posts/{id}/video")
-    public ResponsePostDTO uploadVideo(@PathVariable(name="id") long postId, @RequestPart MultipartFile videoFile, HttpSession session){ //all bytes
+    public ResponsePostDTO uploadVideoToPost(@PathVariable(name="id") long postId, @RequestPart MultipartFile videoFile, HttpSession session){ //all bytes
         sessionManager.authorizeLogin(session);
         return postService.uploadVideo(postId, videoFile);
     }
 
     @PutMapping("/post/{id}/image")
-    public ResponsePostDTO uploadImage(@PathVariable(name="id") long postId, @RequestPart MultipartFile videoFile, HttpSession session){ //all bytes
+    public ResponsePostDTO uploadImageToPost(@PathVariable(name="id") long postId, @RequestPart MultipartFile videoFile, HttpSession session){ //all bytes
         sessionManager.authorizeLogin(session);
         return postService.uploadImage(postId, videoFile);
     }
