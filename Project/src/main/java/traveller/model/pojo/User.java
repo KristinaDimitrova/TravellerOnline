@@ -73,6 +73,15 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
     private Set<Comment> comments;
 
+    @JsonBackReference
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "users_like_comments",
+            joinColumns = {@JoinColumn(name="user_id")},
+            inverseJoinColumns = {@JoinColumn(name="comment_id")}
+    )
+    private Set<Comment> likedComments;
+
     public User(SignupUserDTO userDTO) {
         firstName = userDTO.getFirstName();
         lastName = userDTO.getLastName();

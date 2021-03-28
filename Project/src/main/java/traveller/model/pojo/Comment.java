@@ -2,6 +2,7 @@ package traveller.model.pojo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,10 +22,12 @@ public class Comment {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
-   //USER
+
+   //comment owner
    @ManyToOne
    @JoinColumn(name="owner_id")
    private User owner;
+
    @Column
    private String text;
    @Column
@@ -36,8 +39,8 @@ public class Comment {
    @JsonBackReference
    private Post post;
    //People who hit like
-   @OneToMany
-   @JsonBackReference
+   @ManyToMany(mappedBy = "likedComments")
+   @JsonManagedReference
    private Set<User> likers;
 
 }
