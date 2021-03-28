@@ -1,19 +1,24 @@
 package traveller.model.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import traveller.exceptions.AuthorizationException;
 import traveller.exceptions.BadRequestException;
 import traveller.model.DTO.MessageDTO;
 import traveller.model.DTO.SearchDTO;
 import traveller.model.DTO.postDTO.RequestPostDTO;
 import traveller.model.DTO.postDTO.ResponsePostDTO;
+import traveller.model.POJOs.Image;
 import traveller.model.POJOs.Post;
 import traveller.model.POJOs.User;
 import traveller.model.dao.post.PostDBDao;
+import traveller.model.repositories.ImageRepository;
 import traveller.model.repositories.PostRepository;
 import traveller.model.repositories.UserRepository;
 
+import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +32,18 @@ public class PostService {
     @Autowired
     LocationTypeService locationTypeService;
     @Autowired
-    UserRepository userRepository;
-
+    UserRepository userRepo;
+    @Autowired
+    ImageRepository imageRepo;
+    @Value("${video.path")
+    private String videoPath;
+    @Value("${image.path")
+    private String imagePath;
 
     public ResponsePostDTO addNewPost(RequestPostDTO postDTO, long userId){
         Post post = new Post(postDTO);
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
-        post.setOwner(userRepository.getById(userId));
+        post.setOwner(userRepo.getById(userId));
         return new ResponsePostDTO(postRepo.save(post));
     }
 
@@ -64,7 +74,7 @@ public class PostService {
 
     public MessageDTO likePost(int postId, long userId){
         Post post = postRepo.getPostById(postId);
-        User u = userRepository.getById(userId);
+        User u = userRepo.getById(userId);
         if(post.getLikers().contains(u)){
             throw  new BadRequestException("Post is already liked! ");
         }
@@ -75,7 +85,7 @@ public class PostService {
 
     public MessageDTO unlikePost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
-        User u = userRepository.getById(userId);
+        User u = userRepo.getById(userId);
         if(!post.getLikers().contains(u)){
             throw  new BadRequestException("You need to like post before unlike it! ");
         }
@@ -85,7 +95,7 @@ public class PostService {
 
     public MessageDTO dislikePost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
-        User u = userRepository.getById(userId);
+        User u = userRepo.getById(userId);
         if(post.getDislikers().contains(u)){
             throw  new BadRequestException("Post is already disliked!");
         }
@@ -96,7 +106,7 @@ public class PostService {
 
     public MessageDTO removeDislikeFromPost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
-        User u = userRepository.getById(userId);
+        User u = userRepo.getById(userId);
         if(!post.getDislikers().contains(u)){
             throw new BadRequestException("You need to dislike post before remove dislike!");
         }
@@ -119,6 +129,39 @@ public class PostService {
             responsePostDTOs.add(new ResponsePostDTO(p));
         }
         return responsePostDTOs;
+    }
+
+    public ResponsePostDTO uploadVideo(long postId, MultipartFile videoFile) {
+        Post post = postRepo.getPostById(postId);
+        if (post.getVideoUrl() != null) {
+            throw new BadRequestException("You can upload only one video! ");
+        }
+        File physicalFile = new File(videoPath + File.separator + System.nanoTime() + ".mp4");
+        try (OutputStream os = new FileOutputStream(physicalFile)) {
+            os.write(videoFile.getBytes());
+            post.setVideoUrl(physicalFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Post updatedPost = postRepo.getPostById(postId);
+        return new ResponsePostDTO(updatedPost);
+    }
+
+
+    public ResponsePostDTO uploadImage(long postId, MultipartFile imageFile) {
+        Post post = postRepo.getPostById(postId);
+        File pFile = new File(imagePath + File.separator +System.nanoTime() +".png");
+        try( OutputStream os = new FileOutputStream(pFile);){
+            os.write(imageFile.getBytes());
+            Image image = new Image();
+            image.setUrl(pFile.getAbsolutePath());
+            image.setPost(post);
+            imageRepo.save(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Post updatedPost = postRepo.getPostById(postId);
+        return new ResponsePostDTO(updatedPost);
     }
 }
 

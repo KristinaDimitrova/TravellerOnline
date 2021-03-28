@@ -39,7 +39,7 @@ public class Post {
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "location_type_id")
+    @JoinColumn(name = "id")
     private LocationType locationType;
 
     @JsonBackReference
@@ -51,9 +51,8 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Image> images;
 
-    @JsonManagedReference
-    @OneToOne(mappedBy = "post")
-    private Video video;
+
+    private String videoUrl;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
@@ -77,7 +76,6 @@ public class Post {
     )
     @JsonManagedReference
     Set<User>dislikers = new HashSet<>();
-
 
     public Post(RequestPostDTO postDTO) {
         this.createdAt = LocalDateTime.now();

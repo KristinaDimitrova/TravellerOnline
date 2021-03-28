@@ -22,7 +22,7 @@ public class LocationType {
     private long id;
     private String name;
     @JsonBackReference
-    @OneToMany(mappedBy = "location_type_id")
+    @OneToMany(mappedBy = "locationType")
     private List<Post> posts;
     public LocationType(String name){
         this.name = name;
