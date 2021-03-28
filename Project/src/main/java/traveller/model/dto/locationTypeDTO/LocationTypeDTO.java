@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import traveller.model.POJOs.LocationType;
+import traveller.model.pojo.LocationType;
 
 @Component
 @Getter

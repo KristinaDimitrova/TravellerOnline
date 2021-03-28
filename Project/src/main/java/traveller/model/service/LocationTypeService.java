@@ -2,8 +2,9 @@ package traveller.model.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import traveller.exceptions.BadRequestException;
+import traveller.exception.BadRequestException;
 import traveller.model.dto.locationTypeDTO.LocationTypeDTO;
+import traveller.model.pojo.LocationType;
 import traveller.model.repository.LocationTypeRepository;
 
 import java.util.List;

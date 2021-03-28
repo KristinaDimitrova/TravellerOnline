@@ -3,7 +3,7 @@ package traveller.model.dto.userDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import traveller.model.POJOs.User;
+import traveller.model.pojo.User;
 
 @NoArgsConstructor
 @Getter

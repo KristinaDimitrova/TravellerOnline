@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import traveller.exceptions.NotFoundException;
-import traveller.model.POJOs.Image;
+import traveller.exception.NotFoundException;
+import traveller.model.pojo.Image;
 
 import java.io.File;
 import java.io.IOException;

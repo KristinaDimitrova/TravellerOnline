@@ -1,13 +1,13 @@
 package traveller.controller;
 
-import traveller.exceptions.*;
+import traveller.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.*;
 import traveller.model.dto.userDTO.*;
 import traveller.model.dao.user.UserDBDao;
-import traveller.model.repositories.UserRepository;
-import traveller.model.services.UserService;
+import traveller.model.repository.UserRepository;
+import traveller.model.service.UserService;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 

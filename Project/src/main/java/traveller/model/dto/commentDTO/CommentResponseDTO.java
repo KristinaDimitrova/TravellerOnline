@@ -1,8 +1,8 @@
 package traveller.model.dto.commentDTO;
 
-import traveller.model.POJOs.Comment;
-import traveller.model.POJOs.Post;
-import traveller.model.POJOs.User;
+import traveller.model.pojo.Comment;
+import traveller.model.pojo.Post;
+import traveller.model.pojo.User;
 import java.time.LocalDateTime;
 
 public class CommentResponseDTO implements Comparable<CommentResponseDTO> {

@@ -1,6 +1,6 @@
 package traveller.utilities;
 
-import traveller.exceptions.InvalidRegistrationInputException;
+import traveller.exception.InvalidRegistrationInputException;
 
 public class Validate {
 

@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import traveller.exceptions.NotFoundException;
+import traveller.exception.NotFoundException;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.model.dto.fileDTO.ResponseImageDTO;
 import traveller.model.dto.locationTypeDTO.LocationTypeDTO;
-import traveller.model.POJOs.Comment;
-import traveller.model.POJOs.Image;
-import traveller.model.POJOs.Post;
+import traveller.model.pojo.Comment;
+import traveller.model.pojo.Image;
+import traveller.model.pojo.Post;
 
 import java.io.File;
 import java.io.IOException;

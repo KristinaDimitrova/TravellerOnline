@@ -1,9 +1,9 @@
-package traveller.model.repositories;
+package traveller.model.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import traveller.exceptions.NotFoundException;
-import traveller.model.POJOs.Image;
+import traveller.exception.NotFoundException;
+import traveller.model.pojo.Image;
 
 import java.util.Optional;
 

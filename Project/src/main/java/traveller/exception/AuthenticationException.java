@@ -1,4 +1,4 @@
-package traveller.exceptions;
+package traveller.exception;
 
 public class AuthenticationException extends RuntimeException{
 

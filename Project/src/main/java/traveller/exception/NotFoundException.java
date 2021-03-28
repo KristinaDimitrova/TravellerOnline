@@ -1,6 +1,4 @@
-package traveller.exceptions;
-
-import org.aspectj.weaver.ast.Not;
+package traveller.exception;
 
 public class NotFoundException extends RuntimeException{
 
