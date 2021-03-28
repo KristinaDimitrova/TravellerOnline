@@ -82,31 +82,36 @@ public class UserService implements UserDetailsService { //TODO try it without t
     }
 
     public UserWithoutPasswordDTO findById(long id) {
-        Optional<User> user = userRep.findById(id);
-        if(user.isPresent()){
-            return new UserWithoutPasswordDTO(user.get());
-        }
-        throw new NotFoundException("User not found");
+        return new UserWithoutPasswordDTO(userRep.getById(id));
     }
 
     public void deleteUser(long actorId) {
         userRep.deleteUserById(actorId);
     }
 
-    public UserWithoutPasswordDTO changeDetails(long actorId, EditDetailsUserDTO requestDTO) {
+    public UserWithoutPasswordDTO changeDetails(final long actorId, final EditDetailsUserDTO reqDto) {
         User user = userRep.getById(actorId);
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        if(!encoder.matches(requestDTO.getPassword(), user.getPassword())){
+        if(!encoder.matches(reqDto.getPassword(), user.getPassword())){
             throw new AuthenticationException("Wrong password.");
         }
         //check details one by one and if there are changes, incorporate them into the User user
-        if(requestDTO.getEmail() != user.getEmail()){
-            user.setEmail(requestDTO.getEmail());
+        if(reqDto.getEmail() != user.getEmail()){
+            user.setEmail(reqDto.getEmail());
         }
-        if(requestDTO.getFirstName() != user.getFirstName() && requestDTO.getLastName() != user.getLastName()){
-            Validate.firstLastNames(requestDTO.getFirstName(), requestDTO.getLastName());
-            user.setFirstName(requestDTO.getFirstName());
-            user.setLastName(requestDTO.getLastName());
+        //if both first and last names were changed
+        if(reqDto.getFirstName() != user.getFirstName() && reqDto.getLastName() != user.getLastName()){
+            Validate.firstLastNames(reqDto.getFirstName(), reqDto.getLastName());
+            user.setFirstName(reqDto.getFirstName());
+            user.setLastName(reqDto.getLastName());
+        }
+        //if only the first name was changed
+        if(reqDto.getFirstName() != user.getFirstName()){
+            Validate.firstLastNames(reqDto.getFirstName(), user.getLastName());
+        }
+        //if only the last name was changed
+        if(reqDto.getLastName() != user.getLastName()){
+            Validate.firstLastNames(user.getFirstName(), reqDto.getLastName());
         }
         userRep.save(user); //todo save(user) -> user that as fields old and new
         return findById(actorId);

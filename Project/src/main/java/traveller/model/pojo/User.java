@@ -14,6 +14,7 @@ import traveller.model.dto.userDTO.SignupUserDTO;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -92,6 +93,7 @@ public class User implements UserDetails {
         createdAt = LocalDateTime.now();
         age = userDTO.getAge();
         enabled = false;
+        posts = new ArrayList<>();
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

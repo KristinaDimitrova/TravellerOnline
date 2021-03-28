@@ -51,9 +51,8 @@ public class UserController extends AbstractController{
     }
 
     @PostMapping(value="users/edit")
-    public UserWithoutPasswordDTO editProfile(HttpSession session,@RequestBody EditDetailsUserDTO requestDTO){
+    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){
         long actorId = sessManager.authorizeLogin(session);
-        requestDTO.setId(actorId);
         return userService.changeDetails(actorId, requestDTO);
     }
 
