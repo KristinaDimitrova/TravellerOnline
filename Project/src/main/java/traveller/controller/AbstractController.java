@@ -4,10 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import traveller.exception.AuthenticationException;
-import traveller.exception.BadRequestException;
-import traveller.exception.InvalidRegistrationInputException;
-import traveller.exception.AuthorizationException;
+import traveller.exception.*;
 
 import java.sql.SQLException;
 
@@ -16,6 +13,12 @@ public class AbstractController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleException(BadRequestException e){
         return "Sorry, bad request! -> " + e.getMessage();
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleException(NotFoundException e){
+        return e.getMessage();
     }
 
     @ExceptionHandler(InvalidRegistrationInputException.class)

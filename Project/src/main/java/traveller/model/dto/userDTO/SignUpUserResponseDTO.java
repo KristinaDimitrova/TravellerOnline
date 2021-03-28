@@ -16,6 +16,7 @@ public class SignUpUserResponseDTO {
     private String lastName;
     private String username;
     private String email;
+
     public SignUpUserResponseDTO(User user){
         age = user.getAge();
         username = user.getUsername();
