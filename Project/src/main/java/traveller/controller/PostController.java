@@ -1,14 +1,13 @@
 package traveller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import traveller.model.DTO.MessageDTO;
-import traveller.model.DTO.SearchDTO;
-import traveller.model.DTO.postDTO.RequestPostDTO;
-import traveller.model.DTO.postDTO.ResponsePostDTO;
-import traveller.model.services.PostService;
+import traveller.model.dto.MessageDTO;
+import traveller.model.dto.SearchDTO;
+import traveller.model.dto.postDTO.RequestPostDTO;
+import traveller.model.dto.postDTO.ResponsePostDTO;
+import traveller.model.service.PostService;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;

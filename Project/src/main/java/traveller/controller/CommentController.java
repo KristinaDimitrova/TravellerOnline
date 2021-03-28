@@ -2,15 +2,13 @@ package traveller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import traveller.model.DTO.MessageDTO;
-import traveller.model.DTO.commentDTO.CommentCreationRequestDto;
-import traveller.model.DTO.commentDTO.CommentEditRequestDTO;
-import traveller.model.DTO.commentDTO.CommentResponseDTO;
-import traveller.model.services.CommentService;
+import traveller.model.dto.MessageDTO;
+import traveller.model.dto.commentDTO.CommentCreationRequestDto;
+import traveller.model.dto.commentDTO.CommentEditRequestDTO;
+import traveller.model.dto.commentDTO.CommentResponseDTO;
+import traveller.model.service.CommentService;
 
 import javax.servlet.http.HttpSession;
-import javax.xml.stream.events.Comment; //delete
-import java.util.List;
 import java.util.Set;
 
 @RestController

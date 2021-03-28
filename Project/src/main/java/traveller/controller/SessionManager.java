@@ -1,6 +1,6 @@
 package traveller.controller;
 import org.springframework.stereotype.Component;
-import traveller.exceptions.AuthorizationException;
+import traveller.exception.AuthorizationException;
 import javax.servlet.http.HttpSession;
 @Component
 public class SessionManager {

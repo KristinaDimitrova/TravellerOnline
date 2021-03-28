@@ -3,9 +3,9 @@ package traveller.model.dao.post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import traveller.exceptions.BadRequestException;
-import traveller.model.POJOs.Post;
-import traveller.model.repositories.PostRepository;
+import traveller.exception.BadRequestException;
+import traveller.model.pojo.Post;
+import traveller.model.repository.PostRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

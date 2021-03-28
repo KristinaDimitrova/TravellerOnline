@@ -4,10 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import traveller.exceptions.AuthenticationException;
-import traveller.exceptions.BadRequestException;
-import traveller.exceptions.InvalidRegistrationInputException;
-import traveller.exceptions.AuthorizationException;
+import traveller.exception.AuthenticationException;
+import traveller.exception.BadRequestException;
+import traveller.exception.InvalidRegistrationInputException;
+import traveller.exception.AuthorizationException;
 
 import java.sql.SQLException;
 
