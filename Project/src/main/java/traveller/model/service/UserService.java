@@ -9,10 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import traveller.controller.SessionManager;
-import traveller.exceptions.AuthenticationException;
-import traveller.exceptions.BadRequestException;
-import traveller.exceptions.InvalidRegistrationInputException;
-import traveller.exceptions.NotFoundException;
+import traveller.exception.AuthenticationException;
+import traveller.exception.BadRequestException;
+import traveller.exception.InvalidRegistrationInputException;
+import traveller.exception.NotFoundException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.userDTO.EditDetailsUserDTO;
 import traveller.model.dto.userDTO.SignupResponseUserDTO;
@@ -35,8 +35,6 @@ public class UserService implements UserDetailsService { //TODO try it without t
 
     @Autowired
     private SessionManager sessManager;
-    @Autowired
-    private VerificationTokenService verTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

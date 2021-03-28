@@ -6,7 +6,7 @@ import traveller.model.dto.MessageDTO;
 import traveller.model.dto.commentDTO.CommentCreationRequestDto;
 import traveller.model.dto.commentDTO.CommentEditRequestDTO;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
-import traveller.model.services.CommentService;
+import traveller.model.service.CommentService;
 
 import javax.servlet.http.HttpSession;
 import java.util.Set;

@@ -1,6 +1,7 @@
 package traveller.model.dto.userDTO;
-import traveller.model.POJOs.Post;
-import traveller.model.POJOs.User;
+import traveller.model.dto.postDTO.ResponsePostDTO;
+import traveller.model.pojo.Post;
+import traveller.model.pojo.User;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class UserWithoutPasswordDTO {
     private String lastName;
     private String email;
     private String username;
-    private List<Post> posts;
+    private List<ResponsePostDTO> posts;
 
     public UserWithoutPasswordDTO(User user) {
         firstName = user.getFirstName();
@@ -17,7 +18,7 @@ public class UserWithoutPasswordDTO {
         email = user.getEmail();
         username = user.getUsername();
         for(Post p : user.getPosts()){
-            //posts.add(new PostResponseDto(p))
+            posts.add(new ResponsePostDTO(p));
         }
 
     }
