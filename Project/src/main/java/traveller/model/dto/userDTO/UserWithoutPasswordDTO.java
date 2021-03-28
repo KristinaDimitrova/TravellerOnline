@@ -10,6 +10,7 @@ public class UserWithoutPasswordDTO {
     private String lastName;
     private String email;
     private String username;
+    private int age;
     private List<ResponsePostDTO> posts;
 
     public UserWithoutPasswordDTO(User user) {
@@ -20,6 +21,6 @@ public class UserWithoutPasswordDTO {
         for(Post p : user.getPosts()){
             posts.add(new ResponsePostDTO(p));
         }
-
+        age = user.getAge();
     }
 }

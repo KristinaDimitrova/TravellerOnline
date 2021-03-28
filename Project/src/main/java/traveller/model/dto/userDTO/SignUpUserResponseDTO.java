@@ -10,15 +10,14 @@ import traveller.model.pojo.User;
 @Setter
 @Getter
 @Component
-public class SignupResponseUserDTO {
-    private long id;
+public class SignUpUserResponseDTO {
+    private int age;
     private String firstName;
     private String lastName;
     private String username;
     private String email;
-
-    public SignupResponseUserDTO (User user){
-        id = user.getId();
+    public SignUpUserResponseDTO(User user){
+        age = user.getAge();
         username = user.getUsername();
         email = user.getEmail();
         firstName = user.getFirstName();
@@ -26,3 +25,4 @@ public class SignupResponseUserDTO {
     }
 
 }
+

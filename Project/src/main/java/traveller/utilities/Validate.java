@@ -7,15 +7,15 @@ public class Validate {
     public static void firstLastNames(String firstName, String lastName) {
         String lettersBulg = "[А-Я][a-я]+";
         String lettersEng = "[A-Z][a-z]+";
-        if((!firstName.matches(lettersBulg) && !lastName.matches(lettersBulg)) ||
-                (!firstName.matches(lettersEng) && !lastName.matches(lettersEng))){
+        if((!firstName.matches(lettersBulg) || !lastName.matches(lettersBulg)) &&
+                (!firstName.matches(lettersEng) || !lastName.matches(lettersEng))){
             throw new InvalidRegistrationInputException("Names on Travergy must start with a capital letter and contain only " +
                     "letters from the same alphabet.");
         }
-        if(!firstName.matches("^\\w{1,20}$")) {
+        if(firstName.length() < 1 || firstName.length() > 20) {
             throw new InvalidRegistrationInputException("First name on Travergy must be between one and twenty characters.");
         }
-        if(!lastName.matches("^\\w{1,20}$")) {
+        if(lastName.length() < 1 || lastName.length() > 20) {
             throw new InvalidRegistrationInputException("Last name on Travergy must be between one and twenty characters.");
         }
     }
@@ -54,7 +54,7 @@ public class Validate {
         String pattern =  "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         if(!email.matches(pattern)){
-            System.out.println("Please enter a valid email address.");
+            throw new InvalidRegistrationInputException("Please enter a valid email address.");
         }
     }
 

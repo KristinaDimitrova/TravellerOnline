@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import traveller.model.dto.userDTO.SignupUserDTO;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -40,6 +39,8 @@ public class User implements UserDetails {
     private String username;
     @Column
     private String password;
+    @Column
+    private int age; //TODO validate
     @Column
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
@@ -89,6 +90,7 @@ public class User implements UserDetails {
         username = userDTO.getUsername();
         password = userDTO.getPassword();
         createdAt = LocalDateTime.now();
+        age = userDTO.getAge();
         enabled = false;
     }
     @Override

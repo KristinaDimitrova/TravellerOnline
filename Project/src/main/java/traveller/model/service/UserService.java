@@ -15,7 +15,7 @@ import traveller.exception.InvalidRegistrationInputException;
 import traveller.exception.NotFoundException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.userDTO.EditDetailsUserDTO;
-import traveller.model.dto.userDTO.SignupResponseUserDTO;
+import traveller.model.dto.userDTO.SignUpUserResponseDTO;
 import traveller.model.dto.userDTO.SignupUserDTO;
 import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
 import traveller.model.pojo.User;
@@ -45,7 +45,9 @@ public class UserService implements UserDetailsService { //TODO try it without t
         return user;
     }
 
-    public SignupResponseUserDTO insertUser(SignupUserDTO dto){
+    public SignUpUserResponseDTO insertUser(SignupUserDTO dto){
+        System.out.println(dto.getFirstName());
+        System.out.println(dto.getLastName());
         Validate.firstLastNames(dto.getFirstName(), dto.getLastName());
         Validate.email(dto.getEmail());
         Validate.username(dto.getUsername());
@@ -67,9 +69,8 @@ public class UserService implements UserDetailsService { //TODO try it without t
         User user = new User(dto);
         //enable the new user
         user.setEnabled(false);
-        SignupResponseUserDTO responseDTO = new SignupResponseUserDTO(user);
         //todo send email with a thread
-        return responseDTO;
+        return new SignUpUserResponseDTO(userRep.save(user));
     }
 
     public List<UserWithoutPasswordDTO> getUsersByName(String firstName, String lastName) {

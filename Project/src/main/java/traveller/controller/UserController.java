@@ -5,20 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.*;
 import traveller.model.dto.userDTO.*;
-import traveller.model.dao.user.UserDBDao;
-import traveller.model.repository.UserRepository;
 import traveller.model.service.UserService;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
 @RestController
-public class UserController {
+public class UserController extends AbstractController{
 
-    @Autowired
-    private UserDBDao userDao;
-    @Autowired
-    private UserRepository userRep;
     @Autowired
     private UserService userService;
     @Autowired
@@ -26,7 +20,7 @@ public class UserController {
 
 
     @PostMapping(value="/singup")
-    public SignupResponseUserDTO register(@RequestBody SignupUserDTO dto) {
+    public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
