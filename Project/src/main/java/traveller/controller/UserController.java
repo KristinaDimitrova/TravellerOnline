@@ -6,19 +6,18 @@ import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.*;
 import traveller.model.dto.userDTO.*;
 import traveller.model.service.UserService;
+import traveller.utilities.Validate;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-
 @RestController
 public class UserController extends AbstractController{
-
 
     @Autowired
     private UserService userService;
     @Autowired
     private SessionManager sessManager;
-
 
     @PostMapping(value="/singup")
     public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
@@ -50,44 +49,45 @@ public class UserController extends AbstractController{
         return new MessageDTO("You logged out.");
     }
 
-    @PostMapping(value="users/edit")
-    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){
+    @PostMapping(value="/users/edit")
+    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){ //FIXME
         long actorId = sessManager.authorizeLogin(session);
         return userService.changeDetails(actorId, requestDTO);
     }
 
-    @PostMapping(value="users/change") //TODO postman
-    public UserWithoutPasswordDTO changePassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
+    @PostMapping(value="/users/change") //TODO postman
+    public MessageDTO changePassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
                                  @RequestParam("repeatedNewPassword") String repeatedNewPassword)  {
         long actorId = sessManager.authorizeLogin(session);
         passwordMatches(repeatedNewPassword, newPassword);
+        Validate.passwordChange(newPassword);
         return userService.changePassword(actorId, oldPassword, newPassword);
     }
 
-    private void passwordMatches(String passwordOne, String passwordTwo) throws BadRequestException {
+    private void passwordMatches(String passwordOne, String passwordTwo) {
         if(!passwordOne.equals(passwordTwo)){
             throw new BadRequestException("Passwords do not match.");
         }
     }
 
     @DeleteMapping(value="/users/delete")
-    public MessageDTO deleteAccount(HttpSession session, @PathVariable(name="id") long id) {
+    public MessageDTO deleteAccount(HttpSession session) {
         long actorId = sessManager.authorizeLogin(session);
-        theSameUser(id, actorId);
+        //theSameUser(id, actorId);
         userService.deleteUser(actorId);
         sessManager.userLogsOut(session);
         return new MessageDTO("Account successfully deleted.");
     }
 
     @PostMapping(value="/users/{id}/follow")
-    public MessageDTO followUser(@PathVariable long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
+    public MessageDTO followUser(@PathVariable(name="id") long id, HttpSession session) {
         long actor = sessManager.authorizeLogin(session);
         notTheSameUser(actor, id);
         return userService.followUser(actor, id);
     }
 
-    @PostMapping(value="users/{id}/unfollow")
-    public void unfollowUser(@PathVariable("id") long id, HttpSession session) throws AuthorizationException, NotFoundException, BadRequestException {
+    @PostMapping(value="/users/{id}/unfollow")
+    public void unfollowUser(@PathVariable("id") long id, HttpSession session) {
         long actor = sessManager.authorizeLogin(session);
         notTheSameUser(actor, id);
         userService.unfollowUser(actor, id);
@@ -105,7 +105,7 @@ public class UserController extends AbstractController{
         }
     }
 
-    @GetMapping(value="/users/{id}") //todo postman
+    @GetMapping(value="/users/{id}")
     public UserWithoutPasswordDTO findById(@PathVariable long id){
         return userService.findById(id);
     }

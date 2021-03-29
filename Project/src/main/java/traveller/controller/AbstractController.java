@@ -41,7 +41,13 @@ public class AbstractController {
     @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String handleException(AuthorizationException e){
-        return "Unathorized operation - " + e.getMessage();
+        return "Unauthorized operation - " + e.getMessage();
+    }
+
+    @ExceptionHandler(IllegalPasswordsException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public String handleException(IllegalPasswordsException e){
+        return "Weak password. " + e.getMessage();
     }
 
     @Scheduled(fixedDelay = 1000) //every minute

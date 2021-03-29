@@ -23,7 +23,7 @@ public class Comment {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
 
-   //comment owner
+   //COMMENT OWNER
    @ManyToOne
    @JoinColumn(name="owner_id")
    private User owner;
@@ -38,9 +38,19 @@ public class Comment {
    @JoinColumn(name="post_id")
    @JsonBackReference
    private Post post;
-   //People who hit like
+   //PEOPLE WHO LIKE IT
    @ManyToMany(mappedBy = "likedComments")
-   @JsonManagedReference
+   @JsonManagedReference //FIXME       KRASI, IS THIS REDUNDANT ?
    private Set<User> likers;
+
+/*
+   @JsonBackReference
+   @ManyToMany(cascade = { CascadeType.ALL })
+   @JoinTable(
+           name = "users_like_comments",
+           joinColumns = {@JoinColumn(name="user_id")},
+           inverseJoinColumns = {@JoinColumn(name="comment_id")})
+   private Set<User> likers;
+*/
 
 }

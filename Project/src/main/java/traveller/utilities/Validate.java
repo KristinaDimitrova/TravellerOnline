@@ -1,6 +1,10 @@
 package traveller.utilities;
 
+import traveller.exception.IllegalPasswordsException;
 import traveller.exception.InvalidRegistrationInputException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Validate {
 
@@ -35,7 +39,6 @@ public class Validate {
         String capitalLetterRegex = "(.*[A-Z].*)";
         String digitRegex = "(.*\\d.*)";
         String lowerCaseRegex = "(.*[a-z].*)";
-        String specialCharRegex = ".*[!@#&()–[{}]:;',?/*~$^+=<>]*.";
         if(!password.matches(capitalLetterRegex)){
             throw new InvalidRegistrationInputException("Your password must contain at least one uppercase letter. Please try another.");
         }
@@ -45,8 +48,38 @@ public class Validate {
         if(!password.matches(lowerCaseRegex)){
             throw new InvalidRegistrationInputException("Your password must contain at least one lowercase letter. Please try another.");
         }
-        if(!password.matches(specialCharRegex)){
-            throw new InvalidRegistrationInputException("Your password must contain at least one special character. Please try another.");
+        {
+            Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+            Matcher m = p.matcher(password);
+            boolean containsASpecialCharacter = m.find();
+            if(!containsASpecialCharacter){
+                throw new InvalidRegistrationInputException("Your password must contain at least one special character.\n" +
+                        " Please try another.\n Accepted special characters: ` ~ ! @ # $ % ^ & * ( ) _ - + = ] } [ { ; : ' < > ? *");
+            }
+        }
+    }
+
+    public static void passwordChange(String password){
+        String capitalLetterRegex = "(.*[A-Z].*)";
+        String digitRegex = "(.*\\d.*)";
+        String lowerCaseRegex = "(.*[a-z].*)";
+        if(!password.matches(capitalLetterRegex)){
+            throw new IllegalPasswordsException("Your password must contain at least one uppercase letter. Please try another.");
+        }
+        if(!password.matches(digitRegex)){
+            throw new IllegalPasswordsException("Your password must contain at least one digit. Please try another.");
+        }
+        if(!password.matches(lowerCaseRegex)){
+            throw new IllegalPasswordsException("Your password must contain at least one lowercase letter. Please try another.");
+        }
+        {
+            Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+            Matcher m = p.matcher(password);
+            boolean containsASpecialCharacter = m.find();
+            if(!containsASpecialCharacter){
+                throw new IllegalPasswordsException("Your password must contain at least one special character.\n" +
+                        " Please try another.\n Accepted special characters: ` ~ ! @ # $ % ^ & * ( ) _ - + = ] } [ { ; : ' < > ? *");
+            }
         }
     }
 

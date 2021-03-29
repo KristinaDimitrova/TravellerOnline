@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService { //TODO try it without t
         if(userRep.findByEmail(dto.getEmail()) != null){
             throw new InvalidRegistrationInputException("Account with this email already exists.");
         }
-        //username doesn't exist
+        //username taken
         if(userRep.findByUsername(dto.getUsername()) != null){
             throw new InvalidRegistrationInputException("Account with this username already exists.");
         }
@@ -129,14 +129,15 @@ public class UserService implements UserDetailsService { //TODO try it without t
         return new UserWithoutPasswordDTO(user);
     }
 
-    public UserWithoutPasswordDTO changePassword(long userId, String oldPassword, String newPassword) {
+    public MessageDTO changePassword(long userId, String oldPassword, String newPassword) {
         User user = userRep.getById(userId);
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         if(!encoder.matches(oldPassword, user.getPassword())){
             throw new AuthenticationException("Old password is incorrect.");
         }
-        user.setPassword(newPassword);
-        return new UserWithoutPasswordDTO(userRep.save(user));
+        user.setPassword(encoder.encode(newPassword));
+        userRep.save(user);
+        return new MessageDTO("Password changed.");
     }
 
     public MessageDTO followUser(long follower, long followed){
