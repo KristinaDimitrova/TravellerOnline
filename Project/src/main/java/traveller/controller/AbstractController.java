@@ -50,8 +50,8 @@ public class AbstractController {
         return "Weak password. " + e.getMessage();
     }
 
-    @Scheduled(fixedDelay = 1000) //every minute
+/*    @Scheduled(fixedDelay = 1000) //every minute
     public void ScheduledLogs(){
-        //TODO -> use logs
-    }
+        use logs
+    }*/
 }

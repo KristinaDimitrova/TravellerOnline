@@ -8,24 +8,27 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import traveller.controller.SessionManager;
-import traveller.exception.AuthenticationException;
-import traveller.exception.BadRequestException;
-import traveller.exception.InvalidRegistrationInputException;
-import traveller.exception.NotFoundException;
+import traveller.exception.*;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.userDTO.EditDetailsUserDTO;
 import traveller.model.dto.userDTO.SignUpUserResponseDTO;
 import traveller.model.dto.userDTO.SignupUserDTO;
 import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
 import traveller.model.pojo.User;
+import traveller.model.pojo.VerificationToken;
 import traveller.model.repository.UserRepository;
 import traveller.utilities.Validate;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @Service
@@ -34,8 +37,12 @@ public class UserService implements UserDetailsService { //TODO try it without t
     private UserRepository userRep;
     @Autowired
     private SessionManager sessManager;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private VerificationTokenService tokenService;
 
-    @Override
+    @Override //this is needed by Spring security
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRep.findByUsername(username);
         if (user == null) {
@@ -44,7 +51,8 @@ public class UserService implements UserDetailsService { //TODO try it without t
         return user;
     }
 
-    public SignUpUserResponseDTO insertUser(SignupUserDTO dto){
+    @Transactional //Because we have more than one update statements -> all or nothing
+    public String insertUser(SignupUserDTO dto){
         System.out.println(dto.getFirstName());
         System.out.println(dto.getLastName());
         Validate.firstLastNames(dto.getFirstName(), dto.getLastName());
@@ -63,13 +71,16 @@ public class UserService implements UserDetailsService { //TODO try it without t
             throw new InvalidRegistrationInputException("Account with this username already exists.");
         }
         //encoding password
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        dto.setPassword(encoder.encode(dto.getPassword()));
+        dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         User user = new User(dto);
-        //enable the new user
+        //new user must be unable to login if they have not verified their email
         user.setEnabled(false);
-        //todo send email with a thread
-        return new SignUpUserResponseDTO(userRep.save(user));
+        userRep.save(user);
+        //verification
+        VerificationToken token = new VerificationToken(user);
+        tokenService.save(token);
+        //todo send email
+        return token.getToken(); // SignUpUserResponseDTO(userRep.save(user));
     }
 
     public List<UserWithoutPasswordDTO> getUsersByName(String firstName, String lastName) {
@@ -80,6 +91,7 @@ public class UserService implements UserDetailsService { //TODO try it without t
         }
         return usersWOutPass;
     }
+
 
     public UserWithoutPasswordDTO findById(long id) {
         return new UserWithoutPasswordDTO(userRep.getById(id));
@@ -118,12 +130,17 @@ public class UserService implements UserDetailsService { //TODO try it without t
     }
 
     public UserWithoutPasswordDTO loginWtUsername(String username, String password, HttpSession session) {
-        //check if password is the same
         User user = userRep.findByUsername(username);
+
+        //check if password is the same
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         //username does not exist OR password is wrong
-        if(user == null || !encoder.matches(password, user.getPassword())){
+        if(user == null || !bCryptPasswordEncoder.matches(password, user.getPassword())){
             throw new AuthenticationException("Combination of password and username is incorrect.");
+        }
+        //did the user verify their email?
+        if(!user.isEnabled()){
+            throw new AuthorizationException("You must verify your email.");
         }
         sessManager.userLogsIn(session, user.getId());
         return new UserWithoutPasswordDTO(user);
@@ -131,11 +148,10 @@ public class UserService implements UserDetailsService { //TODO try it without t
 
     public MessageDTO changePassword(long userId, String oldPassword, String newPassword) {
         User user = userRep.getById(userId);
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        if(!encoder.matches(oldPassword, user.getPassword())){
+        if(!bCryptPasswordEncoder.matches(oldPassword, user.getPassword())){
             throw new AuthenticationException("Old password is incorrect.");
         }
-        user.setPassword(encoder.encode(newPassword));
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
         userRep.save(user);
         return new MessageDTO("Password changed.");
     }
@@ -160,5 +176,16 @@ public class UserService implements UserDetailsService { //TODO try it without t
         actingUser.getFollowedUsers().remove(followedUser);
         userRep.save(actingUser);
         return new MessageDTO("Unfollowed");
+    }
+
+    @Transactional
+    public MessageDTO confrimToken(String token) {
+        VerificationToken verToken = tokenService.findByToken(token);
+        if(verToken == null){
+            throw new BadRequestException("Invalid verification details.");
+        }
+        verToken.getUser().setEnabled(true);
+        verToken.setConfirmedAt(LocalDateTime.now());
+        return new MessageDTO("Email confirmed.");
     }
 }

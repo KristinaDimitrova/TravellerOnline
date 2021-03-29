@@ -3,27 +3,24 @@ package traveller.model.pojo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import traveller.model.dto.userDTO.SignupUserDTO;
+import traveller.registration.Role;
+
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@EqualsAndHashCode //fixme test if redundant
 @Entity
 @Table(name="users")
 public class User implements UserDetails {
@@ -47,6 +44,9 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
     @Column
     private boolean enabled;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
             //POSTS
@@ -94,12 +94,12 @@ public class User implements UserDetails {
         age = userDTO.getAge();
         enabled = false;
         posts = new ArrayList<>();
+        role = Role.USER;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
-        //return Collections.singletonList(authority);
-        return null; //fixme
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
+        return Collections.singletonList(authority);
     }
 
     @Override

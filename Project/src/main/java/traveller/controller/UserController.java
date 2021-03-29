@@ -9,6 +9,7 @@ import traveller.model.service.UserService;
 import traveller.utilities.Validate;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -19,9 +20,15 @@ public class UserController extends AbstractController{
     @Autowired
     private SessionManager sessManager;
 
+    @Transactional //FIXME Krasi, when do we have to use this annotation?
     @PostMapping(value="/singup")
-    public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
+    public String register(@RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
+    }
+
+    @GetMapping(value = "confirm/{token}")
+    public MessageDTO confirm(@PathVariable(name ="token") String token){
+        return userService.confrimToken(token);
     }
 
     @GetMapping(value="/search/{firstName}&{lastName}")

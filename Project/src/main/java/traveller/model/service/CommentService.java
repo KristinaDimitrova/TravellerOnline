@@ -12,10 +12,10 @@ import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Post;
 import traveller.model.pojo.User;
-import traveller.model.dao.comment.CommentDBDao;
 import traveller.model.repository.CommentRepository;
 import traveller.model.repository.PostRepository;
 import traveller.model.repository.UserRepository;
+import traveller.utilities.Validate;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -28,8 +28,6 @@ public class CommentService {
     private CommentRepository commentRep;
     @Autowired
     private PostService postServ;
-    @Autowired
-    private CommentDBDao commentDao;
     @Autowired
     private PostRepository postRepo;
     private PostRepository postRep;
@@ -85,7 +83,7 @@ public class CommentService {
     }
 
     public CommentResponseDTO addComment(CommentCreationRequestDto commentDto, long actorId) {
-        //validate input >0 characters <255 characters todo
+        Validate.comment(commentDto.getText());
         Comment comment = new Comment();
         comment.setPost(postRep.getPostById(commentDto.getPostId())); //post exists
         comment.setText(commentDto.getText());  //text is okay

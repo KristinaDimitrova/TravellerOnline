@@ -1,5 +1,6 @@
 package traveller.utilities;
 
+import traveller.exception.BadRequestException;
 import traveller.exception.IllegalPasswordsException;
 import traveller.exception.InvalidRegistrationInputException;
 
@@ -91,4 +92,9 @@ public class Validate {
         }
     }
 
+    public static void comment(String text) {
+        if(text.length() < 1 || text.length() > 255){
+            throw new BadRequestException("Comment must be between 1 and 255 characters.");
+        }
+    }
 }

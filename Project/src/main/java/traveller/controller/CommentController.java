@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Set;
 
 @RestController
-public class CommentController extends AbstractController { //todo Moni
+public class CommentController extends AbstractController {
     @Autowired
     private CommentService comService;
     @Autowired
@@ -23,7 +23,6 @@ public class CommentController extends AbstractController { //todo Moni
                                HttpSession session){
         long actorId = sessManager.authorizeLogin(session); //user has logged in
         return comService.addComment(commentDto, actorId);
-        //TODO validate text
     }
 
     @PutMapping(value="/comments/{id}")
