@@ -15,6 +15,7 @@ import traveller.model.pojo.Post;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -29,7 +30,7 @@ public class ResponsePostDTO {
     private String description;
     private String locationType;
     private byte[] video;
-    private List<ResponseImageDTO> images;
+    private List<ResponseImageDTO> images ;
     private List<CommentResponseDTO> comments;
     private int likes;
     private int dislikes;
@@ -43,11 +44,13 @@ public class ResponsePostDTO {
         if(post.getVideoUrl()!=null){
             downloadVideo(post);
         }
+        this.images = new ArrayList<>();
         if(post.getImages() != null){
             for(Image i : post.getImages()){
                 images.add(new ResponseImageDTO(i));
             }
         }
+        this.comments = new ArrayList<>();
         for(Comment c : post.getComments()){
             comments.add(new CommentResponseDTO(c));
         }

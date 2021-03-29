@@ -3,7 +3,10 @@ package traveller;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @SpringBootApplication(exclude = {ReactiveSecurityAutoConfiguration.class })
 @EnableScheduling
@@ -13,4 +16,10 @@ public class TravellerApplication {
         SpringApplication.run(TravellerApplication.class, args);
     }
 
+
+
+
+
 }
+
+

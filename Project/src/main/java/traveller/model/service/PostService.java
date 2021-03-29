@@ -36,10 +36,10 @@ public class PostService {
     UserRepository userRepo;
     @Autowired
     ImageRepository imageRepo;
-    @Value("${video.path")
-    private String videoPath;
-    @Value("${image.path")
-    private String imagePath;
+
+    @Value("${file.path}")
+    private String filePath;
+
 
     public ResponsePostDTO addNewPost(RequestPostDTO postDTO, long userId){
         Post post = new Post(postDTO);
@@ -142,12 +142,15 @@ public class PostService {
         return responsePostDTOs;
     }
 
-    public ResponsePostDTO uploadVideo(long postId, MultipartFile videoFile) {
+    public ResponsePostDTO uploadVideo(long postId, MultipartFile videoFile, long userId) {
         Post post = postRepo.getPostById(postId);
-        if (post.getVideoUrl() != null) {
-            throw new BadRequestException("You can upload only one video! ");
+        if (post.getOwner().getId() != userId) {
+            throw new AuthorizationException("You can not edit a post that you do not own!");
         }
-        File physicalFile = new File(videoPath + File.separator + System.nanoTime() + ".mp4");
+        if (post.getVideoUrl() != null) {
+            throw new BadRequestException("You can attach up only one video per post! ");
+        }
+        File physicalFile = new File(filePath + File.separator + System.nanoTime() + ".mp4");
         try (OutputStream os = new FileOutputStream(physicalFile)) {
             os.write(videoFile.getBytes());
             post.setVideoUrl(physicalFile.getAbsolutePath());
@@ -161,7 +164,10 @@ public class PostService {
 
     public ResponsePostDTO uploadImage(long postId, MultipartFile imageFile) {
         Post post = postRepo.getPostById(postId);
-        File pFile = new File(imagePath + File.separator +System.nanoTime() +".png");
+        File pFile = new File(filePath + File.separator +System.nanoTime() +".png");
+        if(post.getImages().size()==3){
+            throw new BadRequestException("You can attach up to 3 photos per post!");
+        }
         try( OutputStream os = new FileOutputStream(pFile);){
             os.write(imageFile.getBytes());
             Image image = new Image();
