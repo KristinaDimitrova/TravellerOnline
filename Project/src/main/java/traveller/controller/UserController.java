@@ -22,7 +22,7 @@ public class UserController extends AbstractController{
 
     @Transactional //FIXME Krasi, when do we have to use this annotation?
     @PostMapping(value="/singup")
-    public String register(@RequestBody SignupUserDTO dto) {
+    public MessageDTO register(@RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
