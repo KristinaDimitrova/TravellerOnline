@@ -1,4 +1,4 @@
-package traveller.model.service;
+package traveller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,8 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import traveller.controller.SessionManager;
 import traveller.email.EmailSender;
 import traveller.exception.*;
@@ -19,7 +17,7 @@ import traveller.model.dto.userDTO.SignupUserDTO;
 import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
 import traveller.model.pojo.User;
 import traveller.model.pojo.VerificationToken;
-import traveller.model.repository.UserRepository;
+import traveller.repository.UserRepository;
 import traveller.utilities.Validate;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;

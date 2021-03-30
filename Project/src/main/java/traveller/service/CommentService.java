@@ -1,4 +1,4 @@
-package traveller.model.service;
+package traveller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,9 +12,9 @@ import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Post;
 import traveller.model.pojo.User;
-import traveller.model.repository.CommentRepository;
-import traveller.model.repository.PostRepository;
-import traveller.model.repository.UserRepository;
+import traveller.repository.CommentRepository;
+import traveller.repository.PostRepository;
+import traveller.repository.UserRepository;
 import traveller.utilities.Validate;
 
 import java.time.LocalDateTime;

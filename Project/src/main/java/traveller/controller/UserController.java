@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.*;
 import traveller.model.dto.userDTO.*;
-import traveller.model.service.UserService;
+import traveller.service.UserService;
 import traveller.utilities.Validate;
 
 import javax.servlet.http.HttpSession;

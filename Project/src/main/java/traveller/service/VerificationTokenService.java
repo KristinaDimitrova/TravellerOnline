@@ -1,13 +1,10 @@
-package traveller.model.service;
+package traveller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import traveller.model.pojo.User;
-import traveller.model.repository.VerificationTokenRepository;
+import traveller.repository.VerificationTokenRepository;
 import traveller.model.pojo.VerificationToken;
-
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 @Service
 public class VerificationTokenService {
