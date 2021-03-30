@@ -7,10 +7,12 @@ import org.springframework.stereotype.Component;
 import traveller.exception.NotFoundException;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.model.dto.fileDTO.ResponseImageDTO;
+import traveller.model.dto.fileDTO.ResponseVideoDTO;
 import traveller.model.dto.locationTypeDTO.LocationTypeDTO;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Image;
 import traveller.model.pojo.Post;
+import traveller.model.pojo.Video;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +31,7 @@ public class ResponsePostDTO {
     private String longitude;
     private String description;
     private String locationType;
-    private byte[] video;
+    private List<ResponseVideoDTO> videos ;
     private List<ResponseImageDTO> images ;
     private List<CommentResponseDTO> comments;
     private int likes;
@@ -41,14 +43,13 @@ public class ResponsePostDTO {
         this.longitude = post.getLongitude();
         this.description = post.getDescription();
         this.locationType = new LocationTypeDTO(post.getLocationType()).getName();
-        if(post.getVideoUrl()!=null){
-            downloadVideo(post);
+        this.videos = new ArrayList<>();
+        for(Video v : post.getVideos()){
+            videos.add(new ResponseVideoDTO(v));
         }
         this.images = new ArrayList<>();
-        if(post.getImages() != null){
-            for(Image i : post.getImages()){
-                images.add(new ResponseImageDTO(i));
-            }
+        for(Image i : post.getImages()){
+            images.add(new ResponseImageDTO(i));
         }
         this.comments = new ArrayList<>();
         for(Comment c : post.getComments()){
@@ -57,15 +58,4 @@ public class ResponsePostDTO {
         this.likes = post.getLikers().size();
         this.dislikes = post.getDislikers().size();
     }
-
-    private void downloadVideo(Post post){
-        String url = post.getVideoUrl();
-        File phyFile = new File(url);
-        try {
-            this.video = Files.readAllBytes(phyFile.toPath());
-        } catch (IOException e) {
-            throw new NotFoundException("Sorry, problem with video downloading!");
-        }
-    }
-
 }

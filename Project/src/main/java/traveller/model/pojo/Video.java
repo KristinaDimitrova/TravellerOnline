@@ -13,8 +13,8 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "post_images")
-public class Image {
+@Table(name = "post_videos")
+public class Video {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -23,5 +23,4 @@ public class Image {
     @JoinColumn(name = "post_id")
     private traveller.model.pojo.Post post;
     private String url;
-
 }

@@ -21,7 +21,7 @@ public class CommentController extends AbstractController {
     @PostMapping(value="posts/{postId}/comments")
     public CommentResponseDTO commentPost(@RequestBody CommentCreationRequestDto commentDto, @PathVariable("postId") long postId, @RequestParam("text") String text,
                                HttpSession session){
-        long actorId = sessManager.authorizeLogin(session); //user has logged in
+        long actorId = sessManager.authorizeLogin(session);
         return comService.addComment(commentDto, actorId);
     }
 

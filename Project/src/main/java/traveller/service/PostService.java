@@ -6,20 +6,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import traveller.exception.AuthorizationException;
 import traveller.exception.BadRequestException;
+import traveller.exception.NotFoundException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
+import traveller.model.dto.fileDTO.ResponseImageDTO;
+import traveller.model.dto.fileDTO.ResponseVideoDTO;
 import traveller.model.dto.postDTO.RequestPostDTO;
 import traveller.model.dto.postDTO.ResponsePostDTO;
 import traveller.model.pojo.Image;
 import traveller.model.pojo.Post;
 import traveller.model.pojo.User;
 import traveller.model.dao.post.PostDBDao;
+import traveller.model.pojo.Video;
 import traveller.repository.ImageRepository;
 import traveller.repository.PostRepository;
 import traveller.repository.UserRepository;
+import traveller.repository.VideoRepository;
 
 import javax.transaction.Transactional;
 import java.io.*;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,16 +42,32 @@ public class PostService {
     UserRepository userRepo;
     @Autowired
     ImageRepository imageRepo;
+    @Autowired
+    VideoRepository videoRepo;
 
     @Value("${file.path}")
     private String filePath;
 
 
+    @Transactional
     public ResponsePostDTO addNewPost(RequestPostDTO postDTO, long userId){
         Post post = new Post(postDTO);
 
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         post.setOwner(userRepo.getById(userId));
+        for (long imageId : postDTO.getImageIds()){
+            Image image = imageRepo.getImageById(imageId);
+            image.setPost(post);
+            imageRepo.save(image);
+            post.getImages().add(image);
+        }
+        for (long videoId : postDTO.getVideoIds()){
+            Video video = videoRepo.getVideoById(videoId);
+            video.setPost(post);
+            videoRepo.save(video);
+            post.getVideos().add(video);
+        }
+
         return new ResponsePostDTO(postRepo.save(post));
     }
 
@@ -142,46 +164,55 @@ public class PostService {
         return responsePostDTOs;
     }
 
-    public ResponsePostDTO uploadVideo(long postId, MultipartFile videoFile, long userId) {
-        Post post = postRepo.getPostById(postId);
-        if (post.getOwner().getId() != userId) {
-            throw new AuthorizationException("You can not edit a post that you do not own!");
-        }
-        if (post.getVideoUrl() != null) {
-            throw new BadRequestException("You can attach up only one video per post! ");
-        }
+    public ResponseVideoDTO uploadVideo(MultipartFile videoFile) {
+        Video video = new Video();
+
         File physicalFile = new File(filePath + File.separator + System.nanoTime() + ".mp4");
         try (OutputStream os = new FileOutputStream(physicalFile)) {
             os.write(videoFile.getBytes());
-            post.setVideoUrl(physicalFile.getAbsolutePath());
+            video.setUrl(physicalFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Post updatedPost = postRepo.getPostById(postId);
-        return new ResponsePostDTO(updatedPost);
+        videoRepo.save(video);
+        return new ResponseVideoDTO(video);
     }
 
 
-    public ResponsePostDTO uploadImage(long postId, MultipartFile imageFile, long userId) {
-        Post post = postRepo.getPostById(postId);
-        if (post.getOwner().getId() != userId) {
-            throw new AuthorizationException("You can not edit a post that you do not own!");
-        }
-        File pFile = new File(filePath + File.separator +System.nanoTime() +".png");
-        if(post.getImages().size()>=3){
-            throw new BadRequestException("You can attach up to 3 photos per post!");
-        }
-        try( OutputStream os = new FileOutputStream(pFile);){
+    public ResponseImageDTO uploadImage(MultipartFile imageFile) {
+        Image image  = new Image();
+        File physicalFile = new File(filePath + File.separator + System.nanoTime() + ".png");
+        try (OutputStream os = new FileOutputStream(physicalFile)) {
             os.write(imageFile.getBytes());
-            Image image = new Image();
-            image.setUrl(pFile.getAbsolutePath());
-            image.setPost(post);
-            imageRepo.save(image);
+            image.setUrl(physicalFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Post updatedPost = postRepo.getPostById(postId);
-        return new ResponsePostDTO(updatedPost);
+        imageRepo.save(image);
+        return new ResponseImageDTO(image);
+    }
+
+    public byte[] getVideoById(long videoId) {
+        Video video = videoRepo.getVideoById(videoId);
+        String url = video.getUrl();
+        File phyFile = new File(url);
+        try {
+            return Files.readAllBytes(phyFile.toPath());
+        } catch (IOException e) {
+            throw new NotFoundException("Sorry, problem with video downloading!");
+        }
+    }
+
+
+    public byte[] getImageById(long imageId) {
+        Image image = imageRepo.getImageById(imageId);
+        String url = image.getUrl();
+        File phyFile = new File(url);
+        try {
+            return Files.readAllBytes(phyFile.toPath());
+        } catch (IOException e) {
+            throw new NotFoundException("Sorry, problem with image downloading!");
+        }
     }
 }
 
