@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,16 +23,18 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-@EqualsAndHashCode //fixme test if redundant
+@SQLDelete(sql = "UPDATE users SET email = CONCAT(id, 'null'), username = CONCAT(id, 'null'), is_deleted = 1 WHERE id = ?",
+        check = ResultCheckStyle.COUNT) //hibernate will execute this query
+@Where(clause = "is_deleted =0") //fixme
 @Entity
 @Table(name="users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
+    @Column(name = "first_name")
     private String firstName;
-    @Column
+    @Column(name = "last_name")
     private String lastName;
     @Column
     private String email;
@@ -38,12 +43,14 @@ public class User implements UserDetails {
     @Column
     private String password;
     @Column
-    private int age; //TODO validate
+    private int age;
     @Column
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
     @Column
     private boolean enabled;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
     @Column
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -95,6 +102,7 @@ public class User implements UserDetails {
         enabled = false;
         posts = new ArrayList<>();
         role = Role.USER;
+        isDeleted = false;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

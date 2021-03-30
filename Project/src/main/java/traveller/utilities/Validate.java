@@ -97,4 +97,10 @@ public class Validate {
             throw new BadRequestException("Comment must be between 1 and 255 characters.");
         }
     }
+
+    public static void age(int age) {
+        if(age < 2 || age > 110){
+            throw new InvalidRegistrationInputException("Invalid age.");
+        }
+    }
 }

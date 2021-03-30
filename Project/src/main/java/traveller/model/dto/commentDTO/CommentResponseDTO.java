@@ -1,10 +1,16 @@
 package traveller.model.dto.commentDTO;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Post;
 import traveller.model.pojo.User;
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
+@NoArgsConstructor
 public class CommentResponseDTO implements Comparable<CommentResponseDTO> {
     private User owner;
     private Post post;
@@ -27,4 +33,6 @@ public class CommentResponseDTO implements Comparable<CommentResponseDTO> {
         }
         return 0;
     }
+
+
 }

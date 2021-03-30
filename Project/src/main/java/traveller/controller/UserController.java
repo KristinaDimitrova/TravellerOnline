@@ -9,7 +9,6 @@ import traveller.service.UserService;
 import traveller.utilities.Validate;
 
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -20,9 +19,8 @@ public class UserController extends AbstractController{
     @Autowired
     private SessionManager sessManager;
 
-    @Transactional //FIXME Krasi, when do we have to use this annotation?
     @PostMapping(value="/singup")
-    public MessageDTO register(@RequestBody SignupUserDTO dto) {
+    public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
@@ -46,7 +44,9 @@ public class UserController extends AbstractController{
         if (username.isEmpty() || password.isEmpty()) {
             throw new BadRequestException("Username or password field is empty.");
         }
-        return userService.loginWtUsername(username, password, session);
+        UserWithoutPasswordDTO dtoResponse =  userService.verifyLogin(username, password);
+        sessManager.userLogsIn(session, userService.findByUsername(username).getId());
+        return dtoResponse;
     }
 
     @PostMapping(value="/logout")
@@ -77,9 +77,10 @@ public class UserController extends AbstractController{
         }
     }
 
-    @DeleteMapping(value="/users/delete")
+    @DeleteMapping(value="/delete")
     public MessageDTO deleteAccount(HttpSession session) {
         long actorId = sessManager.authorizeLogin(session);
+        System.out.println("User with id " + actorId + " has logged in.");
         //theSameUser(id, actorId);
         userService.deleteUser(actorId);
         sessManager.userLogsOut(session);
@@ -117,5 +118,4 @@ public class UserController extends AbstractController{
         return userService.findById(id);
     }
 
-    //if changes don't work, this might be the reason -> https://youtu.be/n8z_Ds_zgP4?t=7376
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
+import traveller.model.dto.commentDTO.CommentCreationRequestDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -42,6 +43,13 @@ public class Comment {
    @ManyToMany(mappedBy = "likedComments")
    @JsonManagedReference //FIXME       KRASI, IS THIS REDUNDANT ?
    private Set<User> likers;
+
+   public Comment(CommentCreationRequestDto dto){
+      this.text = dto.getText();
+      createdAt = LocalDateTime.now();
+   }
+
+
 
 /*
    @JsonBackReference

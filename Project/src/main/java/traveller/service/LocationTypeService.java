@@ -31,7 +31,7 @@ public class LocationTypeService {
             return optionalLocationType.get();
         }
         else {
-            throw new BadRequestException("There is not location type with this id!");
+            throw new BadRequestException("There is no location type with this id!");
         }
     }
 
