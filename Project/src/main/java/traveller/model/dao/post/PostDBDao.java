@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import traveller.exception.BadRequestException;
 import traveller.model.pojo.Post;
-import traveller.model.repository.PostRepository;
+import traveller.repository.PostRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
