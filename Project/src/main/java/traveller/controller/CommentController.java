@@ -9,7 +9,6 @@ import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.service.CommentService;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -27,9 +26,10 @@ public class CommentController extends AbstractController {
     }
 
     @PutMapping(value="/comments/{id}")
-    public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long commentId, @RequestBody MessageDTO commentDto){
+    public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long id, @RequestBody CommentEditRequestDTO commentReqDto){
         long actorId = sessManager.authorizeLogin(session);
-        return comService.editComment(commentId, commentDto, actorId);
+        commentReqDto.setId(id);
+        return comService.editComment(commentReqDto, actorId);
     }
 
     @DeleteMapping(value="/comments/{id}")
@@ -39,9 +39,9 @@ public class CommentController extends AbstractController {
     }
 
     @GetMapping(value="/comments/{id}")
-    public CommentResponseDTO getById(@PathVariable("id") long commentId, HttpSession session){
-        sessManager.authorizeLogin(session);
-        return comService.getById(commentId);
+    public CommentResponseDTO getById(@PathVariable("id") long id, HttpSession session){
+        long actorId = sessManager.authorizeLogin(session);
+        return comService.getById(id);
     }
 
     @PostMapping(value="/comments/{id}/1")
@@ -57,8 +57,8 @@ public class CommentController extends AbstractController {
     }
 
     @GetMapping(value="/posts/{id}/comments")
-    public List<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
-        sessManager.authorizeLogin(session);
+    public Set<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
+        long actorId = sessManager.authorizeLogin(session);
         return comService.getComments(postId);
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import traveller.exception.BadRequestException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
+import traveller.model.dto.fileDTO.ResponseImageDTO;
+import traveller.model.dto.fileDTO.ResponseVideoDTO;
 import traveller.model.dto.postDTO.RequestPostDTO;
 import traveller.model.dto.postDTO.ResponsePostDTO;
 import traveller.model.pojo.Post;
@@ -32,17 +34,33 @@ public class PostController extends AbstractController {
     }
 
 
-    @PutMapping( "/posts/{id}/video")
-    public ResponsePostDTO uploadVideoToPost(@PathVariable(name="id") long postId, @RequestPart MultipartFile videoFile, HttpSession session){ //all bytes
-        long userId = sessionManager.authorizeLogin(session);
-        return postService.uploadVideo(postId, videoFile, userId);
+    @PutMapping( "/posts/video")
+    public ResponseVideoDTO uploadVideo( @RequestPart MultipartFile videoFile, HttpSession session){
+      sessionManager.authorizeLogin(session);
+        return postService.uploadVideo( videoFile);
     }
 
-    @PutMapping("/posts/{id}/image")
-    public ResponsePostDTO uploadImageToPost(@PathVariable(name="id") long postId, @RequestPart MultipartFile imageFile, HttpSession session){ //all bytes
-        long userId = sessionManager.authorizeLogin(session);
-        return postService.uploadImage(postId, imageFile, userId );
+    @PutMapping("/posts/image")
+    public ResponseImageDTO uploadImage(@RequestPart MultipartFile imageFile, HttpSession session){
+        sessionManager.authorizeLogin(session);
+        return postService.uploadImage( imageFile);
     }
+
+    @GetMapping (value = "/posts/video/{id}", produces = "video/mp4")
+    public byte[] getVideoById(@PathVariable(name="id") long postId, HttpSession session){
+        sessionManager.authorizeLogin(session);
+        return postService.getVideoById(postId);
+
+    }
+
+
+    @GetMapping (value = "/posts/image/{id}", produces =  "image/*")
+    public byte[] getImageById(@PathVariable(name="id") long imageId, HttpSession session){
+        sessionManager.authorizeLogin(session);
+        return postService.getImageById(imageId);
+    }
+
+
 
     @GetMapping("/posts/{id}")
     public ResponsePostDTO getById(@PathVariable(name="id") long postId, HttpSession session ){

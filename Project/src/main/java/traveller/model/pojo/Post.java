@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import traveller.model.dto.postDTO.RequestPostDTO;
+import traveller.repository.ImageRepository;
 
 import javax.persistence.Id;
 
@@ -51,8 +53,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Image> images = new ArrayList<>();
 
-
-    private String videoUrl;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "post")
+    private List<Video> videos = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "post")
@@ -76,12 +79,14 @@ public class Post {
     @JsonManagedReference
     Set<User>dislikers = new HashSet<>();
 
+
     public Post(RequestPostDTO postDTO) {
         this.createdAt = LocalDateTime.now();
         this.latitude = postDTO.getLatitude();
         this.longitude = postDTO.getLongitude();
         this.description = postDTO.getDescription();
     }
+
 
 }
 

@@ -29,7 +29,7 @@ public class AbstractController {
     @ExceptionHandler(SQLException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(SQLException e){
-        return "Database maintenance... Try again later!";
+        return "Database maintenance... Try again later! " ;
     }
 
     @ExceptionHandler(AuthenticationException.class)

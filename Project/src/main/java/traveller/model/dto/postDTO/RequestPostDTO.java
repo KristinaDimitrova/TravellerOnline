@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 
 @NoArgsConstructor
 @Getter
@@ -14,4 +16,8 @@ public class RequestPostDTO {
     private String latitude;
     private String longitude;
     private String description;
+    private ArrayList<Long> videoIds= new ArrayList<>();
+    private ArrayList<Long> imageIds = new ArrayList<>();
+
+
 }
