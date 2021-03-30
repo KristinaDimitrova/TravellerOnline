@@ -26,7 +26,6 @@ import java.util.Set;
 @Table(name="posts")
 public class Post {
 
-    public static final int IMAGES_LIMIT = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

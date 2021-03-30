@@ -162,10 +162,13 @@ public class PostService {
     }
 
 
-    public ResponsePostDTO uploadImage(long postId, MultipartFile imageFile) {
+    public ResponsePostDTO uploadImage(long postId, MultipartFile imageFile, long userId) {
         Post post = postRepo.getPostById(postId);
+        if (post.getOwner().getId() != userId) {
+            throw new AuthorizationException("You can not edit a post that you do not own!");
+        }
         File pFile = new File(filePath + File.separator +System.nanoTime() +".png");
-        if(post.getImages().size()==3){
+        if(post.getImages().size()>=3){
             throw new BadRequestException("You can attach up to 3 photos per post!");
         }
         try( OutputStream os = new FileOutputStream(pFile);){

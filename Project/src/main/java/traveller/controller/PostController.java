@@ -21,7 +21,7 @@ public class PostController extends AbstractController {
     private SessionManager sessionManager;
 
 
-    @PostMapping("/post")
+    @PostMapping("/posts")
     public ResponsePostDTO createPost(@RequestBody RequestPostDTO postDTO, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.addNewPost(postDTO, userId );
@@ -34,10 +34,10 @@ public class PostController extends AbstractController {
         return postService.uploadVideo(postId, videoFile, userId);
     }
 
-    @PutMapping("/post/{id}/image")
+    @PutMapping("/posts/{id}/image")
     public ResponsePostDTO uploadImageToPost(@PathVariable(name="id") long postId, @RequestPart MultipartFile imageFile, HttpSession session){ //all bytes
-        sessionManager.authorizeLogin(session);
-        return postService.uploadImage(postId, imageFile);
+        long userId = sessionManager.authorizeLogin(session);
+        return postService.uploadImage(postId, imageFile, userId );
     }
 
     @GetMapping("/posts/{id}")
@@ -46,49 +46,49 @@ public class PostController extends AbstractController {
         return postService.getPostById(postId);
     }
 
-    @PutMapping("/post/{id}")
+    @PutMapping("/posts/{id}")
     public ResponsePostDTO editPost(@RequestBody RequestPostDTO postDTO, @PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.editPost(postId, postDTO, userId);
     }
 
-    @DeleteMapping("post/{id}")
+    @DeleteMapping("posts/{id}")
     public MessageDTO deletePost(@PathVariable (name = "id") int postId, HttpSession session) {
         long userId = sessionManager.authorizeLogin(session);
         return postService.deletePost(postId, userId);
     }
 
-    @PostMapping("/post/like/{id}")
+    @PostMapping("/posts/like/{id}")
     public MessageDTO likePost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.likePost(postId, userId);
     }
-    @PostMapping("/post/unlike/{id}")
+    @PostMapping("/posts/unlike/{id}")
     public MessageDTO unlikePost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.unlikePost(postId, userId);
     }
 
-    @PostMapping("/post/dislike/{id}")
+    @PostMapping("/posts/dislike/{id}")
     public MessageDTO dislikPost(@PathVariable (name = "id") int postId, HttpSession session)  {
         long userId = sessionManager.authorizeLogin(session);
         return postService.dislikePost(postId, userId);
     }
 
-    @PostMapping("/post/removeDislike/{id}")
+    @PostMapping("/posts/removeDislike/{id}")
     public MessageDTO removeDislikPost(@PathVariable (name = "id") int postId, HttpSession session)  {
         long userId = sessionManager.authorizeLogin(session);
         return postService.removeDislikeFromPost(postId, userId);
     }
 
-    @PostMapping("post/filter")
+    @PostMapping("posts/filter")
     public List<ResponsePostDTO> filter(@RequestBody SearchDTO searchDTO, HttpSession session) throws SQLException {
         sessionManager.authorizeLogin(session);
         return postService.filter(searchDTO);
     }
 
 
-    @GetMapping("post/newsfeed")
+    @GetMapping("posts/newsfeed")
     public List<ResponsePostDTO> getNewsfeed(HttpSession session) throws SQLException {
         long id = sessionManager.authorizeLogin(session);
         return postService.getNewsFeed(id);
