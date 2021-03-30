@@ -6,10 +6,10 @@ import traveller.model.dto.MessageDTO;
 import traveller.model.dto.commentDTO.CommentCreationRequestDto;
 import traveller.model.dto.commentDTO.CommentEditRequestDTO;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
-import traveller.model.pojo.Comment;
 import traveller.service.CommentService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -19,18 +19,17 @@ public class CommentController extends AbstractController {
     @Autowired
     private SessionManager sessManager;
 
-    @PostMapping(value="posts/{postId}/comments")
-    public CommentResponseDTO commentPost(@RequestBody CommentCreationRequestDto commentDto, @PathVariable("postId") long postId, @RequestParam("text") String text,
-                               HttpSession session){
+    @PutMapping(value="posts/{postId}/comments")
+    public CommentResponseDTO commentPost(@RequestBody CommentCreationRequestDto commentDto,
+                                          @PathVariable("postId") long postId, HttpSession session){
         long actorId = sessManager.authorizeLogin(session); //user has logged in
-        return comService.addComment(commentDto, actorId);
+        return comService.addComment(postId, commentDto, actorId);
     }
 
     @PutMapping(value="/comments/{id}")
-    public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long commentId, @RequestBody CommentEditRequestDTO commentReqDto){
+    public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long commentId, @RequestBody MessageDTO commentDto){
         long actorId = sessManager.authorizeLogin(session);
-        commentReqDto.setId(commentId);
-        return comService.editComment(commentReqDto, actorId);
+        return comService.editComment(commentId, commentDto, actorId);
     }
 
     @DeleteMapping(value="/comments/{id}")
@@ -58,8 +57,9 @@ public class CommentController extends AbstractController {
     }
 
     @GetMapping(value="/posts/{id}/comments")
-    public Set<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
+    public List<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
         sessManager.authorizeLogin(session);
         return comService.getComments(postId);
+        //List<CommentResponseDTO> comments
     }
 }

@@ -11,6 +11,9 @@ import traveller.model.dto.commentDTO.CommentCreationRequestDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -40,13 +43,17 @@ public class Comment {
    @JsonBackReference
    private Post post;
    //PEOPLE WHO LIKE IT
-   @ManyToMany(mappedBy = "likedComments")
-   @JsonManagedReference //FIXME       KRASI, IS THIS REDUNDANT ?
+   @ManyToMany(cascade = { CascadeType.ALL })
+   @JoinTable(
+           name = "users_like_comments",
+           joinColumns = {@JoinColumn(name="comment_id")},
+           inverseJoinColumns = {@JoinColumn(name="user_id")})
    private Set<User> likers;
 
    public Comment(CommentCreationRequestDto dto){
       this.text = dto.getText();
       createdAt = LocalDateTime.now();
+      likers = new HashSet<>();
    }
 
 

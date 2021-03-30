@@ -72,7 +72,6 @@ public class User implements UserDetails {
     )
     private List<User> followedUsers;
             //LIKED POSTS
-
     @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })
     private Set<Post> likedPosts;
             //DISLIKED POSTS
@@ -83,12 +82,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
     private Set<Comment> comments;
             //LIKED COMMENTS
-    @JsonBackReference
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "users_like_comments",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="comment_id")})
+    @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })
     private Set<Comment> likedComments;
 
     public User(SignupUserDTO userDTO) {

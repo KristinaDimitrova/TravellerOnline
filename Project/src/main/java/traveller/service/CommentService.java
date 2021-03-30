@@ -16,6 +16,10 @@ import traveller.repository.CommentRepository;
 import traveller.repository.PostRepository;
 import traveller.repository.UserRepository;
 import traveller.utilities.Validate;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -35,6 +39,7 @@ public class CommentService {
         return new CommentResponseDTO(commentRep.getById(id));
     }
 
+    @Transactional
     public MessageDTO delete(long commentId, long actorId) {
         Comment comment = commentRep.getById(commentId); //comment exists
         User postOwner = comment.getPost().getOwner();  //post exists
@@ -46,13 +51,16 @@ public class CommentService {
         return new MessageDTO("You deleted the comment.");
     }
 
-    public Set<CommentResponseDTO> getComments(long postId) {
+    public List<CommentResponseDTO> getComments(long postId) {
         Post existingPost = postRepo.getPostById(postId);
-        TreeSet<CommentResponseDTO> commentsDto = new TreeSet<>();
-        for (Comment c : commentRep.findCommentsByPost_Id(postId)){
-            commentsDto.add(new CommentResponseDTO(c));
+        List<Comment> comments = existingPost.getComments();
+        comments.forEach(comment -> System.out.println("comment 1"));
+        List<CommentResponseDTO> ordered = new ArrayList<>();
+        for (Comment c : comments){
+            ordered.add(new CommentResponseDTO(c));
         }
-        return commentsDto;
+        ordered.forEach(comment -> System.out.println(comment.getText()));
+        return ordered;
     }
 
     public MessageDTO hitLike(long commentId, long actorId){
@@ -79,22 +87,21 @@ public class CommentService {
         return new MessageDTO("Comment unliked.");
     }
 
-    public CommentResponseDTO addComment(CommentCreationRequestDto commentDto, long actorId) {
+    public CommentResponseDTO addComment(long postId, CommentCreationRequestDto commentDto, long actorId) {
         Validate.comment(commentDto.getText());
         Comment comment = new Comment(commentDto);
-        comment.setPost(postRepo.getPostById(commentDto.getPostId())); //post exists
+        comment.setPost(postRepo.getPostById(postId)); //post exists
         comment.setOwner(userRep.getById(actorId));
         commentRep.save(comment);
         return new CommentResponseDTO(comment);
     }
 
-    public CommentResponseDTO editComment(CommentEditRequestDTO commentDto, long actorId) {
-        Comment comment = commentRep.getById(commentDto.getId());
+    public CommentResponseDTO editComment(long commentId, MessageDTO commentDto, long actorId) {
+        Comment comment = commentRep.getById(commentId);
         if(comment.getOwner().getId() != actorId){ //comment is written by the same person
             throw new BadRequestException("Sorry, on Travergy you can only edit your own comments.");
         }
-        comment.setText(commentDto.getText());
-        commentRep.save(comment);
-        return new CommentResponseDTO(comment);
+        comment.setText(commentDto.getMessage());
+        return new CommentResponseDTO(commentRep.save(comment));
     }
 }

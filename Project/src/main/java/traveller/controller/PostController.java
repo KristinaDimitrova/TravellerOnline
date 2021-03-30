@@ -7,6 +7,8 @@ import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
 import traveller.model.dto.postDTO.RequestPostDTO;
 import traveller.model.dto.postDTO.ResponsePostDTO;
+import traveller.model.pojo.Post;
+import traveller.repository.PostRepository;
 import traveller.service.PostService;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;

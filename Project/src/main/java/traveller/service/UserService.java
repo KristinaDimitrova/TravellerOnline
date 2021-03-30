@@ -20,7 +20,6 @@ import traveller.model.pojo.VerificationToken;
 import traveller.repository.UserRepository;
 import traveller.utilities.Validate;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    private VerificationTokenService tokenService;
+    private TokenService tokenService;
     @Autowired
     private EmailSender emailSender;
 
@@ -108,7 +107,11 @@ public class UserService implements UserDetailsService {
             throw new AuthenticationException("Wrong password.");
         }
         //check details one by one and if there are changes, incorporate them into the User user
-        if(reqDto.getEmail() != user.getEmail()){
+        String emailNew = reqDto.getEmail();
+        if(emailNew != user.getEmail()){
+            if(userRep.findByEmail(emailNew) != null){
+                throw new BadRequestException("Account with this email already exists.");
+            }
             user.setEmail(reqDto.getEmail());
         }
         //if both first and last names were changed
@@ -172,17 +175,6 @@ public class UserService implements UserDetailsService {
         actingUser.getFollowedUsers().remove(followedUser);
         userRep.save(actingUser);
         return new MessageDTO("Unfollowed");
-    }
-
-    @Transactional
-    public MessageDTO confrimToken(String token) {
-        VerificationToken verToken = tokenService.findByToken(token);
-        if(verToken == null){
-            throw new BadRequestException("Invalid verification details.");
-        }
-        verToken.getUser().setEnabled(true);
-        verToken.setConfirmedAt(LocalDateTime.now());
-        return new MessageDTO("Email confirmed.");
     }
 
     private String buildEmail(String name, String link) {
