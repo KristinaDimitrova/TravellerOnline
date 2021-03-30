@@ -54,8 +54,6 @@ public class User implements UserDetails {
     @Column
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
             //POSTS
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
     @JsonManagedReference

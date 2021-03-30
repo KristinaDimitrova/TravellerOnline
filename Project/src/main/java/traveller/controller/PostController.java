@@ -3,6 +3,7 @@ package traveller.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import traveller.exception.BadRequestException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
 import traveller.model.dto.postDTO.RequestPostDTO;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 public class PostController extends AbstractController {
 
+    private static final int RESULTS_PER_PAGE = 10;
     @Autowired
     private PostService postService;
     @Autowired
@@ -90,10 +92,13 @@ public class PostController extends AbstractController {
     }
 
 
-    @GetMapping("posts/newsfeed")
-    public List<ResponsePostDTO> getNewsfeed(HttpSession session) throws SQLException {
+    @GetMapping("posts/newsfeed/{page}")
+    public List<ResponsePostDTO> getNewsfeed(@PathVariable(name = "page") int pageNum, HttpSession session) throws SQLException {
         long id = sessionManager.authorizeLogin(session);
-        return postService.getNewsFeed(id);
+        if(pageNum < 1){
+            throw new BadRequestException("Page not found.");
+        }
+        return postService.getNewsFeed(id, pageNum, RESULTS_PER_PAGE);
     }
 
 }

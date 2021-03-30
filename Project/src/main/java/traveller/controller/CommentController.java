@@ -60,6 +60,5 @@ public class CommentController extends AbstractController {
     public List<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
         sessManager.authorizeLogin(session);
         return comService.getComments(postId);
-        //List<CommentResponseDTO> comments
     }
 }
