@@ -9,6 +9,8 @@ import traveller.model.dto.fileDTO.ResponseImageDTO;
 import traveller.model.dto.fileDTO.ResponseVideoDTO;
 import traveller.model.dto.postDTO.RequestPostDTO;
 import traveller.model.dto.postDTO.ResponsePostDTO;
+import traveller.model.pojo.Post;
+import traveller.repository.PostRepository;
 import traveller.service.PostService;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;

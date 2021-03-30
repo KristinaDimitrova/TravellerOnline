@@ -18,11 +18,11 @@ public class CommentController extends AbstractController {
     @Autowired
     private SessionManager sessManager;
 
-    @PostMapping(value="posts/{postId}/comments")
-    public CommentResponseDTO commentPost(@RequestBody CommentCreationRequestDto commentDto, @PathVariable("postId") long postId, @RequestParam("text") String text,
-                               HttpSession session){
-        long actorId = sessManager.authorizeLogin(session);
-        return comService.addComment(commentDto, actorId);
+    @PutMapping(value="posts/{postId}/comments")
+    public CommentResponseDTO commentPost(@RequestBody CommentCreationRequestDto commentDto,
+                                          @PathVariable("postId") long postId, HttpSession session){
+        long actorId = sessManager.authorizeLogin(session); //user has logged in
+        return comService.addComment(postId, commentDto, actorId);
     }
 
     @PutMapping(value="/comments/{id}")

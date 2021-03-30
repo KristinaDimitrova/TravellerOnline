@@ -1,20 +1,28 @@
 package traveller.model.dto.commentDTO;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Post;
 import traveller.model.pojo.User;
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
+@NoArgsConstructor
 public class CommentResponseDTO implements Comparable<CommentResponseDTO> {
-    private User owner;
-    private Post post;
+    private String ownerComment;
+    private long postId;
     private String text;
+    @DateTimeFormat(pattern = "hh:mm dd/MM/yyyy")
     private LocalDateTime createdAt;
     private int likes;
 
     public CommentResponseDTO(Comment comment){
-        owner = comment.getOwner();
-        post = comment.getPost();
+        ownerComment = comment.getOwner().getFirstName().concat(" ").concat(comment.getOwner().getLastName());
+        postId = comment.getPost().getId();
         text = comment.getText();
         createdAt = comment.getCreatedAt();
         likes = comment.getLikers().size();
@@ -27,4 +35,6 @@ public class CommentResponseDTO implements Comparable<CommentResponseDTO> {
         }
         return 0;
     }
+
+
 }

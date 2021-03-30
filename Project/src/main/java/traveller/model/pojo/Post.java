@@ -70,7 +70,6 @@ public class Post {
     @JsonManagedReference
     Set<User> likers = new HashSet<>();
 
-
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "users_dislike_posts",

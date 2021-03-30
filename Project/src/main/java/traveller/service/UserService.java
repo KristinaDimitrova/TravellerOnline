@@ -8,20 +8,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import traveller.controller.SessionManager;
 import traveller.email.EmailSender;
 import traveller.exception.*;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.userDTO.EditDetailsUserDTO;
+import traveller.model.dto.userDTO.SignUpUserResponseDTO;
 import traveller.model.dto.userDTO.SignupUserDTO;
 import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
 import traveller.model.pojo.User;
 import traveller.model.pojo.VerificationToken;
 import traveller.repository.UserRepository;
 import traveller.utilities.Validate;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +29,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRep;
     @Autowired
-    private SessionManager sessManager;
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    private VerificationTokenService tokenService;
+    private TokenService tokenService;
     @Autowired
     private EmailSender emailSender;
 
@@ -49,9 +45,25 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional //Because we have more than one update statements => all or nothing
-    public MessageDTO insertUser(final SignupUserDTO dto){
-        System.out.println(dto.getFirstName());
-        System.out.println(dto.getLastName());
+    public SignUpUserResponseDTO insertUser(final SignupUserDTO dto){
+        validateUsersDetails(dto);
+        //encoding password
+        dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        User user = new User(dto);
+        //new user must be unable to login if they have not verified their email
+        user.setEnabled(false);
+        userRep.save(user);
+        //verification
+        VerificationToken token = new VerificationToken(user);
+        tokenService.save(token);
+        //sending an email
+        String link = "http://localhost:7878/confirm/" + token.getToken();
+        emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
+        return new SignUpUserResponseDTO(user); // SignUpUserResponseDTO(userRep.save(user));
+    }
+
+    private void validateUsersDetails(SignupUserDTO dto){
+        Validate.age(dto.getAge());
         Validate.firstLastNames(dto.getFirstName(), dto.getLastName());
         Validate.email(dto.getEmail());
         Validate.username(dto.getUsername());
@@ -67,20 +79,6 @@ public class UserService implements UserDetailsService {
         if(userRep.findByUsername(dto.getUsername()) != null){
             throw new InvalidRegistrationInputException("Account with this username already exists.");
         }
-        //encoding password
-        dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-        User user = new User(dto);
-        //new user must be unable to login if they have not verified their email
-        user.setEnabled(false);
-        userRep.save(user);
-        //verification
-        VerificationToken token = new VerificationToken(user);
-        tokenService.save(token);
-        //sending an email
-        String link = "http://localhost:7878/confirm/" + token.getToken();
-        emailSender.send(dto.getEmail(),
-                buildEmail(dto.getFirstName(), link));
-        return new MessageDTO("Registration completed.\nPlease verify your email with the link we just sent you!"); // SignUpUserResponseDTO(userRep.save(user));
     }
 
     public List<UserWithoutPasswordDTO> getUsersByName(String firstName, String lastName) {
@@ -92,15 +90,16 @@ public class UserService implements UserDetailsService {
         return usersWOutPass;
     }
 
-
     public UserWithoutPasswordDTO findById(long id) {
         return new UserWithoutPasswordDTO(userRep.getById(id));
     }
 
     public void deleteUser(long actorId) {
-        userRep.deleteUserById(actorId);
+        User user = userRep.getById(actorId);
+        userRep.delete(user);
     }
 
+    @Transactional//could be non-transactional because the update operation is at the end
     public UserWithoutPasswordDTO changeDetails(final long actorId, final EditDetailsUserDTO reqDto) {
         User user = userRep.getById(actorId);
         PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -108,7 +107,11 @@ public class UserService implements UserDetailsService {
             throw new AuthenticationException("Wrong password.");
         }
         //check details one by one and if there are changes, incorporate them into the User user
-        if(reqDto.getEmail() != user.getEmail()){
+        String emailNew = reqDto.getEmail();
+        if(emailNew != user.getEmail()){
+            if(userRep.findByEmail(emailNew) != null){
+                throw new BadRequestException("Account with this email already exists.");
+            }
             user.setEmail(reqDto.getEmail());
         }
         //if both first and last names were changed
@@ -125,15 +128,12 @@ public class UserService implements UserDetailsService {
         if(reqDto.getLastName() != user.getLastName()){
             Validate.firstLastNames(user.getFirstName(), reqDto.getLastName());
         }
-        userRep.save(user); //todo save(user) -> user that as fields old and new
+        userRep.save(user);
         return findById(actorId);
     }
 
-    public UserWithoutPasswordDTO loginWtUsername(String username, String password, HttpSession session) {
+    public UserWithoutPasswordDTO verifyLogin(String username, String password) {
         User user = userRep.findByUsername(username);
-
-        //check if password is the same
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
         //username does not exist OR password is wrong
         if(user == null || !bCryptPasswordEncoder.matches(password, user.getPassword())){
             throw new AuthenticationException("Combination of password and username is incorrect.");
@@ -142,7 +142,6 @@ public class UserService implements UserDetailsService {
         if(!user.isEnabled()){
             throw new AuthorizationException("You must verify your email.");
         }
-        sessManager.userLogsIn(session, user.getId());
         return new UserWithoutPasswordDTO(user);
     }
 
@@ -164,7 +163,7 @@ public class UserService implements UserDetailsService {
         }
         actingUser.getFollowedUsers().add(followedUser);
         userRep.save(actingUser);
-        return new MessageDTO("Followed.");
+        return new MessageDTO("User followed.");
     }
 
     public MessageDTO unfollowUser(long follower, long followed){
@@ -176,17 +175,6 @@ public class UserService implements UserDetailsService {
         actingUser.getFollowedUsers().remove(followedUser);
         userRep.save(actingUser);
         return new MessageDTO("Unfollowed");
-    }
-
-    @Transactional
-    public MessageDTO confrimToken(String token) {
-        VerificationToken verToken = tokenService.findByToken(token);
-        if(verToken == null){
-            throw new BadRequestException("Invalid verification details.");
-        }
-        verToken.getUser().setEnabled(true);
-        verToken.setConfirmedAt(LocalDateTime.now());
-        return new MessageDTO("Email confirmed.");
     }
 
     private String buildEmail(String name, String link) {
@@ -256,5 +244,9 @@ public class UserService implements UserDetailsService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    public User findByUsername(String username) {
+        return userRep.findByUsername(username);
     }
 }

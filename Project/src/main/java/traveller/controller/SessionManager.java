@@ -18,7 +18,7 @@ public class SessionManager {
     }
 
     public void userLogsOut(HttpSession session){
-        session.invalidate();
+        session.setAttribute(LOGGED_IN, null);
     }
 
     public long authorizeLogin(HttpSession session){
