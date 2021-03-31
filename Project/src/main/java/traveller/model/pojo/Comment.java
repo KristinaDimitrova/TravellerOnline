@@ -2,18 +2,15 @@ package traveller.model.pojo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import traveller.model.dto.commentDTO.CommentCreationRequestDto;
+import traveller.model.dto.commentDTO.CommentRequestDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -30,6 +27,7 @@ public class Comment {
    //COMMENT OWNER
    @ManyToOne
    @JoinColumn(name="owner_id")
+   //@NotNull(message = "Comment must have an author.")
    private User owner;
 
    @Column
@@ -50,7 +48,7 @@ public class Comment {
            inverseJoinColumns = {@JoinColumn(name="user_id")})
    private Set<User> likers;
 
-   public Comment(CommentCreationRequestDto dto){
+   public Comment(CommentRequestDto dto){
       this.text = dto.getText();
       createdAt = LocalDateTime.now();
       likers = new HashSet<>();

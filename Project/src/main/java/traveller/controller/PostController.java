@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import traveller.exception.BadRequestException;
+import traveller.exception.NotFoundException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
 import traveller.model.dto.fileDTO.ResponseImageDTO;
@@ -114,7 +115,7 @@ public class PostController extends AbstractController {
     public List<ResponsePostDTO> getNewsfeed(@PathVariable(name = "page") int pageNum, HttpSession session) throws SQLException {
         long id = sessionManager.authorizeLogin(session);
         if(pageNum < 1){
-            throw new BadRequestException("Page not found.");
+            throw new NotFoundException("Page not found.");
         }
         return postService.getNewsFeed(id, pageNum, RESULTS_PER_PAGE);
     }

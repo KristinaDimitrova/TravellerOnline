@@ -58,14 +58,6 @@ public class Validator {
         }
     }
 
-    public static void validateEmail(String email) {
-        String pattern =  "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        if(!email.matches(pattern)){
-            throw new BadRequestException("Please enter a valid email address.");
-        }
-    }
-
     public static void validateComment(String text) {
         if(text.length() < 1 || text.length() > 255){
             throw new BadRequestException("Comment must be between 1 and 255 characters.");

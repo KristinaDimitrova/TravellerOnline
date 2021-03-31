@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import traveller.exception.BadRequestException;
+import traveller.model.dao.AbstractDao;
 import traveller.model.pojo.Post;
 import traveller.repository.PostRepository;
 
@@ -16,10 +17,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class PostDBDao implements PostDao {
+public class PostDBDao extends AbstractDao implements PostDao {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
     @Autowired
     private PostRepository postRepository;
 

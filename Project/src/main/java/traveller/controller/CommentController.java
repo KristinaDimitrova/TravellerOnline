@@ -3,7 +3,7 @@ package traveller.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.MessageDTO;
-import traveller.model.dto.commentDTO.CommentCreationRequestDto;
+import traveller.model.dto.commentDTO.CommentRequestDto;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.service.CommentService;
 import javax.servlet.http.HttpSession;
@@ -17,7 +17,7 @@ public class CommentController extends AbstractController {
     private SessionManager sessManager;
 
     @PutMapping(value="posts/{postId}/comments")
-    public CommentResponseDTO commentPost(@RequestBody CommentCreationRequestDto commentDto,
+    public CommentResponseDTO commentPost(@RequestBody CommentRequestDto commentDto,
                                           @PathVariable("postId") long postId, HttpSession session){
         long actorId = sessManager.authorizeLogin(session); //user has logged in
         return comService.addComment(postId, commentDto, actorId);

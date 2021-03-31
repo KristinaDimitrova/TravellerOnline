@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import traveller.exception.AuthorizationException;
 import traveller.exception.BadRequestException;
 import traveller.model.dto.MessageDTO;
-import traveller.model.dto.commentDTO.CommentCreationRequestDto;
+import traveller.model.dto.commentDTO.CommentRequestDto;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Post;
@@ -80,7 +80,7 @@ public class CommentService {
         return new MessageDTO("Comment unliked.");
     }
 
-    public CommentResponseDTO addComment(long postId, CommentCreationRequestDto commentDto, long actorId) {
+    public CommentResponseDTO addComment(long postId, CommentRequestDto commentDto, long actorId) {
         Validator.validateComment(commentDto.getText());
         Comment comment = new Comment(commentDto);
         comment.setPost(postRepo.getPostById(postId)); //post exists

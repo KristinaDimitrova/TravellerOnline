@@ -1,5 +1,6 @@
 package traveller.controller;
-
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import traveller.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -7,8 +8,8 @@ import traveller.model.dto.*;
 import traveller.model.dto.userDTO.*;
 import traveller.service.UserService;
 import traveller.utilities.Validator;
-
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class UserController extends AbstractController{
     private SessionManager sessManager;
 
     @PostMapping(value="/singup")
-    public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
+    public SignUpUserResponseDTO register(@Valid @RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
@@ -34,10 +35,10 @@ public class UserController extends AbstractController{
         String password = loginUserDTO.getPassword();
         String username = loginUserDTO.getUsername();
         if(sessManager.isUserLoggedIn(session)){//ако вече е логнат
-            throw new BadRequestException("Already logged in.");
+            throw new BadRequestException("already logged in.");
         }
         if (username.isEmpty() || password.isEmpty()) {
-            throw new BadRequestException("Username or password field is empty.");
+            throw new BadRequestException("username or password field is blank.");
         }
         UserWithoutPasswordDTO dtoResponse =  userService.verifyLogin(username, password);
         sessManager.userLogsIn(session, userService.findByUsername(username).getId());

@@ -15,6 +15,7 @@ import traveller.model.dto.userDTO.SignupUserDTO;
 import traveller.registration.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -37,6 +38,7 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
     @Column
+    //@Email(message = "Please enter a valid email.") fixme
     private String email;
     @Column
     private String username;

@@ -1,2 +1,4 @@
-package traveller.model.dao.post.stats;public class StatsDao {
+package traveller.model.dao.statistics;
+
+public interface StatsDao {
 }

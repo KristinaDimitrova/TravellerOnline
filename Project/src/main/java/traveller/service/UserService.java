@@ -58,14 +58,17 @@ public class UserService implements UserDetailsService {
         tokenService.save(token);
         //sending an email
         String link = "http://localhost:7878/tokens/" + token.getToken();
-        emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
+        try {
+            emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
+        }catch(Exception e){
+            throw new BadRequestException("Invalid email address.");
+        }
         return new SignUpUserResponseDTO(user); // SignUpUserResponseDTO(userRep.save(user));
     }
 
     private void validateUsersDetails(SignupUserDTO dto){
         Validator.validateAge(dto.getAge());
         Validator.validateNames(dto.getFirstName(), dto.getLastName());
-        Validator.validateEmail(dto.getEmail());
         Validator.validateUsername(dto.getUsername());
         if(!dto.getRepeatedPassword().equals(dto.getPassword())){
             throw new NotAcceptableException("passwords do not match.");
