@@ -24,17 +24,19 @@ public class PostDBDao implements PostDao {
     private PostRepository postRepository;
 
     @Override
-    public List<Post> getNewsFeed(long id) throws SQLException {
+    public List<Post> getNewsFeed(long id, int page, int resultsPerPage) throws SQLException {
         String sql = "SELECT * FROM users AS u\n" +
                 "INNER JOIN posts AS p ON u.id = p.owner_id\n" +
                 "INNER JOIN users_subscribe_users AS usu ON u.id = usu.subscribed_id\n" +
                 "WHERE subscriber_id = ? \n" +
                 "ORDER BY p.created_at\n" +
-                "LIMIT 50";
+                "LIMIT ? OFFSET ?";
         List<Post> posts = new ArrayList<>();
         Connection c = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
         PreparedStatement ps = c.prepareStatement(sql);
         ps.setLong(1, id);
+        ps.setInt(2, resultsPerPage);
+        ps.setInt(3, (page - 1) * resultsPerPage);
         ResultSet rs = ps.executeQuery();
         while (rs.next()){
             long postId = rs.getLong(1);

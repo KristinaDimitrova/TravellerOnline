@@ -153,8 +153,8 @@ public class PostService {
         return responseList;
     }
 
-    public List<ResponsePostDTO> getNewsFeed( long userId) throws SQLException {
-        List<Post> postList = postDBDao.getNewsFeed(userId);
+    public List<ResponsePostDTO> getNewsFeed(long userId, int page, int resultsPerPage) throws SQLException {
+        List<Post> postList = postDBDao.getNewsFeed(userId, page, resultsPerPage);
         List<ResponsePostDTO> responsePostDTOs = new ArrayList<>();
         for(Post p :postList){
             responsePostDTOs.add(new ResponsePostDTO(p));
