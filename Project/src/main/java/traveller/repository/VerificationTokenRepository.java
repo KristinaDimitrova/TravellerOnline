@@ -7,9 +7,7 @@ import traveller.model.pojo.VerificationToken;
 
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
-
     VerificationToken findByToken(String token);
     VerificationToken findByUser(User user);
-    VerificationToken save(VerificationToken verificationToken);
 
 }

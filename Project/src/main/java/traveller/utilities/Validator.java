@@ -5,9 +5,9 @@ import traveller.exception.BadRequestException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Validate {
+public class Validator {
 
-    public static void firstLastNames(String firstName, String lastName) {
+    public static void validateNames(String firstName, String lastName) {
         String lettersBulg = "[А-Я][a-я]+";
         String lettersEng = "[A-Z][a-z]+";
         if((!firstName.matches(lettersBulg) || !lastName.matches(lettersBulg)) &&
@@ -22,7 +22,7 @@ public class Validate {
             throw new BadRequestException("Last name on Travergy must be between one and twenty characters.");
         }
     }
-    public static void username(String username) {
+    public static void validateUsername(String username) {
         String lengthRegex = "^\\w{5,18}$";
         String charactersRegex = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,15}[a-zA-Z0-9]$";
         if(!username.matches(lengthRegex)){
@@ -34,7 +34,7 @@ public class Validate {
         }
     }
 
-    public static void password(String password) {
+    public static void validatePassword(String password) {
         String capitalLetterRegex = "(.*[A-Z].*)";
         String digitRegex = "(.*\\d.*)";
         String lowerCaseRegex = "(.*[a-z].*)";
@@ -58,7 +58,7 @@ public class Validate {
         }
     }
 
-    public static void email(String email) {
+    public static void validateEmail(String email) {
         String pattern =  "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         if(!email.matches(pattern)){
@@ -66,13 +66,13 @@ public class Validate {
         }
     }
 
-    public static void comment(String text) {
+    public static void validateComment(String text) {
         if(text.length() < 1 || text.length() > 255){
             throw new BadRequestException("Comment must be between 1 and 255 characters.");
         }
     }
 
-    public static void age(int age) {
+    public static void validateAge(int age) {
         if(age < 2 || age > 110){
             throw new BadRequestException("Invalid age.");
         }

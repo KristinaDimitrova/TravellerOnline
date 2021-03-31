@@ -14,7 +14,6 @@ import java.util.Optional;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
-
     User findByUsername(String username);
 
     default User getById(long id){
@@ -28,12 +27,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByFirstNameAndLastName(String firstName, String lastName);
 
-    Optional<User> findById(Long id);
 
-    void deleteUserById(long id);
-
-    void delete(User user);
-
-    User save(User user);
 
 }

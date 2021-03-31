@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.*;
 import traveller.model.dto.userDTO.*;
 import traveller.service.UserService;
-import traveller.utilities.Validate;
+import traveller.utilities.Validator;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -65,7 +65,7 @@ public class UserController extends AbstractController{
                                  @RequestParam("repeatedNewPassword") String repeatedNewPassword)  {
         long actorId = sessManager.authorizeLogin(session);
         passwordMatches(repeatedNewPassword, newPassword);
-        Validate.password(newPassword);
+        Validator.validatePassword(newPassword);
         return userService.changePassword(actorId, oldPassword, newPassword);
     }
 

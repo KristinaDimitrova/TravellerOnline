@@ -18,7 +18,7 @@ import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
 import traveller.model.pojo.User;
 import traveller.model.pojo.VerificationToken;
 import traveller.repository.UserRepository;
-import traveller.utilities.Validate;
+import traveller.utilities.Validator;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,27 +57,27 @@ public class UserService implements UserDetailsService {
         VerificationToken token = new VerificationToken(user);
         tokenService.save(token);
         //sending an email
-        String link = "http://localhost:7878/confirm/" + token.getToken();
+        String link = "http://localhost:7878/tokens/" + token.getToken();
         emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
         return new SignUpUserResponseDTO(user); // SignUpUserResponseDTO(userRep.save(user));
     }
 
     private void validateUsersDetails(SignupUserDTO dto){
-        Validate.age(dto.getAge());
-        Validate.firstLastNames(dto.getFirstName(), dto.getLastName());
-        Validate.email(dto.getEmail());
-        Validate.username(dto.getUsername());
+        Validator.validateAge(dto.getAge());
+        Validator.validateNames(dto.getFirstName(), dto.getLastName());
+        Validator.validateEmail(dto.getEmail());
+        Validator.validateUsername(dto.getUsername());
         if(!dto.getRepeatedPassword().equals(dto.getPassword())){
-            throw new InvalidRegistrationInputException("Passwords do not match.");
+            throw new NotAcceptableException("passwords do not match.");
         }
-        Validate.password(dto.getPassword());
+        Validator.validatePassword(dto.getPassword());
         //all database-related validations
         if(userRep.findByEmail(dto.getEmail()) != null){
-            throw new InvalidRegistrationInputException("Account with this email already exists.");
+            throw new NotAcceptableException("account with this email already exists.");
         }
         //username taken
         if(userRep.findByUsername(dto.getUsername()) != null){
-            throw new InvalidRegistrationInputException("Account with this username already exists.");
+            throw new NotAcceptableException("account with this username already exists.");
         }
     }
 
@@ -116,17 +116,17 @@ public class UserService implements UserDetailsService {
         }
         //if both first and last names were changed
         if(reqDto.getFirstName() != user.getFirstName() && reqDto.getLastName() != user.getLastName()){
-            Validate.firstLastNames(reqDto.getFirstName(), reqDto.getLastName());
+            Validator.validateNames(reqDto.getFirstName(), reqDto.getLastName());
             user.setFirstName(reqDto.getFirstName());
             user.setLastName(reqDto.getLastName());
         }
         //if only the first name was changed
         if(reqDto.getFirstName() != user.getFirstName()){
-            Validate.firstLastNames(reqDto.getFirstName(), user.getLastName());
+            Validator.validateNames(reqDto.getFirstName(), user.getLastName());
         }
         //if only the last name was changed
         if(reqDto.getLastName() != user.getLastName()){
-            Validate.firstLastNames(user.getFirstName(), reqDto.getLastName());
+            Validator.validateNames(user.getFirstName(), reqDto.getLastName());
         }
         userRep.save(user);
         return findById(actorId);

@@ -4,12 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.commentDTO.CommentCreationRequestDto;
-import traveller.model.dto.commentDTO.CommentEditRequestDTO;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.service.CommentService;
-
 import javax.servlet.http.HttpSession;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 public class CommentController extends AbstractController {
@@ -26,10 +24,9 @@ public class CommentController extends AbstractController {
     }
 
     @PutMapping(value="/comments/{id}")
-    public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long id, @RequestBody CommentEditRequestDTO commentReqDto){
+    public CommentResponseDTO edit(HttpSession session, @PathVariable("id") long commentId, @RequestBody MessageDTO commentDto){
         long actorId = sessManager.authorizeLogin(session);
-        commentReqDto.setId(id);
-        return comService.editComment(commentReqDto, actorId);
+        return comService.editComment(commentId, commentDto, actorId);
     }
 
     @DeleteMapping(value="/comments/{id}")
@@ -40,7 +37,7 @@ public class CommentController extends AbstractController {
 
     @GetMapping(value="/comments/{id}")
     public CommentResponseDTO getById(@PathVariable("id") long id, HttpSession session){
-        long actorId = sessManager.authorizeLogin(session);
+        sessManager.authorizeLogin(session);
         return comService.getById(id);
     }
 
@@ -57,8 +54,8 @@ public class CommentController extends AbstractController {
     }
 
     @GetMapping(value="/posts/{id}/comments")
-    public Set<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
-        long actorId = sessManager.authorizeLogin(session);
+    public List<CommentResponseDTO> getCommentsByPostId(HttpSession session, @PathVariable("id") long postId){
+        sessManager.authorizeLogin(session);
         return comService.getComments(postId);
     }
 }

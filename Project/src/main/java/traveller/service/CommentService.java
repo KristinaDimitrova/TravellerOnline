@@ -7,7 +7,6 @@ import traveller.exception.AuthorizationException;
 import traveller.exception.BadRequestException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.commentDTO.CommentCreationRequestDto;
-import traveller.model.dto.commentDTO.CommentEditRequestDTO;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Post;
@@ -15,21 +14,16 @@ import traveller.model.pojo.User;
 import traveller.repository.CommentRepository;
 import traveller.repository.PostRepository;
 import traveller.repository.UserRepository;
-import traveller.utilities.Validate;
-
+import traveller.utilities.Validator;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Service
 @Component
 public class CommentService {
     @Autowired
     private CommentRepository commentRep;
-    @Autowired
-    private PostService postServ;
     @Autowired
     private PostRepository postRepo;
     @Autowired
@@ -43,7 +37,7 @@ public class CommentService {
     public MessageDTO delete(long commentId, long actorId) {
         Comment comment = commentRep.getById(commentId); //comment exists
         User postOwner = comment.getPost().getOwner();  //post exists
-        User commentOwner = comment.getOwner();  //comment owner exists, else -> cascade delete TODO
+        User commentOwner = comment.getOwner();  //comment owner exists, else
         if(actorId != commentOwner.getId() || actorId != postOwner.getId()) {
             throw new AuthorizationException("You are not authorized to delete the comment.");
         }
@@ -53,8 +47,7 @@ public class CommentService {
 
     public List<CommentResponseDTO> getComments(long postId) {
         Post existingPost = postRepo.getPostById(postId);
-        List<Comment> comments = existingPost.getComments();
-        comments.forEach(comment -> System.out.println("comment 1"));
+        List<Comment> comments = existingPost.getComments(); //fixme get from database => ordered
         List<CommentResponseDTO> ordered = new ArrayList<>();
         for (Comment c : comments){
             ordered.add(new CommentResponseDTO(c));
@@ -88,7 +81,7 @@ public class CommentService {
     }
 
     public CommentResponseDTO addComment(long postId, CommentCreationRequestDto commentDto, long actorId) {
-        Validate.comment(commentDto.getText());
+        Validator.validateComment(commentDto.getText());
         Comment comment = new Comment(commentDto);
         comment.setPost(postRepo.getPostById(postId)); //post exists
         comment.setOwner(userRep.getById(actorId));

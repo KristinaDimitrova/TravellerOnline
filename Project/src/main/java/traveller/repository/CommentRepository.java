@@ -20,10 +20,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         }
         return opt.get();
     }
-    Optional<Comment> findById(long id);
-
-    void deleteCommentById(long id);
 
     List<Comment> findCommentsByPost_Id(long postId);
 
+    void deleteCommentById(long id);
 }
