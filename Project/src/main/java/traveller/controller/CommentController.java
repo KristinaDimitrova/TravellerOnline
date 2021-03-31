@@ -6,10 +6,8 @@ import traveller.model.dto.MessageDTO;
 import traveller.model.dto.commentDTO.CommentCreationRequestDto;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.service.CommentService;
-
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class CommentController extends AbstractController {
