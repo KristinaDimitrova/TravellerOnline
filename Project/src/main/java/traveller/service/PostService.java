@@ -52,23 +52,21 @@ public class PostService {
     @Transactional
     public ResponsePostDTO addNewPost(RequestPostDTO postDTO, long userId){
         Post post = new Post(postDTO);
-
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         post.setOwner(userRepo.getById(userId));
+        postRepo.save(post);
         for (long imageId : postDTO.getImageIds()){
             Image image = imageRepo.getImageById(imageId);
             image.setPost(post);
             imageRepo.save(image);
-            post.getImages().add(image);
         }
         for (long videoId : postDTO.getVideoIds()){
             Video video = videoRepo.getVideoById(videoId);
             video.setPost(post);
             videoRepo.save(video);
-            post.getVideos().add(video);
         }
 
-        return new ResponsePostDTO(postRepo.save(post));
+        return new ResponsePostDTO(post);
     }
 
     public ResponsePostDTO getPostById(long id) {
