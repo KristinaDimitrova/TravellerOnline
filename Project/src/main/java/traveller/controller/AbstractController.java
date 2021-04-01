@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import traveller.exception.*;
+import traveller.model.dto.MessageDTO;
 
-import java.sql.SQLException;
 
 @Log4j2
 public class AbstractController {
@@ -20,7 +20,7 @@ public class AbstractController {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleException(NotFoundException e){
-        log.error(e.getMessage() );
+        log.error(e.getMessage());
         return e.getMessage();
     }
 
@@ -30,11 +30,11 @@ public class AbstractController {
         log.error(e.getMessage());
         return "Please try again, "  + e.getMessage();
     }
-    @ExceptionHandler(SQLException.class)
+
+    @ExceptionHandler(TechnicalIssuesException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleException(SQLException e){
-        log.error(e.getMessage() );
-        return "Database maintenance... Try again later! " ;
+    public MessageDTO handleException(TechnicalIssuesException e){
+        return new MessageDTO("Sorry we are experiencing technical issues. Please try again later.");
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -52,8 +52,4 @@ public class AbstractController {
         return "Unauthorized operation - " + e.getMessage();
     }
 
-/*    @Scheduled(fixedDelay = 1000) //every minute
-    public void ScheduledLogs(){
-        use logs
-    }*/
 }

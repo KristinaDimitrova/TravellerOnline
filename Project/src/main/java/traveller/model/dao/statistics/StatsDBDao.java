@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import traveller.exception.TechnicalIssuesException;
 import traveller.model.dao.AbstractDao;
-import traveller.model.pojo.StatsProfile;
+import traveller.model.pojo.stats.StatsSignups;
+import traveller.model.pojo.stats.StatsProfile;
 import traveller.model.pojo.User;
 import traveller.repository.UserRepository;
 
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 @Component
 public class StatsDBDao extends AbstractDao implements StatsDao {
     //NB query can execute only if there are at least 5 followed users
@@ -160,7 +162,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
         }
     }
 
-    //метод който връща брой нови регистрации според възрастова група
+    //метод който връща брой нови регистрации според възрастова група на последователите
     @Override
     public List<StatsProfile> getFavouriteProfilesByAgeGroup(int minRange, int maxRange) {
         String sqlSelectQuery = "SELECT influencers.id AS "+ USER_ID +", COUNT(subER.username) AS "+SUBSCRIBERS+"\n" +
@@ -176,7 +178,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
                 "LIMIT " + POP_USERS_RESULTS;
         try(Connection conn = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection()) {
             PreparedStatement ps = conn.prepareStatement(sqlSelectQuery);
-            ResultSet rows = ps.executeQuery(); //връща се ResultSet, за да не се конструират листове от DTO-та в DAO-то
+            ResultSet rows = ps.executeQuery();
             List<StatsProfile> statsProfiles = new ArrayList<>();
             while(rows.next()) {
                 long userId = rows.getInt(USER_ID);
@@ -185,6 +187,27 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
                 statsProfiles.add(new StatsProfile(user, subscribers));
             }
             return statsProfiles;
+        } catch(SQLException e){
+            //todo log
+            throw new TechnicalIssuesException("Database on fire. Call the tech guy!");
+        }
+    }
+
+    @Override
+    public StatsSignups getSignupsCountByAgeRange(int minAge, int maxAge, int intervalDays) {
+        String sqlQuery = "SELECT SUM(count_new_users) AS sum FROM new_users_count_by_age \n" +
+                "WHERE age BETWEEN " + minAge + " AND " + maxAge + " \n" +
+                "AND record_created_at BETWEEN date_sub(curdate(), INTERVAL " + intervalDays + " DAY) AND curdate()";
+        try(Connection conn = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection()) {
+            PreparedStatement ps = conn.prepareStatement(sqlQuery);
+            ResultSet rows = ps.executeQuery();
+            rows.next();
+            StatsSignups stats = new StatsSignups();
+            stats.setMaxAge(maxAge);
+            stats.setMinAge(minAge);
+            stats.setPeriodDays(intervalDays);
+            stats.setNewAccountsCreated(rows.getInt("sum"));
+            return stats;
         } catch(SQLException e){
             //todo log
             throw new TechnicalIssuesException("Database on fire. Call the tech guy!");

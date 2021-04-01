@@ -9,6 +9,7 @@ import traveller.service.UserService;
 import traveller.utilities.Validator;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class UserController extends AbstractController{
     private SessionManager sessManager;
 
     @PostMapping(value="/singup")
-    public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
+    public SignUpUserResponseDTO register(@Valid @RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
@@ -55,12 +56,12 @@ public class UserController extends AbstractController{
     }
 
     @PostMapping(value="/users")
-    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){ //FIXME
+    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){
         long actorId = sessManager.authorizeLogin(session);
         return userService.changeDetails(actorId, requestDTO);
     }
 
-    @PostMapping(value="/users/password") //TODO postman
+    @PostMapping(value="/users/password")
     public MessageDTO changePassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
                                  @RequestParam("repeatedNewPassword") String repeatedNewPassword)  {
         long actorId = sessManager.authorizeLogin(session);
@@ -78,7 +79,6 @@ public class UserController extends AbstractController{
     @DeleteMapping(value="/users")
     public MessageDTO deleteAccount(HttpSession session) {
         long actorId = sessManager.authorizeLogin(session);
-        System.out.println("User with id " + actorId + " has logged in.");
         userService.deleteUser(actorId);
         sessManager.userLogsOut(session);
         return new MessageDTO("Account successfully deleted.");
