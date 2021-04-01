@@ -49,7 +49,6 @@ public class AbstractController {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String handleException(AuthorizationException e){
         log.error(e.getMessage() );
-
         return "Unauthorized operation - " + e.getMessage();
     }
 
