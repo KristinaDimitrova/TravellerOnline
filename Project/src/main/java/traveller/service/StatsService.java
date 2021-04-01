@@ -19,11 +19,10 @@ public class StatsService {
     @Autowired
     private UserRepository userRep;
 
-    //get most popular posts for today / the week / todo
+    //get newest most popular posts for today / the week / todo
 
     //get new users count for the past one month
 
-    //get most popular people from database by period
 
 
 

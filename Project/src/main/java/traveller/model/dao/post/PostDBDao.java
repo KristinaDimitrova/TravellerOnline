@@ -57,7 +57,7 @@ public class PostDBDao implements PostDao {
                 "ON(p.id=ulp.post_id)");
         PreparedStatement ps;
         if(name == null && locationType == null){
-            throw new BadRequestException("At least one parameter is required!");
+            throw new BadRequestException("To fetch results, you must first select a filter.");
         }
         else
         if(locationType == null){

@@ -49,3 +49,43 @@
 2021-04-01 16:25:48,444 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
 2021-04-01 16:25:52,780 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.616 seconds (JVM running for 5.21)
 2021-04-01 16:25:56,164 ERROR traveller.controller.AbstractController [http-nio-7878-exec-1] You must log in first.
+2021-04-01 18:29:07,062 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 11208 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 18:29:07,065 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:29:07,066 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:29:16,686 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 10.189 seconds (JVM running for 11.453)
+2021-04-01 18:30:03,667 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 15572 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 18:30:03,670 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:30:03,670 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:30:10,258 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.028 seconds (JVM running for 8.178)
+2021-04-01 18:37:33,105 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 19480 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 18:37:33,107 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:37:33,107 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:37:39,737 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.086 seconds (JVM running for 8.108)
+2021-04-01 18:42:49,258 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 12988 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 18:42:49,261 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:42:49,261 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:42:56,140 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.372 seconds (JVM running for 8.634)
+2021-04-01 18:45:14,465 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 12604 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 18:45:14,468 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:45:14,468 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:45:20,947 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 6.965 seconds (JVM running for 7.971)
+2021-04-01 18:49:36,756 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 21332 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 18:49:36,758 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:49:36,758 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:49:43,488 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.2 seconds (JVM running for 8.282)
+2021-04-01 19:00:38,249 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 9608 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 19:00:38,252 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 19:00:38,252 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 19:00:44,926 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.157 seconds (JVM running for 8.492)
+2021-04-01 19:04:59,789 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 10692 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 19:04:59,791 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 19:04:59,791 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 19:05:06,918 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.594 seconds (JVM running for 8.824)
+2021-04-01 19:06:26,033 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 1788 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 19:06:26,036 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 19:06:26,036 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 19:06:32,698 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.15 seconds (JVM running for 8.385)
+2021-04-01 19:08:37,231 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-OI2STUP with PID 19320 (C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project\target\classes started by Monika Valkova in C:\Users\Monika Valkova\IdeaProjects\Java\Project\TravellerOnline\Project)
+2021-04-01 19:08:37,233 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 19:08:37,234 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 19:08:44,259 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 7.598 seconds (JVM running for 8.596)

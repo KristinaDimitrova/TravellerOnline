@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface StatsDao {
     void saveRecordOfMostPopularPosts();
-    void saveRecordMostPopularUsers();
+    void saveRecordOfMostPopularUsers();
 
-    void saveRecordOfNewUsersByAgeGroup();
+    void saveRecordSignups();
     List<StatsProfile> getFavouriteProfilesByAgeGroup(int minRange, int maxRange) throws SQLException;
 }
