@@ -56,12 +56,12 @@ public class UserController extends AbstractController{
     }
 
     @PostMapping(value="/users")
-    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){ //FIXME
+    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){
         long actorId = sessManager.authorizeLogin(session);
         return userService.changeDetails(actorId, requestDTO);
     }
 
-    @PostMapping(value="/users/password") //TODO postman
+    @PostMapping(value="/users/password")
     public MessageDTO changePassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
                                  @RequestParam("repeatedNewPassword") String repeatedNewPassword)  {
         long actorId = sessManager.authorizeLogin(session);

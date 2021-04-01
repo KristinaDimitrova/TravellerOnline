@@ -26,7 +26,7 @@ import java.util.*;
 @Setter
 @SQLDelete(sql = "UPDATE users SET email = CONCAT(id, 'null'), username = CONCAT(id, 'null'), is_deleted = 1 WHERE id = ?",
         check = ResultCheckStyle.COUNT) //hibernate will execute this query
-@Where(clause = "is_deleted =0") //fixme
+@Where(clause = "is_deleted = 0") //fixme
 @Entity
 @Table(name="users")
 public class User implements UserDetails {

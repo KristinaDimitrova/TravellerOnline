@@ -1,5 +1,6 @@
 package traveller.controller;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,11 +31,10 @@ public abstract class AbstractController {
     public MessageDTO handleException(NotAcceptableException e){
         return new MessageDTO("Please try again, "  + e.getMessage());
     }
-
-    @ExceptionHandler(SQLException.class)
+    @ExceptionHandler(TechnicalIssuesException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public MessageDTO handleException(SQLException e){
-        return new MessageDTO("Database maintenance. Please try again later");
+    public MessageDTO handleException(TechnicalIssuesException e){
+        return new MessageDTO("Sorry we are experiencing technical issues. Please try again later.");
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -62,8 +62,4 @@ public abstract class AbstractController {
     }
 
 
-/*    @Scheduled(fixedDelay = 1000) //every minute
-    public void ScheduledLogs(){
-        use logs
-    }*/
 }

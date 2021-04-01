@@ -58,11 +58,7 @@ public class UserService implements UserDetailsService {
         tokenService.save(token);
         //sending an email
         String link = "http://localhost:7878/tokens/" + token.getToken();
-        try {
-            emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
-        }catch(Exception e){
-            throw new BadRequestException("Invalid email address.");
-        }
+        emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
         return new SignUpUserResponseDTO(user); // SignUpUserResponseDTO(userRep.save(user));
     }
 

@@ -6,4 +6,5 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public abstract class AbstractDao {
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+
 }

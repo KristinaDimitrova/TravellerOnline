@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import traveller.exception.BadRequestException;
 import traveller.exception.NotFoundException;
+import traveller.exception.TechnicalIssuesException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
 import traveller.model.dto.fileDTO.ResponseImageDTO;
@@ -76,7 +77,7 @@ public class PostController extends AbstractController {
     }
 
     @DeleteMapping("posts/{id}")
-    public MessageDTO deletePost(@PathVariable (name = "id") int postId, HttpSession session) {
+    public MessageDTO deletePost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.deletePost(postId, userId);
     }
@@ -93,31 +94,39 @@ public class PostController extends AbstractController {
     }
 
     @PostMapping("/posts/dislike/{id}")
-    public MessageDTO dislikPost(@PathVariable (name = "id") int postId, HttpSession session)  {
+    public MessageDTO dislikPost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.dislikePost(postId, userId);
     }
 
     @PostMapping("/posts/removeDislike/{id}")
-    public MessageDTO removeDislikPost(@PathVariable (name = "id") int postId, HttpSession session)  {
+    public MessageDTO removeDislikPost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.removeDislikeFromPost(postId, userId);
     }
 
     @PostMapping("posts/filter")
-    public List<ResponsePostDTO> filter(@RequestBody SearchDTO searchDTO, HttpSession session) throws SQLException {
+    public List<ResponsePostDTO> filter(@RequestBody SearchDTO searchDTO, HttpSession session){
         sessionManager.authorizeLogin(session);
-        return postService.filter(searchDTO);
+        try {
+            return postService.filter(searchDTO);
+        }catch(SQLException e){
+            throw new TechnicalIssuesException();
+        }
     }
 
 
     @GetMapping("posts/newsfeed/{page}")
-    public List<ResponsePostDTO> getNewsfeed(@PathVariable(name = "page") int pageNum, HttpSession session) throws SQLException {
+    public List<ResponsePostDTO> getNewsfeed(@PathVariable(name = "page") int pageNum, HttpSession session){
         long id = sessionManager.authorizeLogin(session);
         if(pageNum < 1){
             throw new NotFoundException("Page not found.");
         }
-        return postService.getNewsFeed(id, pageNum, RESULTS_PER_PAGE);
+        try {
+            return postService.getNewsFeed(id, pageNum, RESULTS_PER_PAGE);
+        } catch (SQLException e) {
+            throw new TechnicalIssuesException();
+        }
     }
 
 }
