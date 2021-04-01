@@ -9,7 +9,7 @@ import traveller.service.CommentService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Set;
+
 
 @RestController
 public class CommentController extends AbstractController {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import traveller.model.dto.postDTO.RequestPostDTO;
@@ -20,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 @Component
 @NoArgsConstructor
 @Setter
@@ -27,6 +29,7 @@ import java.util.Set;
 @Entity
 @Table(name="posts")
 public class Post {
+
 
 
     @Id

@@ -15,19 +15,19 @@ public class LocationTypeController extends AbstractController{
     @Autowired
     SessionManager sessionManager;
 
-    @PostMapping("/locationType")
+    @PostMapping("/locationTypes")
     public LocationType addLocationType(@RequestBody LocationTypeDTO locationTypeDTO, HttpSession session)  {
         sessionManager.authorizeLogin(session);
         return locationTypeService.addLocationType(locationTypeDTO);
     }
 
-    @GetMapping("/locationType/all")
+    @GetMapping("/locationTypes/all")
     public List<LocationType> getAllLocationTypes(HttpSession session) {
         sessionManager.authorizeLogin(session);
         return locationTypeService.getAllLocationTypes();
     }
 
-    @GetMapping("/locationType/{id}")
+    @GetMapping("/locationTypes/{id}")
     public LocationType getById (@PathVariable int id,HttpSession session )  {
         sessionManager.authorizeLogin(session);
         return locationTypeService.getById(id);

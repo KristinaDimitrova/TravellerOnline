@@ -4,19 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import traveller.model.pojo.Image;
 import traveller.model.pojo.Video;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseVideoDTO {
-    private long imageId;
-    private String imageUrl;
+public class VideoDTO {
+    private long videoId;
+    private String videoUrl;
 
-    public ResponseVideoDTO(Video video) {
-        this.imageId = video.getId();
-        this.imageUrl = video.getUrl();
+    public VideoDTO(Video video) {
+        this.videoId = video.getId();
+        this.videoUrl = video.getUrl();
     }
 }

@@ -1,16 +1,12 @@
 package traveller.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import traveller.exception.AuthorizationException;
 import traveller.exception.BadRequestException;
-import traveller.exception.NotFoundException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
-import traveller.model.dto.fileDTO.ResponseImageDTO;
-import traveller.model.dto.fileDTO.ResponseVideoDTO;
 import traveller.model.dto.postDTO.RequestPostDTO;
 import traveller.model.dto.postDTO.ResponsePostDTO;
 import traveller.model.pojo.Image;
@@ -24,9 +20,8 @@ import traveller.repository.UserRepository;
 import traveller.repository.VideoRepository;
 
 import javax.transaction.Transactional;
-import java.io.*;
-import java.nio.file.Files;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,21 +32,25 @@ public class PostService {
     @Autowired
     private PostDBDao postDBDao;
     @Autowired
-    LocationTypeService locationTypeService;
+    private LocationTypeService locationTypeService;
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
     @Autowired
-    ImageRepository imageRepo;
+    private ImageRepository imageRepo;
     @Autowired
-    VideoRepository videoRepo;
+    private MediaService mediaService;
+    @Autowired
+    private VideoRepository videoRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    @Value("${file.path}")
-    private String filePath;
+
 
 
     @Transactional
-    public ResponsePostDTO addNewPost(RequestPostDTO postDTO, long userId){
-        Post post = new Post(postDTO);
+    public ResponsePostDTO  addNewPost(RequestPostDTO postDTO, long userId){
+        Post post = convertPostToEntity(postDTO);
+
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         post.setOwner(userRepo.getById(userId));
         postRepo.save(post);
@@ -65,22 +64,22 @@ public class PostService {
             video.setPost(post);
             videoRepo.save(video);
         }
-
-        return new ResponsePostDTO(post);
+        Post fullPost = postRepo.getPostById(post.getId());
+        return convertPostToDto(fullPost);
     }
 
     public ResponsePostDTO getPostById(long id) {
-        return  new ResponsePostDTO(postRepo.getPostById(id));
+        return convertPostToDto(postRepo.getPostById(id));
     }
 
+    @Transactional
     public ResponsePostDTO editPost(long postId, RequestPostDTO postDTO, long userId) {
         Post post = postRepo.getPostById(postId);
         if (post.getOwner().getId() != userId) {
             throw new AuthorizationException("You can not edit a post that you do not own!");
         }
-        post.setLatitude(postDTO.getLatitude());
-        post.setLongitude(postDTO.getLongitude());
-        post.setDescription(postDTO.getDescription());
+        Post post1 = convertPostToEntity(postDTO);
+
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         return new ResponsePostDTO(postRepo.save(post));
     }
@@ -162,55 +161,26 @@ public class PostService {
         return responsePostDTOs;
     }
 
-    public ResponseVideoDTO uploadVideo(MultipartFile videoFile) {
-        Video video = new Video();
 
-        File physicalFile = new File(filePath + File.separator + System.nanoTime() + ".mp4");
-        try (OutputStream os = new FileOutputStream(physicalFile)) {
-            os.write(videoFile.getBytes());
-            video.setUrl(physicalFile.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
+    private ResponsePostDTO convertPostToDto(Post post) {
+        ResponsePostDTO postDTO = modelMapper.map(post, ResponsePostDTO.class);
+        postDTO.setLocationType(post.getLocationType().getName());
+        System.out.println(3);
+        for(Video v : post.getVideos()){
+            System.out.println( 1);
+            postDTO.getVideos().add(mediaService.convertVideoEntityToImageDTO(v));
         }
-        videoRepo.save(video);
-        return new ResponseVideoDTO(video);
+        for(Image i : post.getImages()){
+            System.out.println(2);
+            postDTO.getImages().add(mediaService.convertImageEntityToImageDTO(i));
+        }
+        return postDTO;
     }
 
-
-    public ResponseImageDTO uploadImage(MultipartFile imageFile) {
-        Image image  = new Image();
-        File physicalFile = new File(filePath + File.separator + System.nanoTime() + ".png");
-        try (OutputStream os = new FileOutputStream(physicalFile)) {
-            os.write(imageFile.getBytes());
-            image.setUrl(physicalFile.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        imageRepo.save(image);
-        return new ResponseImageDTO(image);
-    }
-
-    public byte[] getVideoById(long videoId) {
-        Video video = videoRepo.getVideoById(videoId);
-        String url = video.getUrl();
-        File phyFile = new File(url);
-        try {
-            return Files.readAllBytes(phyFile.toPath());
-        } catch (IOException e) {
-            throw new NotFoundException("Sorry, problem with video downloading!");
-        }
-    }
-
-
-    public byte[] getImageById(long imageId) {
-        Image image = imageRepo.getImageById(imageId);
-        String url = image.getUrl();
-        File phyFile = new File(url);
-        try {
-            return Files.readAllBytes(phyFile.toPath());
-        } catch (IOException e) {
-            throw new NotFoundException("Sorry, problem with image downloading!");
-        }
+    private Post convertPostToEntity(RequestPostDTO postDto)   {
+        Post post = modelMapper.map(postDto, Post.class);
+        post.setCreatedAt(LocalDateTime.now());
+        return post;
     }
 }
 

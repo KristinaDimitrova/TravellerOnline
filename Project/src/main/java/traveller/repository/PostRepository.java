@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import traveller.exception.NotFoundException;
 import traveller.model.pojo.Post;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,5 +19,6 @@ public interface PostRepository extends JpaRepository<Post,Long> {
         else throw new NotFoundException("Post not found!");
     }
 
+    List<Post> getPostsByIdIn(List<Long> ids);
 
 }

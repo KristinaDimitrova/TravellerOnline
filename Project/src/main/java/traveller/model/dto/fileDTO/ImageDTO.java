@@ -16,11 +16,11 @@ import java.nio.file.Files;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseImageDTO {
+public class ImageDTO {
     private long imageId;
     private String imageUrl;
 
-    public ResponseImageDTO(Image image) {
+    public ImageDTO(Image image) {
       this.imageId = image.getId();
       this.imageUrl = image.getUrl();
     }
