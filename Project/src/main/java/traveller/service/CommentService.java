@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import traveller.exception.AuthorizationException;
 import traveller.exception.BadRequestException;
 import traveller.model.dto.MessageDTO;
-import traveller.model.dto.commentDTO.CommentCreationRequestDto;
+import traveller.model.dto.commentDTO.CommentRequestDTO;
 import traveller.model.dto.commentDTO.CommentResponseDTO;
 import traveller.model.pojo.Comment;
 import traveller.model.pojo.Post;
@@ -25,92 +25,94 @@ import java.util.List;
 @Component
 public class CommentService {
     @Autowired
-    private CommentRepository commentRep;
+    private CommentRepository commentRepo;
     @Autowired
     private PostRepository postRepo;
     @Autowired
     private UserRepository userRep;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private  UserService userService;
 
     public CommentResponseDTO getById(long id) {
-        return convertToCommentResponseDto(commentRep.getById(id));
+        return convertToCommentResponseDto(commentRepo.getById(id));
     }
 
     @Transactional
     public MessageDTO delete(long commentId, long actorId) {
-        Comment comment = commentRep.getById(commentId); //comment exists
+        Comment comment = commentRepo.getById(commentId); //comment exists
         User postOwner = comment.getPost().getOwner();  //post exists
         User commentOwner = comment.getOwner();  //comment owner exists, else
         if(actorId != commentOwner.getId() || actorId != postOwner.getId()) {
             throw new AuthorizationException("You are not authorized to delete the comment.");
         }
-        commentRep.deleteCommentById(commentId);
+        commentRepo.deleteCommentById(commentId);
         return new MessageDTO("You deleted the comment.");
     }
 
     public List<CommentResponseDTO> getComments(long postId) {
         Post existingPost = postRepo.getPostById(postId);
-        List<Comment> comments = existingPost.getComments(); //fixme get from database => ordered
+        List<Comment> comments = existingPost.getComments();
         List<CommentResponseDTO> ordered = new ArrayList<>();
         for (Comment c : comments){
             ordered.add(convertToCommentResponseDto(c));
         }
-        ordered.forEach(comment -> System.out.println(comment.getText()));
         return ordered;
     }
 
-    public MessageDTO hitLike(long commentId, long actorId){
-        Comment comment = commentRep.getById(commentId);
-        Post post = postRepo.getPostById(comment.getPost().getId());
+    public CommentResponseDTO hitLike(long commentId, long actorId){
+        Comment comment = commentRepo.getById(commentId);
+        postRepo.getPostById(comment.getPost().getId()); // does post exist
         User actor = userRep.getById(actorId);
         if(comment.getLikers().contains(actor)){
             throw new BadRequestException("You have already liked this comment.");
         }
         comment.getLikers().add(userRep.getById(actorId));
-        commentRep.save(comment);
-        return new MessageDTO("Comment liked.");
+        commentRepo.save(comment);
+        return convertToCommentResponseDto(commentRepo.getById(commentId));
     }
 
-    public MessageDTO removeLike(long commentId, long actorId) {
-        Comment comment = commentRep.getById(commentId);
-        Post post = postRepo.getPostById(comment.getPost().getId()); //post has not been deleted
+    public CommentResponseDTO removeLike(long commentId, long actorId) {
+        Comment comment = commentRepo.getById(commentId);
+        postRepo.getPostById(comment.getPost().getId()); //post has not been deleted
         User actor = userRep.getById(actorId);
         if(!comment.getLikers().contains(actor)){
             throw new BadRequestException("You haven't liked this comment.");
         }
         comment.getLikers().remove(userRep.getById(actorId));
-        commentRep.save(comment);
-        return new MessageDTO("Comment unliked.");
+        commentRepo.save(comment);
+        return convertToCommentResponseDto(commentRepo.getById(commentId));
     }
 
-    public CommentResponseDTO addComment(long postId, CommentCreationRequestDto commentDto, long actorId) {
+    public CommentResponseDTO addComment(long postId, CommentRequestDTO commentDto, long actorId) {
         Validator.validateComment(commentDto.getText());
-        Comment comment = convertCommentDTOToEntity(commentDto);
+        Comment comment = convertCommentDtoToEntity(commentDto);
         comment.setPost(postRepo.getPostById(postId)); //post exists
         comment.setOwner(userRep.getById(actorId));
+
         comment.setCreatedAt(LocalDateTime.now());
-        commentRep.save(comment);
+        commentRepo.save(comment);
         return convertToCommentResponseDto(comment);
     }
 
-    public CommentResponseDTO editComment(long commentId, MessageDTO commentDto, long actorId) {
-        Comment comment = commentRep.getById(commentId);
+    public CommentResponseDTO editComment(long commentId, CommentRequestDTO commentDto, long actorId) {
+        Comment comment = commentRepo.getById(commentId);
         if(comment.getOwner().getId() != actorId){ //comment is written by the same person
             throw new BadRequestException("Sorry, on Travergy you can only edit your own comments.");
         }
-        comment.setText(commentDto.getMessage());
-        return convertToCommentResponseDto(commentRep.save(comment)) ;
+        comment.setText(commentDto.getText());
+        return convertToCommentResponseDto(commentRepo.save(comment)) ;
 
     }
 
     public CommentResponseDTO convertToCommentResponseDto(Comment comment) {
         CommentResponseDTO commentResponseDTO = modelMapper.map(comment, CommentResponseDTO.class);
-        commentResponseDTO.setOwnerComment(comment.getOwner().getUsername());
-        return commentResponseDTO;
+        commentResponseDTO.setOwner(userService.convertUserEntityToOwnerDto(comment.getOwner()));
+        return  commentResponseDTO;
     }
 
-    public Comment convertCommentDTOToEntity(CommentCreationRequestDto commentDTO)   { ;
+    public Comment convertCommentDtoToEntity(CommentRequestDTO commentDTO)   { ;
         return  modelMapper.map(commentDTO, Comment.class);
     }
 }

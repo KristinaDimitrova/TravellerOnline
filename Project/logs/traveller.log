@@ -1,8 +1,0 @@
-2021-04-02 10:32:52,956 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 1280 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
-2021-04-02 10:32:53,003 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
-2021-04-02 10:32:53,003 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
-2021-04-02 10:32:59,317 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 6.857 seconds (JVM running for 7.94)
-[30m2021-04-02 11:09:58,714[0;39m [34mINFO [0;39m [[34mrestartedMain[0;39m] [33morg.springframework.boot.StartupInfoLogger[0;39m: Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 13012 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
-[30m2021-04-02 11:09:58,714[0;39m [39mDEBUG[0;39m [[34mrestartedMain[0;39m] [33morg.springframework.boot.StartupInfoLogger[0;39m: Running with Spring Boot v2.4.4, Spring v5.3.5
-[30m2021-04-02 11:09:58,714[0;39m [34mINFO [0;39m [[34mrestartedMain[0;39m] [33morg.springframework.boot.SpringApplication[0;39m: The following profiles are active: krisi
-[30m2021-04-02 11:10:03,176[0;39m [34mINFO [0;39m [[34mrestartedMain[0;39m] [33morg.springframework.boot.StartupInfoLogger[0;39m: Started TravellerApplication in 4.759 seconds (JVM running for 5.437)

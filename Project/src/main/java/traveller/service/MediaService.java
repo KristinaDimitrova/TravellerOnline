@@ -1,12 +1,17 @@
 package traveller.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import traveller.exception.NotFoundException;
+import traveller.exception.TechnicalIssuesException;
 import traveller.model.dto.fileDTO.ImageDTO;
 import traveller.model.dto.fileDTO.VideoDTO;
 import traveller.model.pojo.Image;
@@ -17,84 +22,96 @@ import traveller.repository.VideoRepository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
+import java.util.Objects;
 
 @Log4j2
 @Service
 public class MediaService {
-    @Value("${file.path}")
-    private String filePath;
     @Autowired
     private VideoRepository videoRepo;
     @Autowired
     private ImageRepository imageRepo;
     @Autowired
     private ModelMapper modelMapper;
+    @Value("${application.bucket.name}")
+    private String bucketName;
+    @Autowired
+    private AmazonS3 s3Client;
 
-    public VideoDTO uploadVideo(MultipartFile videoFile) {
+    public VideoDTO uploadVideo (MultipartFile videoFile){
         Video video = new Video();
+        File file = convertMultiPartFileToFile(videoFile);
+        String fileName = System.currentTimeMillis()+"_"+videoFile.getOriginalFilename();
 
-        File physicalFile = new File(filePath + File.separator + System.nanoTime() + ".mp4");
-        try (OutputStream os = new FileOutputStream(physicalFile)) {
-            os.write(videoFile.getBytes());
-            video.setUrl(physicalFile.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
+        video.setUrl(fileName);
         videoRepo.save(video);
-        return new VideoDTO(video);
+        return convertVideoEntityToVideoDTO(video);
     }
 
-
-    public ImageDTO uploadImage(MultipartFile imageFile) {
-        Image image  = new Image();
-        File physicalFile = new File(filePath + File.separator + System.nanoTime() + ".png");
-        try (OutputStream os = new FileOutputStream(physicalFile)) {
-            os.write(imageFile.getBytes());
-            image.setUrl(physicalFile.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        imageRepo.save(image);
-        return new ImageDTO(image);
-    }
-
-    public byte[] getVideoById(long videoId) {
+    public byte[] getVideoById(long videoId){
         Video video = videoRepo.getVideoById(videoId);
-        String url = video.getUrl();
-        File phyFile = new File(url);
-        try {
-            return Files.readAllBytes(phyFile.toPath());
-        } catch (IOException e) {
-            throw new NotFoundException("Sorry, problem with video downloading!");
-        }
+        String fileName = video.getUrl();
+        return  downloadFromAmazonS3(fileName);
     }
 
-    public byte[] getImageById(long imageId) {
+    public ImageDTO uploadImage(MultipartFile imageFile){
+        System.out.println(":p");
+        Image image = new Image();
+        File file = convertMultiPartFileToFile(imageFile);
+        String fileName = System.currentTimeMillis()+"_"+imageFile.getOriginalFilename();
+        s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
+        image.setUrl(fileName);
+        imageRepo.save(image);
+        return convertImageEntityToImageDTO(image);
+    }
+
+    public byte[] getImageById(long imageId){
         Image image = imageRepo.getImageById(imageId);
-        String url = image.getUrl();
-        File phyFile = new File(url);
+        String fileName = image.getUrl();
+        return downloadFromAmazonS3(fileName);
+    }
+
+    private byte[]downloadFromAmazonS3(String fileName){
+        S3Object s3Object = s3Client.getObject(bucketName, fileName);
+        S3ObjectInputStream inputStream = s3Object.getObjectContent();
         try {
-            return Files.readAllBytes(phyFile.toPath());
+            return IOUtils.toByteArray(inputStream);
         } catch (IOException e) {
-            throw new NotFoundException("Sorry, problem with image downloading!");
+            log.error(e.getMessage());
+            throw new TechnicalIssuesException();
         }
     }
 
-    public Image convertImageDTOtoEntity(ImageDTO imageDTO){
-        return modelMapper.map(imageDTO, Image.class);
+    private File convertMultiPartFileToFile(MultipartFile file) {
+        File convertedFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+            fos.write(file.getBytes());
+        } catch (IOException e) {
+            log.error("Error converting multipartFile to file", e);
+        }
+        return convertedFile;
     }
+
+    public void deleteFileFromAmazonS3(String fileName){
+        s3Client.deleteObject(bucketName, fileName);
+    }
+
 
     public ImageDTO convertImageEntityToImageDTO(Image image){
         return modelMapper.map(image, ImageDTO.class);
     }
 
-    public Video convertVideoDTOtoEntity(VideoDTO videoDTO){
-        return modelMapper.map(videoDTO,Video.class);
-    }
-
     public VideoDTO convertVideoEntityToVideoDTO(Video video){
         return modelMapper.map(video, VideoDTO.class);
     }
+
+    private boolean validateVideoType(){
+        return true;
+    }
+
+    private boolean validateImageType(){
+        return true;
+    }
+
 }

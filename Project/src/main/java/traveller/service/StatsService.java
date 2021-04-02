@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import traveller.exception.AuthorizationException;
 import traveller.model.dao.statistics.StatsDBDao;
-import traveller.model.dto.statsDTO.StatsProfileDto;
-import traveller.model.pojo.StatsProfile;
+import traveller.model.dto.statsDTO.StatsProfileDTO;
+import traveller.model.pojo.stats.StatsSignups;
+import traveller.model.pojo.stats.StatsProfile;
 import traveller.registration.Role;
 import traveller.repository.UserRepository;
 
@@ -19,25 +20,23 @@ public class StatsService {
     @Autowired
     private UserRepository userRep;
 
-    //get most popular posts for today / the week / todo
-
-    //get new users count for the past one month
-
-    //get most popular people from database by period
-
-
-
-    public List<StatsProfileDto> getFavouriteProfilesByAgeGroup(int minRange, int maxRange, long actorId) {
-        //service might be available only for ADMINS
+    public StatsSignups getSignupsCountByAgeRange(int minAge, int maxAge, int periodDays, long actorId) {
         if(userRep.getById(actorId).getRole() != Role.ADMIN){
-            throw new AuthorizationException("restricted data");
+            throw new AuthorizationException("sensitive data");
+        }
+        return statsDao.getSignupsCountByAgeRange(minAge, maxAge, periodDays);
+    }
+
+    public List<StatsProfileDTO> getFavouriteProfilesByAgeGroup(int minRange, int maxRange, long actorId) {
+        //service is available only for ADMINS
+        if(userRep.getById(actorId).getRole() != Role.ADMIN){
+            throw new AuthorizationException("sensitive data");
         }
         List<StatsProfile> listFromDao = statsDao.getFavouriteProfilesByAgeGroup(minRange, maxRange);
-        List<StatsProfileDto> popularProfiles = new ArrayList<>();
+        List<StatsProfileDTO> popularProfiles = new ArrayList<>();
         for(StatsProfile i : listFromDao){
-            popularProfiles.add(new StatsProfileDto(i));
+            popularProfiles.add(new StatsProfileDTO(i));
         }
-        System.out.println("We are good here in Service 33");
         return popularProfiles;
     }
 }

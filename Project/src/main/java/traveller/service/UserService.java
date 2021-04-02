@@ -12,15 +12,10 @@ import org.springframework.stereotype.Service;
 import traveller.email.EmailSender;
 import traveller.exception.*;
 import traveller.model.dto.MessageDTO;
-import traveller.model.dto.postDTO.RequestPostDTO;
-import traveller.model.dto.postDTO.ResponsePostDTO;
-import traveller.model.dto.userDTO.EditDetailsUserDTO;
-import traveller.model.dto.userDTO.SignUpUserResponseDTO;
-import traveller.model.dto.userDTO.SignupUserDTO;
-import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
-import traveller.model.pojo.Post;
+import traveller.model.dto.userDTO.*;
 import traveller.model.pojo.User;
 import traveller.model.pojo.VerificationToken;
+import traveller.registration.Role;
 import traveller.repository.UserRepository;
 import traveller.utilities.Validator;
 import javax.transaction.Transactional;
@@ -56,7 +51,7 @@ public class UserService implements UserDetailsService {
         validateUsersDetails(dto);
         //encoding password
         dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-        User user = new User(dto);
+        User user = convertSignUpUserDtoToUserEntity(dto);
         //new user must be unable to login if they have not verified their email
         user.setEnabled(false);
         userRep.save(user);
@@ -65,8 +60,12 @@ public class UserService implements UserDetailsService {
         tokenService.save(token);
         //sending an email
         String link = "http://localhost:7878/tokens/" + token.getToken();
-        emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
-        return convertToSignUpUserResponseDTO(user); // SignUpUserResponseDTO(userRep.save(user));
+        try {
+            emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
+        }catch(Exception e){
+            throw new BadRequestException("Invalid email.");
+        }
+        return convertUserEntityToSignUpResponseUserDto(user) ; // SignUpUserResponseDTO(userRep.save(user));
     }
 
     private void validateUsersDetails(SignupUserDTO dto){
@@ -92,13 +91,13 @@ public class UserService implements UserDetailsService {
         List<User> list =  userRep.findByFirstNameAndLastName(firstName, lastName);
         List<UserWithoutPasswordDTO> usersWOutPass = new ArrayList<>();
         for(User u : list){
-            usersWOutPass.add(convertToUserWithoutPasswordDTO(u));
+            usersWOutPass.add(convertUserEntityToUserWithoutPasswordDto(u));
         }
         return usersWOutPass;
     }
 
     public UserWithoutPasswordDTO findById(long id) {
-        return convertToUserWithoutPasswordDTO(userRep.getById(id));
+        return convertUserEntityToUserWithoutPasswordDto(userRep.getById(id));
     }
 
     public void deleteUser(long actorId) {
@@ -149,7 +148,7 @@ public class UserService implements UserDetailsService {
         if(!user.isEnabled()){
             throw new AuthorizationException("You must verify your email.");
         }
-        return convertToUserWithoutPasswordDTO(user);
+        return convertUserEntityToUserWithoutPasswordDto(user);
     }
 
     public MessageDTO changePassword(long userId, String oldPassword, String newPassword) {
@@ -257,15 +256,25 @@ public class UserService implements UserDetailsService {
         return userRep.findByUsername(username);
     }
 
-    private SignUpUserResponseDTO convertToSignUpUserResponseDTO(User user) {
-        return modelMapper.map(user, SignUpUserResponseDTO.class);
+    public UserWithoutPasswordDTO convertUserEntityToUserWithoutPasswordDto(User user) {
+        return modelMapper.map(user,UserWithoutPasswordDTO.class);
     }
 
-    private UserWithoutPasswordDTO convertToUserWithoutPasswordDTO(User user) {
-        return modelMapper.map(user, UserWithoutPasswordDTO.class);
+    public SignUpUserResponseDTO convertUserEntityToSignUpResponseUserDto(User user){
+        return  modelMapper.map(user, SignUpUserResponseDTO.class);
     }
 
-    private User convertUserDTOToEntity(SignupUserDTO signupUserDTO)   {
-        return  modelMapper.map(signupUserDTO, User.class);
+    public OwnerDTO convertUserEntityToOwnerDto(User user){
+        return  modelMapper.map(user,OwnerDTO.class);
+    }
+
+    public User convertSignUpUserDtoToUserEntity(SignupUserDTO signupUserDTO)   {
+        User user = modelMapper.map(signupUserDTO, User.class);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setDeleted(false);
+        user.setRole(Role.USER);
+        user.setEnabled(false);
+        user.setPosts(new ArrayList<>());
+        return user;
     }
 }

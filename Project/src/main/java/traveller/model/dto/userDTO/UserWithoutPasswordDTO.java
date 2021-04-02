@@ -1,4 +1,5 @@
 package traveller.model.dto.userDTO;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,19 +16,11 @@ import java.util.List;
 public class UserWithoutPasswordDTO {
     private String firstName;
     private String lastName;
-    private String email;
     private String username;
+    private String email;
     private int age;
+    @JsonManagedReference
     private List<ResponsePostDTO> posts = new ArrayList<>();
 
-//    public UserWithoutPasswordDTO(User user) {
-//        firstName = user.getFirstName();
-//        lastName = user.getLastName();
-//        email = user.getEmail();
-//        username = user.getUsername();
-//        for(Post p : user.getPosts()){
-//            posts.add(new ResponsePostDTO(p));
-//        }
-//        age = user.getAge();
-//    }
+
 }

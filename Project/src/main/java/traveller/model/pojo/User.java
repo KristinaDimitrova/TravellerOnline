@@ -57,7 +57,7 @@ public class User implements UserDetails {
             //POSTS
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
     @JsonManagedReference
-    List<Post> posts;
+    List<Post> posts ;
             //FOLLOWERS
     @ManyToMany(mappedBy = "followedUsers")
     private Set<User> followers;
@@ -83,19 +83,19 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })
     private Set<Comment> likedComments;
 
-    public User(SignupUserDTO userDTO) {
-        firstName = userDTO.getFirstName();
-        lastName = userDTO.getLastName();
-        email = userDTO.getEmail();
-        username = userDTO.getUsername();
-        password = userDTO.getPassword();
-        createdAt = LocalDateTime.now();
-        age = userDTO.getAge();
-        enabled = false;
-        posts = new ArrayList<>();
-        role = Role.USER;
-        isDeleted = false;
-    }
+//    public User(SignupUserDTO userDTO) {
+//        firstName = userDTO.getFirstName();
+//        lastName = userDTO.getLastName();
+//        email = userDTO.getEmail();
+//        username = userDTO.getUsername();
+//        password = userDTO.getPassword();
+//        createdAt = LocalDateTime.now();
+//        age = userDTO.getAge();
+//        enabled = false;
+//        posts = new ArrayList<>();
+//        role = Role.USER;
+//        isDeleted = false;
+//    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());

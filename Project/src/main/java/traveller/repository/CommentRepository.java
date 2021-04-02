@@ -15,13 +15,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     default Comment getById(long id){
         Optional<Comment> opt = findById(id);
-        if(!opt.isPresent()){
+        if(opt.isEmpty()){
             throw new NotFoundException("Comment not found.");
         }
         return opt.get();
     }
-
-    List<Comment> findCommentsByPost_Id(long postId);
 
     void deleteCommentById(long id);
 }

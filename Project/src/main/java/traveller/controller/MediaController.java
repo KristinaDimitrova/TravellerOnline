@@ -31,9 +31,9 @@ public class MediaController {
     }
 
     @GetMapping(value = "/video/{id}", produces = "video/mp4")
-    public byte[] getVideoById(@PathVariable(name="id") long postId, HttpSession session){
+    public byte[] getVideoById(@PathVariable(name="id") long videoId, HttpSession session){
         sessionManager.authorizeLogin(session);
-        return mediaService.getVideoById(postId);
+        return mediaService.getVideoById(videoId);
     }
 
     @GetMapping (value = "/image/{id}", produces =  "image/*")
