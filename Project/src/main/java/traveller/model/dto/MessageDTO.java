@@ -12,5 +12,5 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class MessageDTO {
-    private  String message;
+    private  String text;
 }
