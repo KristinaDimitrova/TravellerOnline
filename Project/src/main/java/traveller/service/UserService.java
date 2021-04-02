@@ -1,5 +1,6 @@
 package traveller.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,15 +12,19 @@ import org.springframework.stereotype.Service;
 import traveller.email.EmailSender;
 import traveller.exception.*;
 import traveller.model.dto.MessageDTO;
+import traveller.model.dto.postDTO.RequestPostDTO;
+import traveller.model.dto.postDTO.ResponsePostDTO;
 import traveller.model.dto.userDTO.EditDetailsUserDTO;
 import traveller.model.dto.userDTO.SignUpUserResponseDTO;
 import traveller.model.dto.userDTO.SignupUserDTO;
 import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
+import traveller.model.pojo.Post;
 import traveller.model.pojo.User;
 import traveller.model.pojo.VerificationToken;
 import traveller.repository.UserRepository;
 import traveller.utilities.Validator;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +39,8 @@ public class UserService implements UserDetailsService {
     private TokenService tokenService;
     @Autowired
     private EmailSender emailSender;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override //method needed by Spring security
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -59,7 +66,7 @@ public class UserService implements UserDetailsService {
         //sending an email
         String link = "http://localhost:7878/tokens/" + token.getToken();
         emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
-        return new SignUpUserResponseDTO(user); // SignUpUserResponseDTO(userRep.save(user));
+        return convertToSignUpUserResponseDTO(user); // SignUpUserResponseDTO(userRep.save(user));
     }
 
     private void validateUsersDetails(SignupUserDTO dto){
@@ -85,13 +92,13 @@ public class UserService implements UserDetailsService {
         List<User> list =  userRep.findByFirstNameAndLastName(firstName, lastName);
         List<UserWithoutPasswordDTO> usersWOutPass = new ArrayList<>();
         for(User u : list){
-            usersWOutPass.add(new UserWithoutPasswordDTO(u));
+            usersWOutPass.add(convertToUserWithoutPasswordDTO(u));
         }
         return usersWOutPass;
     }
 
     public UserWithoutPasswordDTO findById(long id) {
-        return new UserWithoutPasswordDTO(userRep.getById(id));
+        return convertToUserWithoutPasswordDTO(userRep.getById(id));
     }
 
     public void deleteUser(long actorId) {
@@ -142,7 +149,7 @@ public class UserService implements UserDetailsService {
         if(!user.isEnabled()){
             throw new AuthorizationException("You must verify your email.");
         }
-        return new UserWithoutPasswordDTO(user);
+        return convertToUserWithoutPasswordDTO(user);
     }
 
     public MessageDTO changePassword(long userId, String oldPassword, String newPassword) {
@@ -248,5 +255,17 @@ public class UserService implements UserDetailsService {
 
     public User findByUsername(String username) {
         return userRep.findByUsername(username);
+    }
+
+    private SignUpUserResponseDTO convertToSignUpUserResponseDTO(User user) {
+        return modelMapper.map(user, SignUpUserResponseDTO.class);
+    }
+
+    private UserWithoutPasswordDTO convertToUserWithoutPasswordDTO(User user) {
+        return modelMapper.map(user, UserWithoutPasswordDTO.class);
+    }
+
+    private User convertUserDTOToEntity(SignupUserDTO signupUserDTO)   {
+        return  modelMapper.map(signupUserDTO, User.class);
     }
 }

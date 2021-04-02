@@ -1,0 +1,137 @@
+2021-04-01 14:12:18,246 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 4428 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 14:12:18,248 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 14:12:18,248 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 14:12:22,577 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.642 seconds (JVM running for 5.239)
+2021-04-01 14:12:28,133 ERROR traveller.controller.AbstractController [http-nio-7878-exec-3] You must log in first.
+2021-04-01 14:13:05,979 ERROR traveller.controller.AbstractController [http-nio-7878-exec-6] Post not found!
+2021-04-01 14:14:58,986 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 12664 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 14:14:58,987 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 14:14:58,987 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 14:15:03,337 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.626 seconds (JVM running for 6.397)
+2021-04-01 15:46:50,248 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 11320 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 15:46:50,255 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 15:46:50,255 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 15:47:17,688 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 29.257 seconds (JVM running for 31.548)
+2021-04-01 15:47:39,807 ERROR traveller.controller.AbstractController [http-nio-7878-exec-3] Column 'created_at' cannot be null
+2021-04-01 15:47:50,236 ERROR traveller.controller.AbstractController [http-nio-7878-exec-5] Column 'created_at' cannot be null
+2021-04-01 15:47:51,367 ERROR traveller.controller.AbstractController [http-nio-7878-exec-7] Column 'created_at' cannot be null
+2021-04-01 15:52:19,960 ERROR traveller.controller.AbstractController [http-nio-7878-exec-9] Already logged in.
+2021-04-01 15:52:32,054 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 4312 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 15:52:32,055 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 15:52:32,055 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 15:52:36,154 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.397 seconds (JVM running for 4.995)
+2021-04-01 15:58:21,384 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 13168 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 15:58:21,385 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 15:58:21,386 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 15:58:25,485 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.369 seconds (JVM running for 5.122)
+2021-04-01 16:01:03,582 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 5720 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:01:03,583 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:01:03,583 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:01:07,770 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.655 seconds (JVM running for 5.488)
+2021-04-01 16:04:25,255 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 8256 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:04:25,256 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:04:25,256 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:04:29,585 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.621 seconds (JVM running for 5.206)
+2021-04-01 16:18:40,626 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 10948 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:18:40,627 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:18:40,627 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:18:45,468 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 5.17 seconds (JVM running for 5.824)
+2021-04-01 16:23:20,705 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 12356 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:23:20,707 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:23:20,707 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:23:25,039 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.639 seconds (JVM running for 5.263)
+2021-04-01 16:24:51,596 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 13172 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:24:51,597 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:24:51,597 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:24:55,957 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.641 seconds (JVM running for 5.236)
+2021-04-01 16:25:48,443 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 10980 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:25:48,444 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:25:48,444 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:25:52,780 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.616 seconds (JVM running for 5.21)
+2021-04-01 16:25:56,164 ERROR traveller.controller.AbstractController [http-nio-7878-exec-1] You must log in first.
+2021-04-01 16:39:43,968 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 11724 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:39:43,970 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:39:43,971 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:39:48,434 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.821 seconds (JVM running for 5.454)
+2021-04-01 16:43:16,638 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 10056 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:43:16,639 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:43:16,640 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:43:20,899 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.551 seconds (JVM running for 5.163)
+2021-04-01 16:46:24,634 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 1540 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:46:24,635 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:46:24,636 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:46:29,076 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.765 seconds (JVM running for 5.397)
+2021-04-01 16:49:01,138 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 5412 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 16:49:01,139 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 16:49:01,139 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 16:49:05,679 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.825 seconds (JVM running for 5.444)
+2021-04-01 18:33:51,126 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 4448 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 18:33:51,173 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:33:51,173 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:33:56,318 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 5.722 seconds (JVM running for 6.56)
+2021-04-01 18:38:58,345 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 13732 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 18:38:58,360 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:38:58,360 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:39:02,576 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.514 seconds (JVM running for 5.128)
+2021-04-01 18:39:23,614 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 8708 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 18:39:23,614 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:39:23,614 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:39:27,701 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.377 seconds (JVM running for 4.968)
+2021-04-01 18:46:23,023 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 3140 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 18:46:23,023 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:46:23,023 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:46:27,480 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.748 seconds (JVM running for 5.361)
+2021-04-01 18:47:36,037 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 10372 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 18:47:36,037 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:47:36,037 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:47:40,161 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.413 seconds (JVM running for 5.017)
+2021-04-01 18:50:45,507 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 8052 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 18:50:45,507 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:50:45,507 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:50:50,193 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.972 seconds (JVM running for 5.587)
+2021-04-01 18:59:31,236 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 14132 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 18:59:31,236 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 18:59:31,236 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 18:59:35,431 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.488 seconds (JVM running for 5.113)
+2021-04-01 19:00:00,692 ERROR traveller.controller.AbstractController [http-nio-7878-exec-3] You must log in first.
+2021-04-01 19:00:56,940 ERROR traveller.controller.AbstractController [http-nio-7878-exec-4] Post not found!
+2021-04-01 19:07:37,020 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 12856 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 19:07:37,028 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 19:07:37,028 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 19:07:41,391 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.663 seconds (JVM running for 5.276)
+2021-04-01 19:13:39,400 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 7108 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 19:13:39,400 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 19:13:39,400 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 19:13:43,590 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.484 seconds (JVM running for 5.075)
+2021-04-01 20:03:12,116 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 5040 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 20:03:12,116 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 20:03:12,116 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 20:03:16,376 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.555 seconds (JVM running for 5.269)
+2021-04-01 20:31:02,421 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 13740 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 20:31:02,437 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 20:31:02,437 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 20:31:06,676 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.542 seconds (JVM running for 5.197)
+2021-04-01 20:33:41,865 ERROR traveller.controller.AbstractController [http-nio-7878-exec-5] Column 'created_at' cannot be null
+2021-04-01 20:35:05,170 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 12260 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 20:35:05,171 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 20:35:05,171 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 20:35:09,347 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.472 seconds (JVM running for 5.112)
+2021-04-01 20:35:58,369 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 1060 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 20:35:58,369 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 20:35:58,369 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 20:36:02,518 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.497 seconds (JVM running for 5.364)
+2021-04-01 20:41:05,924 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 1852 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 20:41:05,924 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 20:41:05,924 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 20:41:10,052 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.405 seconds (JVM running for 4.989)
+2021-04-01 20:42:06,836 ERROR traveller.controller.AbstractController [http-nio-7878-exec-3] Already logged in.
+2021-04-01 20:42:08,154 ERROR traveller.controller.AbstractController [http-nio-7878-exec-5] Already logged in.
+2021-04-01 20:45:51,796 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 9420 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 20:45:51,796 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 20:45:51,796 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 20:45:56,040 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.526 seconds (JVM running for 5.117)
+2021-04-01 21:08:40,110 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting TravellerApplication using Java 15.0.2 on DESKTOP-CSTC129 with PID 9608 (C:\Users\HP\Desktop\traveller\Project\target\classes started by HP in C:\Users\HP\Desktop\traveller\Project)
+2021-04-01 21:08:40,112 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-01 21:08:40,112 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: krisi
+2021-04-01 21:08:44,703 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started TravellerApplication in 4.914 seconds (JVM running for 5.557)
+2021-04-01 21:09:12,470 ERROR traveller.controller.AbstractController [http-nio-7878-exec-2] You must log in first.

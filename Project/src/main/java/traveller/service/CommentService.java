@@ -1,5 +1,6 @@
 package traveller.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import traveller.repository.PostRepository;
 import traveller.repository.UserRepository;
 import traveller.utilities.Validator;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +30,11 @@ public class CommentService {
     private PostRepository postRepo;
     @Autowired
     private UserRepository userRep;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public CommentResponseDTO getById(long id) {
-        return new CommentResponseDTO(commentRep.getById(id));
+        return convertToCommentResponseDto(commentRep.getById(id));
     }
 
     @Transactional
@@ -50,7 +54,7 @@ public class CommentService {
         List<Comment> comments = existingPost.getComments(); //fixme get from database => ordered
         List<CommentResponseDTO> ordered = new ArrayList<>();
         for (Comment c : comments){
-            ordered.add(new CommentResponseDTO(c));
+            ordered.add(convertToCommentResponseDto(c));
         }
         ordered.forEach(comment -> System.out.println(comment.getText()));
         return ordered;
@@ -82,11 +86,12 @@ public class CommentService {
 
     public CommentResponseDTO addComment(long postId, CommentCreationRequestDto commentDto, long actorId) {
         Validator.validateComment(commentDto.getText());
-        Comment comment = new Comment(commentDto);
+        Comment comment = convertCommentDTOToEntity(commentDto);
         comment.setPost(postRepo.getPostById(postId)); //post exists
         comment.setOwner(userRep.getById(actorId));
+        comment.setCreatedAt(LocalDateTime.now());
         commentRep.save(comment);
-        return new CommentResponseDTO(comment);
+        return convertToCommentResponseDto(comment);
     }
 
     public CommentResponseDTO editComment(long commentId, MessageDTO commentDto, long actorId) {
@@ -95,6 +100,17 @@ public class CommentService {
             throw new BadRequestException("Sorry, on Travergy you can only edit your own comments.");
         }
         comment.setText(commentDto.getMessage());
-        return new CommentResponseDTO(commentRep.save(comment));
+        return convertToCommentResponseDto(commentRep.save(comment)) ;
+
+    }
+
+    public CommentResponseDTO convertToCommentResponseDto(Comment comment) {
+        CommentResponseDTO commentResponseDTO = modelMapper.map(comment, CommentResponseDTO.class);
+        commentResponseDTO.setOwnerComment(comment.getOwner().getUsername());
+        return commentResponseDTO;
+    }
+
+    public Comment convertCommentDTOToEntity(CommentCreationRequestDto commentDTO)   { ;
+        return  modelMapper.map(commentDTO, Comment.class);
     }
 }

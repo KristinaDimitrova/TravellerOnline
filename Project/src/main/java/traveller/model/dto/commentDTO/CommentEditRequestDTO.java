@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class CommentEditRequestDTO {
+public class CommentEditRequestDTO { // no usages
     private long id;
     private String text;
 }

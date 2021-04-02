@@ -94,7 +94,7 @@ public class MediaService {
         return modelMapper.map(videoDTO,Video.class);
     }
 
-    public VideoDTO convertVideoEntityToImageDTO(Video video){
+    public VideoDTO convertVideoEntityToVideoDTO(Video video){
         return modelMapper.map(video, VideoDTO.class);
     }
 }

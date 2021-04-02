@@ -20,13 +20,13 @@ public class CommentResponseDTO implements Comparable<CommentResponseDTO> {
     private LocalDateTime createdAt;
     private int likes;
 
-    public CommentResponseDTO(Comment comment){
-        ownerComment = comment.getOwner().getFirstName().concat(" ").concat(comment.getOwner().getLastName());
-        postId = comment.getPost().getId();
-        text = comment.getText();
-        createdAt = comment.getCreatedAt();
-        likes = comment.getLikers().size();
-    }
+//    public CommentResponseDTO(Comment comment){
+//        ownerComment = comment.getOwner().getFirstName().concat(" ").concat(comment.getOwner().getLastName());
+//        postId = comment.getPost().getId();
+//        text = comment.getText();
+//        createdAt = comment.getCreatedAt();
+//        likes = comment.getLikers().size();
+//    }
 
     @Override
     public int compareTo(CommentResponseDTO o) {

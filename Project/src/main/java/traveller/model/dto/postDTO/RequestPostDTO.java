@@ -12,7 +12,6 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class RequestPostDTO {
-    private long id;
     private String locationType;
     private String latitude;
     private String longitude;

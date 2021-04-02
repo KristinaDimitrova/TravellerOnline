@@ -83,12 +83,12 @@ public class Post {
     Set<User>dislikers = new HashSet<>();
 
 
-    public Post(RequestPostDTO postDTO) {
-        this.createdAt = LocalDateTime.now();
-        this.latitude = postDTO.getLatitude();
-        this.longitude = postDTO.getLongitude();
-        this.description = postDTO.getDescription();
-    }
+//    public Post(RequestPostDTO postDTO) {
+//        this.createdAt = LocalDateTime.now();
+//        this.latitude = postDTO.getLatitude();
+//        this.longitude = postDTO.getLongitude();
+//        this.description = postDTO.getDescription();
+//    }
 
 
 }

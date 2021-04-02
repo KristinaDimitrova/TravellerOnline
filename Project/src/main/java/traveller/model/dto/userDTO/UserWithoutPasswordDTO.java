@@ -20,14 +20,14 @@ public class UserWithoutPasswordDTO {
     private int age;
     private List<ResponsePostDTO> posts = new ArrayList<>();
 
-    public UserWithoutPasswordDTO(User user) {
-        firstName = user.getFirstName();
-        lastName = user.getLastName();
-        email = user.getEmail();
-        username = user.getUsername();
-        for(Post p : user.getPosts()){
-            posts.add(new ResponsePostDTO(p));
-        }
-        age = user.getAge();
-    }
+//    public UserWithoutPasswordDTO(User user) {
+//        firstName = user.getFirstName();
+//        lastName = user.getLastName();
+//        email = user.getEmail();
+//        username = user.getUsername();
+//        for(Post p : user.getPosts()){
+//            posts.add(new ResponsePostDTO(p));
+//        }
+//        age = user.getAge();
+//    }
 }

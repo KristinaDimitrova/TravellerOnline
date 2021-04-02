@@ -9,11 +9,8 @@ import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
 import traveller.model.dto.postDTO.RequestPostDTO;
 import traveller.model.dto.postDTO.ResponsePostDTO;
-import traveller.model.pojo.Image;
-import traveller.model.pojo.Post;
-import traveller.model.pojo.User;
+import traveller.model.pojo.*;
 import traveller.model.dao.post.PostDBDao;
-import traveller.model.pojo.Video;
 import traveller.repository.ImageRepository;
 import traveller.repository.PostRepository;
 import traveller.repository.UserRepository;
@@ -38,19 +35,15 @@ public class PostService {
     @Autowired
     private ImageRepository imageRepo;
     @Autowired
-    private MediaService mediaService;
-    @Autowired
     private VideoRepository videoRepo;
     @Autowired
     private ModelMapper modelMapper;
-
-
-
+    @Autowired
+    CommentService commentService;
 
     @Transactional
     public ResponsePostDTO  addNewPost(RequestPostDTO postDTO, long userId){
         Post post = convertPostToEntity(postDTO);
-
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
         post.setOwner(userRepo.getById(userId));
         postRepo.save(post);
@@ -64,12 +57,14 @@ public class PostService {
             video.setPost(post);
             videoRepo.save(video);
         }
-        Post fullPost = postRepo.getPostById(post.getId());
-        return convertPostToDto(fullPost);
+        return convertPostToDto(postRepo.getPostById(post.getId()));
     }
 
     public ResponsePostDTO getPostById(long id) {
-        return convertPostToDto(postRepo.getPostById(id));
+        Post post = postRepo.getPostById(id);
+        System.out.println(post.getVideos().size());
+        System.out.println(post.getImages().size());
+        return convertPostToDto(post);
     }
 
     @Transactional
@@ -78,10 +73,9 @@ public class PostService {
         if (post.getOwner().getId() != userId) {
             throw new AuthorizationException("You can not edit a post that you do not own!");
         }
-        Post post1 = convertPostToEntity(postDTO);
-
+        post = convertPostToEntity(postDTO);
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
-        return new ResponsePostDTO(postRepo.save(post));
+        return convertPostToDto(post);
     }
 
     public MessageDTO deletePost ( long postId, long userId){
@@ -147,7 +141,7 @@ public class PostService {
         List<ResponsePostDTO> responseList = new ArrayList<>();
         List<Post> posts = postDBDao.filter(searchDTO.getName(), searchDTO.getLocationType());
         for (Post p : posts) {
-            responseList.add(new ResponsePostDTO(p));
+            responseList.add(convertPostToDto(p));
         }
         return responseList;
     }
@@ -156,28 +150,17 @@ public class PostService {
         List<Post> postList = postDBDao.getNewsFeed(userId, page, resultsPerPage);
         List<ResponsePostDTO> responsePostDTOs = new ArrayList<>();
         for(Post p :postList){
-            responsePostDTOs.add(new ResponsePostDTO(p));
+            responsePostDTOs.add(convertPostToDto(p));
         }
         return responsePostDTOs;
     }
 
 
-    private ResponsePostDTO convertPostToDto(Post post) {
-        ResponsePostDTO postDTO = modelMapper.map(post, ResponsePostDTO.class);
-        postDTO.setLocationType(post.getLocationType().getName());
-        System.out.println(3);
-        for(Video v : post.getVideos()){
-            System.out.println( 1);
-            postDTO.getVideos().add(mediaService.convertVideoEntityToImageDTO(v));
-        }
-        for(Image i : post.getImages()){
-            System.out.println(2);
-            postDTO.getImages().add(mediaService.convertImageEntityToImageDTO(i));
-        }
-        return postDTO;
+    public ResponsePostDTO convertPostToDto(Post post) {
+        return modelMapper.map(post, ResponsePostDTO.class);
     }
 
-    private Post convertPostToEntity(RequestPostDTO postDto)   {
+    public Post convertPostToEntity(RequestPostDTO postDto)   {
         Post post = modelMapper.map(postDto, Post.class);
         post.setCreatedAt(LocalDateTime.now());
         return post;

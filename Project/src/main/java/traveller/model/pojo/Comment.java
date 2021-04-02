@@ -50,11 +50,11 @@ public class Comment {
            inverseJoinColumns = {@JoinColumn(name="user_id")})
    private Set<User> likers;
 
-   public Comment(CommentCreationRequestDto dto){
-      this.text = dto.getText();
-      createdAt = LocalDateTime.now();
-      likers = new HashSet<>();
-   }
+//   public Comment(CommentCreationRequestDto dto){
+//      this.text = dto.getText();
+//      createdAt = LocalDateTime.now();
+//      likers = new HashSet<>();
+//   }
 
 
 

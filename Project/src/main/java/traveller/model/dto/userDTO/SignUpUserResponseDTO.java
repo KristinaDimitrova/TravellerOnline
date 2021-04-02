@@ -17,13 +17,13 @@ public class SignUpUserResponseDTO {
     private String username;
     private String email;
 
-    public SignUpUserResponseDTO(User user){
-        age = user.getAge();
-        username = user.getUsername();
-        email = user.getEmail();
-        firstName = user.getFirstName();
-        lastName = user.getLastName();
-    }
+//    public SignUpUserResponseDTO(User user){
+//        age = user.getAge();
+//        username = user.getUsername();
+//        email = user.getEmail();
+//        firstName = user.getFirstName();
+//        lastName = user.getLastName();
+//    }
 
 }
 
