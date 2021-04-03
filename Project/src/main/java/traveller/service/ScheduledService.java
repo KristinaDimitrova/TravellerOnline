@@ -29,7 +29,6 @@ public class ScheduledService {
     //@Scheduled(cron = "0 0 1 1 * ?", zone = "Europe/Sofia") //on every first date at 1 am
     @Scheduled(cron = "10 * * * * ?", zone = "Europe/Sofia")
     public void ScheduledAnalysisTopInfluencers(){
-        System.out.println("Heey  " + LocalDateTime.now());
         dao.saveRecordOfMostPopularUsers();
     }
 
@@ -37,16 +36,13 @@ public class ScheduledService {
     //@Scheduled(cron = "0 0 1 * * ?", zone = "Europe/Sofia") //every day at 1:00 AM
     @Scheduled(cron = "10 * * * * ?", zone = "Europe/Sofia")
     public void ScheduledAnalysisTopPosts(){
-        System.out.println("Heey  " + LocalDateTime.now());
         dao.saveRecordOfMostPopularPosts();
     }
 
     //запази данни за нови потребители за седмицата по възрастова група ->
     //@Scheduled(cron = "0 0 1 * * MON", zone = "Europe/Sofia") every Monday
     @Scheduled(cron = "10 * * * * ?", zone = "Europe/Sofia") //every minute
-    public void whatIsWrong(){
-        System.out.println("Things seem to be running smoothly  " + LocalDateTime.now());
-        //todo must perform the stats
+    public void ScheduledAnalysisNewSignups(){
         dao.saveRecordSignups();
     }
 

@@ -48,7 +48,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
         try(Connection conn = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection()) {
             PreparedStatement ps = conn.prepareStatement(sqlQuerySelectTopPosts);
             ResultSet rows = ps.executeQuery();
-            System.out.println(sqlQuerySelectTopPosts);
+            //System.out.println(sqlQuerySelectTopPosts);
             insertIntoTopPostsTable(rows);
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -71,7 +71,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
                 int popPostId = rows.getInt(POST_ID);
                 ps.setInt(rowRecord++, popPostId);
             }
-            System.out.println(sqlInsertQuery);
+            //System.out.println(sqlInsertQuery);
             ps.executeUpdate();
         }catch(SQLException e){
           log.error(e.getMessage());
@@ -106,7 +106,6 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
                 sqlInsertQuery.append(", ");
             }
         }
-        System.out.println("Check out this \n " + sqlInsertQuery);
         try(Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
             PreparedStatement ps = connection.prepareStatement(sqlInsertQuery.toString());) {
             int rowCorrespondingToRank = 1;
@@ -185,7 +184,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
                 long userId = rows.getInt(USER_ID);
                 User user = userRepo.getById(userId);
                 int subscribers = rows.getInt(SUBSCRIBERS);
-                statsProfiles.add(new StatsProfile(user, subscribers));
+                statsProfiles.add(new StatsProfile(user, subscribers)); //todo map
             }
             return statsProfiles;
         } catch(SQLException e){

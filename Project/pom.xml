@@ -17,6 +17,13 @@
         <java.version>11</java.version>
     </properties>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-hal-explorer</artifactId>
@@ -111,9 +118,24 @@
         </dependency>
 
         <dependency>
+            <!-- contains many different assertion libraries! (hamcrest, jupiter  -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <!-- това ни позволява да не пазим данни генерирани от тестовете
+            в локалната ни база от данни-->
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <!-- scope test се слага задължително за да се ограничи обхвата -->
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <dependency>

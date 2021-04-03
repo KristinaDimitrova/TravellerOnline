@@ -20,6 +20,11 @@ public class UserController extends AbstractController{
     @Autowired
     private SessionManager sessManager;
 
+    @GetMapping(value="/welcome")
+    public String welcomeDeleteMe(@RequestParam(defaultValue = "Moni", value = "name") String username){
+        return "Welcome " + username;
+    }
+
     @PostMapping(value="/singup")
     public SignUpUserResponseDTO register(@Valid @RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);

@@ -18,10 +18,9 @@ import traveller.model.pojo.Image;
 import traveller.model.pojo.Video;
 import traveller.repository.ImageRepository;
 import traveller.repository.VideoRepository;
+import traveller.utilities.Validator;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 
 @Log4j2
@@ -55,10 +54,16 @@ public class MediaService {
         return  downloadFromAmazonS3(fileName);
     }
 
-    public ImageDTO uploadImage(MultipartFile imageFile){
+    public ImageDTO uploadImage(MultipartFile imageFile) {
         System.out.println(":p");
         Image image = new Image();
         File file = convertMultiPartFileToFile(imageFile);
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            Validator.validateImageContent(inputStream);
+        }catch(IOException e){
+            log.error("Eggplant check failed.", e);
+        }
         String fileName = System.currentTimeMillis()+"_"+imageFile.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
         image.setFileName(fileName);
@@ -105,16 +110,6 @@ public class MediaService {
 
     public VideoDTO convertVideoEntityToVideoDTO(Video video){
         return modelMapper.map(video, VideoDTO.class);
-    }
-
-    private boolean validateVideoType(){
-        //todo
-        return true;
-    }
-
-    private boolean validateImageType(){
-        //todo
-        return true;
     }
 
 }

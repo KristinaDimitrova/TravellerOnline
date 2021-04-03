@@ -57,10 +57,10 @@ public class User implements UserDetails {
             //POSTS
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
     @JsonManagedReference
-    List<Post> posts ;
+    List<Post> posts = new ArrayList<>();
             //FOLLOWERS
     @ManyToMany(mappedBy = "followedUsers")
-    private Set<User> followers;
+    private Set<User> followers = new HashSet<>();
             //FOLLOWED USERS
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
@@ -68,20 +68,20 @@ public class User implements UserDetails {
             joinColumns = {@JoinColumn(name="subscriber_id")},
             inverseJoinColumns = {@JoinColumn(name="subscribed_id")}
     )
-    private List<User> followedUsers;
+    private List<User> followedUsers = new ArrayList<>();
             //LIKED POSTS
     @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })
-    private Set<Post> likedPosts;
+    private Set<Post> likedPosts = new HashSet<Post>();
             //DISLIKED POSTS
     @ManyToMany(mappedBy = "dislikers", cascade = { CascadeType.ALL })
-    private Set<Post> dislikedPosts;
+    private Set<Post> dislikedPosts = new HashSet<Post>();
             //COMMENTS
     @JsonBackReference
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
-    private Set<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
             //LIKED COMMENTS
     @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })
-    private Set<Comment> likedComments;
+    private Set<Comment> likedComment = new HashSet<>();
 
 //    public User(SignupUserDTO userDTO) {
 //        firstName = userDTO.getFirstName();

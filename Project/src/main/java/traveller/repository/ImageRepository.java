@@ -19,7 +19,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
         else throw new NotFoundException("Image not found!");
     }
 
-
-
     List<Image> getAllByPostIdIsNull();
 }

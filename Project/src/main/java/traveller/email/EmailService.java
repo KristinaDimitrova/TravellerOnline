@@ -1,12 +1,14 @@
 package traveller.email;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import traveller.exception.TechnicalIssuesException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -14,6 +16,7 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 @AllArgsConstructor
+@Log4j2
 public class EmailService implements EmailSender{
 
     private final JavaMailSender mailSender;
@@ -30,8 +33,8 @@ public class EmailService implements EmailSender{
             helper.setFrom("travergy@programmer.net");
             mailSender.send(mimeMessage);
         }catch (MessagingException e){
-            //todo logger logs
-            //throw new custom exception to stop the process todo
+            log.error("Confirmation email not sent.", e);
+            throw new TechnicalIssuesException("Confirmation email could not be sent.");
         }
     }
 }

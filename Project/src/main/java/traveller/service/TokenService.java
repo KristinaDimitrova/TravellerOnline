@@ -22,7 +22,7 @@ public class TokenService {
         return tokenRep.findByToken(token);
     }
 
-    public VerificationToken findByUser(User user){
+    public VerificationToken findByUser(User user){ //TODO use for resend email method!!
         return tokenRep.findByUser(user);
     }
 

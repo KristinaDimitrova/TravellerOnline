@@ -34,11 +34,14 @@ public class StatsController extends AbstractController{
     }
 
     @GetMapping(value = "/influencers")
-    public List<StatsProfileDTO> getMostFollowedProfilesByAgeGroup(@RequestParam(value = "min") int minAge,
-         @RequestParam(value = "max") int maxAge, HttpSession session){
+    public List<StatsProfileDTO> getMostFollowedProfilesByAgeGroup(@RequestParam(defaultValue = "20", value = "min") int minAge,
+         @RequestParam(defaultValue = "25", value = "max") int maxAge, HttpSession session){
         long actorId = sessManager.authorizeLogin(session);
         if(minAge > maxAge){
             throw new BadRequestException("min age can't be larger than max age.");
+        }
+        if(minAge < 5 || maxAge > 99){
+            throw new BadRequestException("invalid input");
         }
         return statsService.getFavouriteProfilesByAgeGroup(minAge, maxAge, actorId);
     }

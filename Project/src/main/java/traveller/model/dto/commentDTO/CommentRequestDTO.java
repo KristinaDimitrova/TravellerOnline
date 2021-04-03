@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class CommentRequestDTO {
-    @Size(max = 255, message = "Sorry, your comment must not exceed 255 characters")
+    @Size(min = 5, max = 255, message = "Sorry, your comment must not exceed 255 characters")
     @NotBlank(message = "Field must not be blank")
     private String text;
 }
