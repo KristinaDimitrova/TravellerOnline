@@ -42,16 +42,16 @@ public class MediaService {
         Video video = new Video();
         File file = convertMultiPartFileToFile(videoFile);
         String fileName = System.currentTimeMillis()+"_"+videoFile.getOriginalFilename();
-
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
-        video.setUrl(fileName);
+        video.setFileName(fileName);
         videoRepo.save(video);
+        file.delete();
         return convertVideoEntityToVideoDTO(video);
     }
 
     public byte[] getVideoById(long videoId){
         Video video = videoRepo.getVideoById(videoId);
-        String fileName = video.getUrl();
+        String fileName = video.getFileName();
         return  downloadFromAmazonS3(fileName);
     }
 
@@ -61,14 +61,15 @@ public class MediaService {
         File file = convertMultiPartFileToFile(imageFile);
         String fileName = System.currentTimeMillis()+"_"+imageFile.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
-        image.setUrl(fileName);
+        image.setFileName(fileName);
         imageRepo.save(image);
+        file.delete();
         return convertImageEntityToImageDTO(image);
     }
 
     public byte[] getImageById(long imageId){
         Image image = imageRepo.getImageById(imageId);
-        String fileName = image.getUrl();
+        String fileName = image.getFileName();
         return downloadFromAmazonS3(fileName);
     }
 
@@ -107,10 +108,12 @@ public class MediaService {
     }
 
     private boolean validateVideoType(){
+        //todo
         return true;
     }
 
     private boolean validateImageType(){
+        //todo
         return true;
     }
 

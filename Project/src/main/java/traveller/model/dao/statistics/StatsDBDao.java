@@ -1,5 +1,6 @@
 package traveller.model.dao.statistics;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import traveller.exception.TechnicalIssuesException;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+@Log4j2
 @Component
 public class StatsDBDao extends AbstractDao implements StatsDao {
     //NB query can execute only if there are at least 5 followed users
@@ -50,7 +51,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             System.out.println(sqlQuerySelectTopPosts);
             insertIntoTopPostsTable(rows);
         } catch (SQLException e) {
-            //todo запиши в log
+            log.error(e.getMessage());
         }
     }
 
@@ -73,7 +74,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             System.out.println(sqlInsertQuery);
             ps.executeUpdate();
         }catch(SQLException e){
-            //todo log method
+          log.error(e.getMessage());
         }
     }
 
@@ -91,7 +92,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             ResultSet rows = ps.executeQuery();
             insertIntoMostPopularUsersTable(rows);
         } catch (SQLException e) {
-            //todo запиши в log
+            log.error(e.getMessage());
         }
     }
 
@@ -114,7 +115,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             }
             ps.executeUpdate();
         } catch (SQLException e) {
-            //todo log
+            log.error(e.getMessage());
         }
     }
 
@@ -131,7 +132,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             ResultSet rows = ps.executeQuery();
             insertIntoTableSignups(rows);
         } catch (SQLException e) {
-            //todo запиши в log
+           log.error(e.getMessage());
         }
     }
 
@@ -157,7 +158,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             try {
                 ps.close();
             } catch (SQLException e) {
-                //todo log
+               log.error(e.getMessage());
             }
         }
     }
@@ -188,7 +189,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             }
             return statsProfiles;
         } catch(SQLException e){
-            //todo log
+            log.error(e.getMessage());
             throw new TechnicalIssuesException("Database on fire. Call the tech guy!");
         }
     }
@@ -209,7 +210,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             stats.setNewAccountsCreated(rows.getInt("sum"));
             return stats;
         } catch(SQLException e){
-            //todo log
+           log.error(e.getMessage());
             throw new TechnicalIssuesException("Database on fire. Call the tech guy!");
         }
     }

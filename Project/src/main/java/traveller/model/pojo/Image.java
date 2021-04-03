@@ -21,7 +21,7 @@ public class Image {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "post_id")
-    private traveller.model.pojo.Post post;
-    private String url;
+    private Post post;
+    private String fileName;
 
 }

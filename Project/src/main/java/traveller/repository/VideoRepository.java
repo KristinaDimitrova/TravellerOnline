@@ -6,6 +6,7 @@ import traveller.exception.NotFoundException;
 import traveller.model.pojo.Image;
 import traveller.model.pojo.Video;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,4 +19,8 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
         }
         else throw new NotFoundException("Image not found!");
     }
+
+    List<Video> getAllByPostIdIsNull();
+
+
 }

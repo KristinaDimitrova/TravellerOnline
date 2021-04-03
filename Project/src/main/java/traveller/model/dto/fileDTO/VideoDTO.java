@@ -12,10 +12,6 @@ import traveller.model.pojo.Video;
 @NoArgsConstructor
 public class VideoDTO {
     private long videoId;
-    private String videoUrl;
+    private String videoFileName;
 
-    public VideoDTO(Video video) {
-        this.videoId = video.getId();
-        this.videoUrl = video.getUrl();
-    }
 }

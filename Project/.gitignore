@@ -38,3 +38,4 @@ build/
 /src/main/resources/
 /src/test/
 /logs/
+/application.yml

@@ -1,5 +1,6 @@
 package traveller.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +20,15 @@ import traveller.registration.Role;
 import traveller.repository.UserRepository;
 import traveller.utilities.Validator;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+@Log4j2
 @Component
 @Service
 public class UserService implements UserDetailsService {
@@ -48,6 +54,15 @@ public class UserService implements UserDetailsService {
 
     @Transactional //Because we have more than one update statements => all or nothing
     public SignUpUserResponseDTO insertUser(final SignupUserDTO dto){
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        javax.validation.Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<SignupUserDTO>> violations = validator.validate(dto);
+
+        for (ConstraintViolation<SignupUserDTO> violation : violations) {
+            log.error(violation.getMessage());
+        }
+
         validateUsersDetails(dto);
         //encoding password
         dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));

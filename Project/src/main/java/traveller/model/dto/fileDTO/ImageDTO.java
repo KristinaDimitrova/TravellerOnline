@@ -18,11 +18,7 @@ import java.nio.file.Files;
 @NoArgsConstructor
 public class ImageDTO {
     private long imageId;
-    private String imageUrl;
+    private String imageFileName;
 
-    public ImageDTO(Image image) {
-      this.imageId = image.getId();
-      this.imageUrl = image.getUrl();
-    }
 }
 

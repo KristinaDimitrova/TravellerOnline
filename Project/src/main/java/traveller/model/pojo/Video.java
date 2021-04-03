@@ -22,5 +22,5 @@ public class Video {
     @JsonBackReference
     @JoinColumn(name = "post_id")
     private traveller.model.pojo.Post post;
-    private String url;
+    private String fileName;
 }
