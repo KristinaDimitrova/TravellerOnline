@@ -153,7 +153,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             ps = connection.prepareStatement(sqlInsertQuery.toString());
             ps.executeUpdate();
         }catch(SQLException e){
-            //todo log
+           log.error(e.getMessage());
         }finally{
             try {
                 ps.close();
