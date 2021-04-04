@@ -2,7 +2,7 @@ package traveller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import traveller.model.dto.locationTypeDTO.LocationTypeDTO;
+import traveller.model.dto.locationType.LocationTypeDTO;
 import traveller.model.pojo.LocationType;
 import traveller.service.LocationTypeService;
 import javax.servlet.http.HttpSession;

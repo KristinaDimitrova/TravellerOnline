@@ -6,7 +6,7 @@ import traveller.model.pojo.stats.StatsProfile;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface StatsDao {
+public interface StatsDAO {
     void saveRecordOfMostPopularPosts();
     void saveRecordOfMostPopularUsers();
 

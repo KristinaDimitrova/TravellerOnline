@@ -1,4 +1,4 @@
-package traveller.model.dto.locationTypeDTO;
+package traveller.model.dto.locationType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

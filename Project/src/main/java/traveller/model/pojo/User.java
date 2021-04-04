@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import traveller.model.dto.userDTO.SignupUserDTO;
 import traveller.registration.Role;
 
 import javax.persistence.*;

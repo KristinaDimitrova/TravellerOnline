@@ -4,7 +4,7 @@ import traveller.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import traveller.model.dto.*;
-import traveller.model.dto.userDTO.*;
+import traveller.model.dto.user.*;
 import traveller.service.UserService;
 import traveller.utilities.Validator;
 

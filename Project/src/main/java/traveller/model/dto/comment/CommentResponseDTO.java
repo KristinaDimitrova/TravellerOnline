@@ -1,16 +1,12 @@
-package traveller.model.dto.commentDTO;
+package traveller.model.dto.comment;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import traveller.model.dto.postDTO.ResponsePostDTO;
-import traveller.model.dto.userDTO.OwnerDTO;
-import traveller.model.dto.userDTO.UserWithoutPasswordDTO;
+import traveller.model.dto.user.OwnerDTO;
 import traveller.model.pojo.Comment;
-import traveller.model.pojo.Post;
-import traveller.model.pojo.User;
+
 import java.time.LocalDateTime;
 
 @Setter

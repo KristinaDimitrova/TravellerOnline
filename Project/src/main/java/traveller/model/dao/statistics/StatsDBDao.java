@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 @Log4j2
 @Component
-public class StatsDBDao extends AbstractDao implements StatsDao {
+public class StatsDBDao extends AbstractDao implements StatsDAO {
     //NB query can execute only if there are at least 5 followed users
     private static final int POP_POSTS_RESULTS = 5;
     private static final int POP_USERS_RESULTS = 5;
@@ -154,7 +154,7 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
             ps = connection.prepareStatement(sqlInsertQuery.toString());
             ps.executeUpdate();
         }catch(SQLException e){
-            //todo log
+           log.error(e.getMessage());
         }finally{
             try {
                 ps.close();

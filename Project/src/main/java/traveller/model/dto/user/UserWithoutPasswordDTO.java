@@ -1,11 +1,9 @@
-package traveller.model.dto.userDTO;
+package traveller.model.dto.user;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import traveller.model.dto.postDTO.ResponsePostDTO;
-import traveller.model.pojo.Post;
-import traveller.model.pojo.User;
+import traveller.model.dto.post.ResponsePostDTO;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,11 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import traveller.model.dto.postDTO.RequestPostDTO;
-import traveller.repository.ImageRepository;
 
 import javax.persistence.Id;
 

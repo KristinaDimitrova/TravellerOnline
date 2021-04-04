@@ -1,10 +1,9 @@
-package traveller.model.dto.userDTO;
+package traveller.model.dto.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import traveller.model.pojo.User;
 
 @NoArgsConstructor
 @Setter

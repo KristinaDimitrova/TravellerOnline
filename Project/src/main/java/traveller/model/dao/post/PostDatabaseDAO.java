@@ -2,7 +2,6 @@ package traveller.model.dao.post;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import traveller.exception.BadRequestException;
 import traveller.exception.TechnicalIssuesException;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 @Log4j2
 @Component
-public class PostDBDao extends AbstractDao implements PostDao {
+public class PostDatabaseDAO extends AbstractDao implements PostDAO {
 
     @Autowired
     private PostRepository postRepository;

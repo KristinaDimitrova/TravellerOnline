@@ -10,10 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import traveller.email.EmailSender;
 import traveller.exception.*;
 import traveller.model.dto.MessageDTO;
-import traveller.model.dto.userDTO.*;
+import traveller.model.dto.user.*;
 import traveller.model.pojo.User;
 import traveller.model.pojo.VerificationToken;
 import traveller.registration.Role;
@@ -39,9 +38,13 @@ public class UserService implements UserDetailsService {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private EmailSender emailSender;
+    private EmailService emailService;
     @Autowired
     private ModelMapper modelMapper;
+
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final javax.validation.Validator validator = factory.getValidator();
+
 
     @Override //method needed by Spring security
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -54,15 +57,10 @@ public class UserService implements UserDetailsService {
 
     @Transactional //Because we have more than one update statements => all or nothing
     public SignUpUserResponseDTO insertUser(final SignupUserDTO dto){
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        javax.validation.Validator validator = factory.getValidator();
-
         Set<ConstraintViolation<SignupUserDTO>> violations = validator.validate(dto);
-
         for (ConstraintViolation<SignupUserDTO> violation : violations) {
             log.error(violation.getMessage());
         }
-
         validateUsersDetails(dto);
         //encoding password
         dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
@@ -76,7 +74,7 @@ public class UserService implements UserDetailsService {
         //sending an email
         String link = "http://localhost:7878/tokens/" + token.getToken();
         try {
-            emailSender.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
+            emailService.send(dto.getEmail(), buildEmail(dto.getFirstName(), link));
         }catch(Exception e){
             throw new BadRequestException("Invalid email.");
         }

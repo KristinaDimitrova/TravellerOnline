@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import traveller.exception.AuthorizationException;
 import traveller.model.dao.statistics.StatsDBDao;
-import traveller.model.dto.statsDTO.StatsProfileDTO;
+import traveller.model.dto.stats.StatsProfileDTO;
 import traveller.model.pojo.stats.StatsSignups;
 import traveller.model.pojo.stats.StatsProfile;
 import traveller.registration.Role;

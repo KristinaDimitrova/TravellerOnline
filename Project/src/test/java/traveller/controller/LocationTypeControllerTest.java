@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import traveller.model.dto.locationTypeDTO.LocationTypeDTO;
+import traveller.model.dto.locationType.LocationTypeDTO;
 import traveller.model.pojo.LocationType;
 import traveller.model.pojo.Post;
 import traveller.service.LocationTypeService;

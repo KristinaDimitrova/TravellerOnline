@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import traveller.exception.BadRequestException;
-import traveller.model.dto.statsDTO.StatsProfileDTO;
+import traveller.model.dto.stats.StatsProfileDTO;
 import traveller.model.pojo.stats.StatsSignups;
 import traveller.service.StatsService;
 import javax.servlet.http.HttpSession;
