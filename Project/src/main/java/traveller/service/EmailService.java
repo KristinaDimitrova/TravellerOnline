@@ -1,4 +1,4 @@
-package traveller.email;
+package traveller.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,11 +17,10 @@ import javax.mail.internet.MimeMessage;
 @Service
 @AllArgsConstructor
 @Log4j2
-public class EmailService implements EmailSender{
+public class EmailService{
 
     private final JavaMailSender mailSender;
 
-    @Override
     @Async //doesn't block the client
     public void send(String to, String email) {
         try{

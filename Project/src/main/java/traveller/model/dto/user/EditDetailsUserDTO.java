@@ -1,9 +1,8 @@
-package traveller.model.dto.userDTO;
+package traveller.model.dto.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import traveller.model.pojo.User;
 
 @NoArgsConstructor
 @Getter

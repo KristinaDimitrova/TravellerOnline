@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import traveller.model.dto.statsDTO.StatsProfileDTO;
+import traveller.model.dto.stats.StatsProfileDTO;
 import traveller.service.StatsService;
 
 @ContextConfiguration(classes = {StatsController.class})

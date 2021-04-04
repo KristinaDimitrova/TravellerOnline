@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import traveller.model.dto.MessageDTO;
-import traveller.model.dto.commentDTO.CommentRequestDTO;
-import traveller.model.dto.commentDTO.CommentResponseDTO;
+import traveller.model.dto.comment.CommentRequestDTO;
+import traveller.model.dto.comment.CommentResponseDTO;
 import traveller.service.CommentService;
 
 @ContextConfiguration(classes = {CommentController.class})

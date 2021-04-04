@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import traveller.model.dto.locationTypeDTO.LocationTypeDTO;
+import traveller.model.dto.locationType.LocationTypeDTO;
 
 import javax.persistence.*;
 import java.util.List;

@@ -26,8 +26,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
-import traveller.model.dto.postDTO.RequestPostDTO;
-import traveller.model.dto.postDTO.ResponsePostDTO;
+import traveller.model.dto.post.RequestPostDTO;
+import traveller.model.dto.post.ResponsePostDTO;
 import traveller.service.PostService;
 
 @ContextConfiguration(classes = {PostController.class})

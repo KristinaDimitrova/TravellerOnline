@@ -1,15 +1,14 @@
-package traveller.model.dto.postDTO;
+package traveller.model.dto.post;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import traveller.model.dto.commentDTO.CommentResponseDTO;
-import traveller.model.dto.fileDTO.ImageDTO;
-import traveller.model.dto.fileDTO.VideoDTO;
-import traveller.model.dto.locationTypeDTO.LocationTypeDTO;
-import traveller.model.dto.userDTO.OwnerDTO;
+import traveller.model.dto.comment.CommentResponseDTO;
+import traveller.model.dto.file.ImageDTO;
+import traveller.model.dto.file.VideoDTO;
+import traveller.model.dto.locationType.LocationTypeDTO;
+import traveller.model.dto.user.OwnerDTO;
 
 
 import java.util.LinkedList;

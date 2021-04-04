@@ -3,8 +3,8 @@ package traveller.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import traveller.model.dto.fileDTO.ImageDTO;
-import traveller.model.dto.fileDTO.VideoDTO;
+import traveller.model.dto.file.ImageDTO;
+import traveller.model.dto.file.VideoDTO;
 import traveller.service.MediaService;
 import traveller.utilities.Validator;
 

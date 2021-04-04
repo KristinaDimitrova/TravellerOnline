@@ -7,10 +7,10 @@ import traveller.exception.AuthorizationException;
 import traveller.exception.BadRequestException;
 import traveller.model.dto.MessageDTO;
 import traveller.model.dto.SearchDTO;
-import traveller.model.dto.postDTO.RequestPostDTO;
-import traveller.model.dto.postDTO.ResponsePostDTO;
+import traveller.model.dto.post.RequestPostDTO;
+import traveller.model.dto.post.ResponsePostDTO;
 import traveller.model.pojo.*;
-import traveller.model.dao.post.PostDBDao;
+import traveller.model.dao.post.PostDatabaseDAO;
 import traveller.repository.ImageRepository;
 import traveller.repository.PostRepository;
 import traveller.repository.UserRepository;
@@ -27,7 +27,7 @@ public class PostService {
     @Autowired
     private PostRepository postRepo;
     @Autowired
-    private PostDBDao postDBDao;
+    private PostDatabaseDAO postDBDao;
     @Autowired
     private LocationTypeService locationTypeService;
     @Autowired

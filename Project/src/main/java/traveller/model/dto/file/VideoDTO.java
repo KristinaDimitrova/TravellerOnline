@@ -1,10 +1,9 @@
-package traveller.model.dto.fileDTO;
+package traveller.model.dto.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import traveller.model.pojo.Video;
 
 @Getter
 @Setter
