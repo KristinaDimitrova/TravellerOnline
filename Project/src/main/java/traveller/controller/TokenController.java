@@ -16,7 +16,7 @@ public class TokenController {
     TokenService tokenService;
 
     @GetMapping(value = "/tokens/{token}")
-    public MessageDTO confirm(@PathVariable(name ="token") String token){
+    public MessageDTO verifyEmailAddress(@PathVariable(name ="token") String token){
         return tokenService.confrimToken(token);
     }
 }

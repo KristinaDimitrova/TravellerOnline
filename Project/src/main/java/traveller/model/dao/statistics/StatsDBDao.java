@@ -140,7 +140,9 @@ public class StatsDBDao extends AbstractDao implements StatsDao {
                 "(record_created_at, count_new_users, age)\n" +
                 "VALUES ");
         PreparedStatement ps = null;
-        try(Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection()) {
+        try(Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
+
+        ) {
             if(rows.next()) { //ако е първото не се слага запетайка, за да не се счупи заявката
                 sqlInsertQuery.append("(curdate(), " + rows.getInt(COUNT_NEW_USERS) + ", " + rows.getInt(AGE) + ")");
             } else{
