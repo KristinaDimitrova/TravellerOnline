@@ -36,6 +36,5 @@ build/
 .vscode/
 /.mvn/
 /src/main/resources/
-/src/test/
 /logs/
 /application.yml

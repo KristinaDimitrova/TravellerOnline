@@ -7,28 +7,27 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import traveller.exception.*;
 import traveller.model.dto.MessageDTO;
 
-
 @Log4j2
 public class AbstractController {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleException(BadRequestException e){
+    public MessageDTO handleException(BadRequestException e){
         log.error(e.getMessage());
-        return "Sorry, bad request! -> " + e.getMessage();
+        return new MessageDTO("Sorry,  " + e.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleException(NotFoundException e){
+    public MessageDTO handleException(NotFoundException e){
         log.error(e.getMessage());
-        return e.getMessage();
+        return new MessageDTO(e.getMessage());
     }
 
     @ExceptionHandler(NotAcceptableException.class)
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    public String handleException(NotAcceptableException e){
+    public MessageDTO handleException(NotAcceptableException e){
         log.error(e.getMessage());
-        return "Please try again, "  + e.getMessage();
+        return new MessageDTO("Please try again, "  + e.getMessage());
     }
 
     @ExceptionHandler(TechnicalIssuesException.class)
@@ -40,16 +39,16 @@ public class AbstractController {
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    public String handleException(AuthenticationException e){
+    public MessageDTO handleException(AuthenticationException e){
         log.error(e.getMessage());
-        return "Service unavailable - " + e.getMessage();
+        return new MessageDTO(e.getMessage());
     }
 
     @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleException(AuthorizationException e){
+    public MessageDTO handleException(AuthorizationException e){
         log.error(e.getMessage() );
-        return "Unauthorized operation - " + e.getMessage();
+        return new MessageDTO("Unauthorized operation - " + e.getMessage());
     }
 
 }

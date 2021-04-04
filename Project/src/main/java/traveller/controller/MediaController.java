@@ -6,11 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 import traveller.model.dto.fileDTO.ImageDTO;
 import traveller.model.dto.fileDTO.VideoDTO;
 import traveller.service.MediaService;
+import traveller.utilities.Validator;
 
 import javax.servlet.http.HttpSession;
 
 @RestController
-public class MediaController {
+public class MediaController extends AbstractController{
 
     private static final int RESULTS_PER_PAGE = 10;
     @Autowired
@@ -21,13 +22,18 @@ public class MediaController {
     @PutMapping( "/video")
     public VideoDTO uploadVideo(@RequestPart MultipartFile videoFile, HttpSession session){
         sessionManager.authorizeLogin(session);
+        Validator.validateSizeOfFile(videoFile);
+        Validator.validateItsVideo(videoFile.getContentType());
         return mediaService.uploadVideo( videoFile);
     }
 
     @PutMapping("/image")
     public ImageDTO uploadImage(@RequestPart MultipartFile imageFile, HttpSession session){
         sessionManager.authorizeLogin(session);
-        return mediaService.uploadImage( imageFile);
+        String contentType = imageFile.getContentType();
+        Validator.validateSizeOfFile(imageFile);
+        Validator.validateItsImage(contentType); //todo
+        return mediaService.uploadImage(imageFile);
     }
 
     @GetMapping(value = "/video/{id}", produces = "video/mp4")

@@ -22,6 +22,7 @@ public class Image {
     @JsonBackReference
     @JoinColumn(name = "post_id")
     private Post post;
+    @Column(name = "file_name")
     private String fileName;
 
 }
