@@ -20,7 +20,6 @@ public class SignupUserDTO {
     private int age;
     @NotNull(message = "Please enter a username")
     private String username;
-    @Email(message = "Please enter a valid email")
     private String email;
     private String password;
     private String repeatedPassword;

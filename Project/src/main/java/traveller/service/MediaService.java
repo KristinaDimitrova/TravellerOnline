@@ -55,7 +55,6 @@ public class MediaService {
     }
 
     public ImageDTO uploadImage(MultipartFile imageFile) {
-        System.out.println(":p");
         Image image = new Image();
         File file = convertMultiPartFileToFile(imageFile);
         try {
