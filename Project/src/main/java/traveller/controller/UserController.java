@@ -79,7 +79,7 @@ public class UserController extends AbstractController{
     @DeleteMapping(value="/users")
     public MessageDTO deleteAccount(HttpSession session) {
         long actorId = sessManager.authorizeLogin(session);
-        userService.deleteUserByEmail(actorId);
+        userService.deleteUser(actorId);
         sessManager.userLogsOut(session);
         return new MessageDTO("Account successfully deleted.");
     }

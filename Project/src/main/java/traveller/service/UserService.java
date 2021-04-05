@@ -67,8 +67,9 @@ public class UserService implements UserDetailsService {
         tokenService.save(token);
         //sending an email
         String link = "http://localhost:7878/tokens/" + token.getToken();
+
         Thread thread = new Thread(() -> emailService.send(dto.getEmail(),
-                buildEmail(dto.getFirstName(), link), dto.getEmail()));
+                buildEmail(dto.getFirstName(), link)));
         thread.start();
         return convertUserEntityToSignUpResponseUserDto(user) ; // SignUpUserResponseDTO(userRep.save(user));
     }
@@ -105,14 +106,8 @@ public class UserService implements UserDetailsService {
         return new UserWithoutPasswordDTO(userRep.getById(id));
     }
 
-    public void deleteUserByEmail(long actorId) {
+    public void deleteUser(long actorId) {
         User user = userRep.getById(actorId);
-        userRep.delete(user);
-    }
-
-    public void deleteUserByEmail(String email) {
-        System.out.println("THIS IS THE EMAIL " + " ---> " + email);
-        User user = userRep.findByEmail(email);
         userRep.delete(user);
     }
 
