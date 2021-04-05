@@ -7,7 +7,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EditDetailsUserDTO { //username cannot be changed
+public class EditDetailsUserDTO {
     private String firstName;
     private String lastName;
     private String email;

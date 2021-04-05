@@ -9,11 +9,13 @@ import traveller.model.pojo.User;
 @Getter
 @NoArgsConstructor
 public class OwnerDTO {
+    private long id;
     private String firstName;
     private String lastName;
     private String username;
 
     public OwnerDTO(User user){
+        id = user.getId();
         firstName = user.getFirstName();
         lastName = user.getLastName();
         username = user.getUsername();

@@ -65,8 +65,7 @@ public class Post {
             inverseJoinColumns = { @JoinColumn(name = "owner_id") }
     )
     @JsonManagedReference
-    Set<User> likers = new HashSet<>();
-
+    private Set<User> likers = new HashSet<>();
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "users_dislike_posts",
@@ -74,15 +73,12 @@ public class Post {
             inverseJoinColumns = { @JoinColumn(name = "owner_id") }
     )
     @JsonManagedReference
-    Set<User>dislikers = new HashSet<>();
+    private Set<User>dislikers = new HashSet<>();
 
 
-//    public Post(RequestPostDTO postDTO) {
-//        this.createdAt = LocalDateTime.now();
-//        this.latitude = postDTO.getLatitude();
-//        this.longitude = postDTO.getLongitude();
-//        this.description = postDTO.getDescription();
-//    }
+
+
+
 
 
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class CommentResponseDTO implements Comparable<CommentResponseDTO> {
+    private long id;
     OwnerDTO owner;
     private String text;
     @DateTimeFormat(pattern = "hh:mm dd/MM/yyyy")

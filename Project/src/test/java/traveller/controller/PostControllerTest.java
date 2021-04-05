@@ -109,57 +109,57 @@ public class PostControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
     }
 
-    @Test
-    public void testLikePost() throws Exception {
-        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
-        when(this.postService.likePost(anyInt(), anyLong())).thenReturn(new MessageDTO("Text"));
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/like", 123456789);
-        MockMvcBuilders.standaloneSetup(this.postController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
-    }
-
-    @Test
-    public void testUnlikePost() throws Exception {
-        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
-        when(this.postService.unlikePost(anyLong(), anyLong())).thenReturn(new MessageDTO("Text"));
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/unlike", 123456789);
-        MockMvcBuilders.standaloneSetup(this.postController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
-    }
-
-    @Test
-    public void testDislikePost() throws Exception {
-        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
-        when(this.postService.dislikePost(anyLong(), anyLong())).thenReturn(new MessageDTO("Text"));
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/dislike", 123456789);
-        MockMvcBuilders.standaloneSetup(this.postController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
-    }
-
-    @Test
-    public void testRemoveDislikeFromPost() throws Exception {
-        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
-        when(this.postService.removeDislikeFromPost(anyLong(), anyLong())).thenReturn(new MessageDTO("Text"));
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/removeDislike", 123456789);
-        MockMvcBuilders.standaloneSetup(this.postController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
-    }
+//    @Test
+//    public void testLikePost() throws Exception {
+//        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+//        when(this.postService.likePost(anyInt(), anyLong())).thenReturn(new MessageDTO("Text"));
+//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/like", 123456789);
+//        MockMvcBuilders.standaloneSetup(this.postController)
+//                .build()
+//                .perform(requestBuilder)
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+//                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
+//    }
+//
+//    @Test
+//    public void testUnlikePost() throws Exception {
+//        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+//        when(this.postService.unlikePost(anyLong(), anyLong())).thenReturn(new MessageDTO("Text"));
+//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/unlike", 123456789);
+//        MockMvcBuilders.standaloneSetup(this.postController)
+//                .build()
+//                .perform(requestBuilder)
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+//                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
+//    }
+//
+//    @Test
+//    public void testDislikePost() throws Exception {
+//        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+//        when(this.postService.dislikePost(anyLong(), anyLong())).thenReturn(new MessageDTO("Text"));
+//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/dislike", 123456789);
+//        MockMvcBuilders.standaloneSetup(this.postController)
+//                .build()
+//                .perform(requestBuilder)
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+//                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
+//    }
+//
+//    @Test
+//    public void testRemoveDislikeFromPost() throws Exception {
+//        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+//        when(this.postService.removeDislikeFromPost(anyLong(), anyLong())).thenReturn(new MessageDTO("Text"));
+//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/posts/{id}/removeDislike", 123456789);
+//        MockMvcBuilders.standaloneSetup(this.postController)
+//                .build()
+//                .perform(requestBuilder)
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+//                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"text\":\"Text\"}")));
+//    }
 
     @Test
     public void testFilter() throws Exception {

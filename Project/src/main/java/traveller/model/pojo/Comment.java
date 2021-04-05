@@ -55,14 +55,4 @@ public class Comment {
 
 
 
-/*
-   @JsonBackReference
-   @ManyToMany(cascade = { CascadeType.ALL })
-   @JoinTable(
-           name = "users_like_comments",
-           joinColumns = {@JoinColumn(name="user_id")},
-           inverseJoinColumns = {@JoinColumn(name="comment_id")})
-   private Set<User> likers;
-*/
-
 }

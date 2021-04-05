@@ -104,13 +104,13 @@ public class UserService implements UserDetailsService {
         List<User> list =  userRep.findByFirstNameAndLastName(firstName, lastName);
         List<UserWithoutPasswordDTO> usersWOutPass = new ArrayList<>();
         for(User u : list){
-            usersWOutPass.add(convertUserEntityToUserWithoutPasswordDto(u));
+            usersWOutPass.add( new UserWithoutPasswordDTO(u));
         }
         return usersWOutPass;
     }
 
     public UserWithoutPasswordDTO findById(long id) {
-        return convertUserEntityToUserWithoutPasswordDto(userRep.getById(id));
+        return new UserWithoutPasswordDTO(userRep.getById(id));
     }
 
     public void deleteUser(long actorId) {
@@ -161,7 +161,7 @@ public class UserService implements UserDetailsService {
         if(!user.isEnabled()){
             throw new AuthorizationException("You must verify your email.");
         }
-        return convertUserEntityToUserWithoutPasswordDto(user);
+        return new UserWithoutPasswordDTO(user);
     }
 
     public MessageDTO changePassword(long userId, String oldPassword, String newPassword) {
@@ -269,9 +269,7 @@ public class UserService implements UserDetailsService {
         return userRep.findByUsername(username);
     }
 
-    public UserWithoutPasswordDTO convertUserEntityToUserWithoutPasswordDto(User user) {
-        return modelMapper.map(user,UserWithoutPasswordDTO.class);
-    }
+
 
     public SignUpUserResponseDTO convertUserEntityToSignUpResponseUserDto(User user){
         return  modelMapper.map(user, SignUpUserResponseDTO.class);

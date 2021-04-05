@@ -16,7 +16,6 @@ public class StatsProfileDTO {
     private String username;
     private int age;
 
-    //todo map
 
     public StatsProfileDTO(StatsProfile profile) {
         this.firstName = profile.getUser().getFirstName();

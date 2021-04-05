@@ -50,25 +50,25 @@ public class PostController extends AbstractController {
     }
 
     @PostMapping("/posts/{id}/like")
-    public MessageDTO likePost(@PathVariable (name = "id") int postId, HttpSession session){
+    public ResponsePostDTO likePost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.likePost(postId, userId);
     }
 
     @PostMapping("/posts/{id}/unlike")
-    public MessageDTO unlikePost(@PathVariable (name = "id") int postId, HttpSession session){
+    public ResponsePostDTO unlikePost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.unlikePost(postId, userId);
     }
 
     @PostMapping("/posts/{id}/dislike")
-    public MessageDTO dislikePost(@PathVariable (name = "id") int postId, HttpSession session){
+    public ResponsePostDTO dislikePost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.dislikePost(postId, userId);
     }
 
     @PostMapping("/posts/{id}/removeDislike")
-    public MessageDTO removeDislikeFromPost(@PathVariable (name = "id") int postId, HttpSession session){
+    public ResponsePostDTO removeDislikeFromPost(@PathVariable (name = "id") int postId, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.removeDislikeFromPost(postId, userId);
     }

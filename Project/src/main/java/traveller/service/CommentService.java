@@ -109,10 +109,11 @@ public class CommentService {
     public CommentResponseDTO convertToCommentResponseDto(Comment comment) {
         CommentResponseDTO commentResponseDTO = modelMapper.map(comment, CommentResponseDTO.class);
         commentResponseDTO.setOwner(userService.convertUserEntityToOwnerDto(comment.getOwner()));
+        commentResponseDTO.setLikes(comment.getLikers().size());
         return  commentResponseDTO;
     }
 
-    public Comment convertCommentDtoToEntity(CommentRequestDTO commentDTO)   { ;
+    public Comment convertCommentDtoToEntity(CommentRequestDTO commentDTO)   {
         return  modelMapper.map(commentDTO, Comment.class);
     }
 }

@@ -51,20 +51,20 @@ public class PostService {
             Image image = imageRepo.getImageById(imageId);
             image.setPost(post);
             imageRepo.save(image);
+            post.getImages().add(image);
         }
         for (long videoId : postDTO.getVideoIds()){
             Video video = videoRepo.getVideoById(videoId);
             video.setPost(post);
             videoRepo.save(video);
+            post.getVideos().add(video);
         }
         return convertPostToDto(postRepo.getPostById(post.getId()));
     }
 
     public ResponsePostDTO getPostById(long id) {
         Post post = postRepo.getPostById(id);
-        System.out.println(post.getVideos().size());
-        System.out.println(post.getImages().size());
-        return convertPostToDto(post);
+        return new ResponsePostDTO(post);
     }
 
     @Transactional
@@ -73,8 +73,25 @@ public class PostService {
         if (post.getOwner().getId() != userId) {
             throw new AuthorizationException("You can not edit a post that you do not own!");
         }
-        post = convertPostToEntity(postDTO);
+        post.setLatitude(postDTO.getLatitude());
+        post.setLongitude(postDTO.getLongitude());
+        post.setDescription(postDTO.getDescription());
         post.setLocationType(locationTypeService.getByName(postDTO.getLocationType()));
+
+        post.getImages().clear();
+        post.getVideos().clear();
+        for (long imageId : postDTO.getImageIds()){
+            Image image = imageRepo.getImageById(imageId);
+            image.setPost(post);
+            imageRepo.save(image);
+            post.getImages().add(image);
+        }
+        for (long videoId : postDTO.getVideoIds()){
+            Video video = videoRepo.getVideoById(videoId);
+            video.setPost(post);
+            videoRepo.save(video);
+            post.getVideos().add(video);
+        }
         return convertPostToDto(post);
     }
 
@@ -88,7 +105,7 @@ public class PostService {
     }
 
     @Transactional
-    public MessageDTO likePost(int postId, long userId){
+    public ResponsePostDTO likePost(int postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
         if(post.getLikers().contains(u)){
@@ -97,11 +114,11 @@ public class PostService {
         post.getDislikers().remove(u);
         post.getLikers().add(u);
         postRepo.save(post);
-        return new MessageDTO("Post was liked!");
+        return new ResponsePostDTO(postRepo.getPostById(postId));
     }
 
     @Transactional
-    public MessageDTO unlikePost(long postId, long userId){
+    public ResponsePostDTO unlikePost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
         if(!post.getLikers().contains(u)){
@@ -109,11 +126,11 @@ public class PostService {
         }
         post.getLikers().remove(u);
         postRepo.save(post);
-        return new MessageDTO("Post was unliked!");
+        return new ResponsePostDTO(postRepo.getPostById(postId));
     }
 
     @Transactional
-    public MessageDTO dislikePost(long postId, long userId){
+    public ResponsePostDTO dislikePost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
         if(post.getDislikers().contains(u)){
@@ -122,11 +139,11 @@ public class PostService {
         post.getLikers().remove(u);
         post.getDislikers().add(u);
         postRepo.save(post);
-        return new MessageDTO("Post was disliked!");
+        return new ResponsePostDTO(postRepo.getPostById(postId));
     }
 
     @Transactional
-    public MessageDTO removeDislikeFromPost(long postId, long userId){
+    public ResponsePostDTO removeDislikeFromPost(long postId, long userId){
         Post post = postRepo.getPostById(postId);
         User u = userRepo.getById(userId);
         if(!post.getDislikers().contains(u)){
@@ -134,14 +151,14 @@ public class PostService {
         }
         post.getDislikers().remove(u);
         postRepo.save(post);
-        return new MessageDTO("Dislike was removed from post!");
+        return new ResponsePostDTO(postRepo.getPostById(postId));
     }
 
     public List<ResponsePostDTO> filter(SearchDTO searchDTO) throws SQLException {
         List<ResponsePostDTO> responseList = new ArrayList<>();
         List<Post> posts = postDBDao.filter(searchDTO.getName(), searchDTO.getLocationType());
         for (Post p : posts) {
-            responseList.add(convertPostToDto(p));
+            responseList.add(new ResponsePostDTO(p));
         }
         return responseList;
     }
@@ -150,14 +167,17 @@ public class PostService {
         List<Post> postList = postDBDao.getNewsFeed(userId, page, resultsPerPage);
         List<ResponsePostDTO> responsePostDTOs = new ArrayList<>();
         for(Post p :postList){
-            responsePostDTOs.add(convertPostToDto(p));
+            responsePostDTOs.add(new ResponsePostDTO(p));
         }
         return responsePostDTOs;
     }
 
 
     public ResponsePostDTO convertPostToDto(Post post) {
-        return modelMapper.map(post, ResponsePostDTO.class);
+        ResponsePostDTO responsePostDTO = modelMapper.map(post, ResponsePostDTO.class);
+        responsePostDTO.setLikes(post.getLikers().size());
+        responsePostDTO.setDislikes(post.getDislikers().size());
+        return responsePostDTO;
     }
 
     public Post convertPostToEntity(RequestPostDTO postDto)   {

@@ -11,9 +11,11 @@ import traveller.model.pojo.LocationType;
 @Setter
 @NoArgsConstructor
 public class LocationTypeDTO {
+    private long id;
     private String name;
 
     public LocationTypeDTO(LocationType locationType){
+        this.id = locationType.getId();
         this.name = locationType.getName();
     }
 }
