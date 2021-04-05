@@ -2,6 +2,7 @@ package traveller.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import traveller.exception.*;
@@ -17,7 +18,7 @@ public class AbstractController {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public MessageDTO handleException(NotFoundException e){
         log.error(e.getMessage());
         return new MessageDTO(e.getMessage());
@@ -49,6 +50,14 @@ public class AbstractController {
     public MessageDTO handleException(AuthorizationException e){
         log.error(e.getMessage() );
         return new MessageDTO("Unauthorized operation - " + e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MessageDTO onMethodArgumentNotValidException(
+            MethodArgumentNotValidException e) {
+        log.error(e.getMessage());
+        return new MessageDTO(e.getMessage());
     }
 
 }

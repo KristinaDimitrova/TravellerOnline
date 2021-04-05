@@ -3,6 +3,7 @@ package traveller.utilities;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 import traveller.exception.BadRequestException;
 
@@ -22,6 +23,10 @@ import java.nio.charset.StandardCharsets;
 public class Validator {
 
     private static final double MAX_FILE_SIZE_MB = 512;
+    @Value("${imagga.nsfw_beta.key}")
+    private static String imaggaKey;
+    @Value("${imagga.nsfw_beta.secret}")
+    private static String imaggaSecret;
 
     public static void validateNames(String firstName, String lastName) {
         String lettersBulg = "[А-Я][a-я]+";
@@ -104,13 +109,14 @@ public class Validator {
     }
 
     public static void validateItsImage(final String contentType) {
+        System.out.println(contentType); //delete me todo
         if(!contentType.startsWith("image/")){
             throw new BadRequestException("An image file is required.");
         }
     }
 
     public static void validateImageContent(InputStream inputStream) throws IOException {
-        String credentialsToEncode = "acc_ad2de633ec13d13" + ":" + "1d608a8150329cd7fb909f4cbb821953";
+        String credentialsToEncode = imaggaKey + ":" + imaggaSecret;
         String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 
         String endpoint = "/categories/nsfw_beta";

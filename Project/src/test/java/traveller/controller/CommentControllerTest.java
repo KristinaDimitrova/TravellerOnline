@@ -82,7 +82,7 @@ public class CommentControllerTest {
 
     @Test
     public void testEdit() throws Exception { // FIXME: 4/3/2021
-        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+        when(this.sessionManager.authorizeLogin(any())).thenReturn(1L);
         when(this.commentService.editComment(anyLong(), (CommentRequestDTO) any(), anyLong()))
                 .thenReturn(new CommentResponseDTO());
 
