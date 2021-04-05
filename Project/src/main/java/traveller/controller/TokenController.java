@@ -9,7 +9,7 @@ import traveller.service.UserService;
 import traveller.service.TokenService;
 
 @RestController
-public class TokenController {
+public class TokenController extends AbstractController{
     @Autowired
     UserService userService;
     @Autowired
