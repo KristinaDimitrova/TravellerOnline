@@ -23,10 +23,8 @@ import java.nio.charset.StandardCharsets;
 public class Validator {
 
     private static final double MAX_FILE_SIZE_MB = 512;
-    @Value("${imagga.nsfw_beta.key}")
-    private static String imaggaKey;
-    @Value("${imagga.nsfw_beta.secret}")
-    private static String imaggaSecret;
+    private static String imaggaKey = "acc_ad2de633ec13d13";
+    private static String imaggaSecret = "1d608a8150329cd7fb909f4cbb821953";
 
     public static void validateNames(String firstName, String lastName) {
         String lettersBulg = "[А-Я][a-я]+";

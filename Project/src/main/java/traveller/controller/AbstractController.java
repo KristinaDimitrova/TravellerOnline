@@ -5,11 +5,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpServerErrorException;
 import traveller.exception.*;
 import traveller.model.dto.MessageDTO;
 
 @Log4j2
 public class AbstractController {
+
+    @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public MessageDTO handleException(HttpServerErrorException.InternalServerError e){
+        log.error(e.getMessage());
+        return new MessageDTO("Sorry,  " + e.getMessage());
+    }
+
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public MessageDTO handleException(BadRequestException e){

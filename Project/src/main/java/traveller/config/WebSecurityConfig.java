@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(daoAuthenticationProvider());
      }
 
-     //Because AppUserService implemented UserDetailsService, we can use it in the provider here
+     //Because UserService implemented UserDetailsService, we can use it in the provider here
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
          DaoAuthenticationProvider provider =
