@@ -40,9 +40,13 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
             ArrayList<Long> ids = new ArrayList<>();
             while (rs.next()){
                 long postId = rs.getLong(1);
+                System.out.println(postId);
                 ids.add(postId);
             }
-            return new ArrayList<>(postRepository.getPostsByIdIn(ids));
+            List<Post> newsfeed = new ArrayList<>();
+            newsfeed = postRepository.getPostsByIdIn(ids);
+            System.out.println(newsfeed.size());
+            return newsfeed;
         } catch (SQLException throwables) {
             log.error(throwables.getMessage());
             throwables.printStackTrace();
@@ -93,6 +97,7 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
                 if(postId<1){
                     continue;
                 }
+                System.out.println(postId);
                 ids.add(postId);
             }
             rs.close();

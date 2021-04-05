@@ -45,7 +45,7 @@ public class Comment {
            name = "users_like_comments",
            joinColumns = {@JoinColumn(name="comment_id")},
            inverseJoinColumns = {@JoinColumn(name="user_id")})
-   private Set<User> likers;
+   private Set<User> likers = new HashSet<>();
 
    public Comment(CommentRequestDTO dto){
       this.text = dto.getText();

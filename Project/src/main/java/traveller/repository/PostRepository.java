@@ -19,6 +19,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
         else throw new NotFoundException("Post not found!");
     }
 
-    List<Post> getPostsByIdIn(List<Long> ids);
+     List<Post> getPostsByIdIn(List<Long> ids);
+
 
 }

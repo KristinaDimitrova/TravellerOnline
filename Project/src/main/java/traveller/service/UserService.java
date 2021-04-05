@@ -42,9 +42,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    private final javax.validation.Validator validator = factory.getValidator();
-
 
     @Override //method needed by Spring security
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -57,10 +54,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional //Because we have more than one update statements => all or nothing
     public SignUpUserResponseDTO insertUser(final SignupUserDTO dto){
-        Set<ConstraintViolation<SignupUserDTO>> violations = validator.validate(dto);
-        for (ConstraintViolation<SignupUserDTO> violation : violations) {
-            log.error(violation.getMessage());
-        }
+
         validateUsersDetails(dto);
         //encoding password
         dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));

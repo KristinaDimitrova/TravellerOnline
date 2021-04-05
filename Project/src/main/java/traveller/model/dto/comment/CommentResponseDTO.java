@@ -21,6 +21,7 @@ public class CommentResponseDTO implements Comparable<CommentResponseDTO> {
     private int likes;
 
     public CommentResponseDTO(Comment comment){
+        id = comment.getId();
         owner = new OwnerDTO(comment.getOwner());
         text = comment.getText();
         createdAt = comment.getCreatedAt();
