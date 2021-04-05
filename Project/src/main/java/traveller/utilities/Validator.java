@@ -45,14 +45,11 @@ public class Validator {
     }
 
     public static void validateUsername(String username) {
-        String lengthRegex = "^\\w{5,18}$";
-        String charactersRegex = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,15}[a-zA-Z0-9]$";
-        if(!username.matches(lengthRegex)){
-            throw new BadRequestException("Your username must be between 5 and 18 characters. Please try another.");
-        }
-        if(!username.matches(charactersRegex)){
-            throw new BadRequestException("Your username contains an illegal character. Usernames can contain " +
-                    "letters, numbers, and in the middle - a single dot, hyphen, and/or underscore. Please try another username.");
+        String characterRegex = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
+        if(!username.matches(characterRegex)){
+            throw new BadRequestException("Your username must be between 5 and 18 characters."+"\n"
+                    +"It may contain letters, numbers, and in the middle - a single dot, hyphen, and/or underscore"+
+                    "\n"+"Please try another.");
         }
     }
 
@@ -74,16 +71,17 @@ public class Validator {
             Matcher m = p.matcher(password);
             boolean containsASpecialCharacter = m.find();
             if(!containsASpecialCharacter){
-                throw new BadRequestException("Your password must contain at least one special character.\n" +
-                        " Please try another.\n Accepted special characters: ` ~ ! @ # $ % ^ & * ( ) _ - + = ] } [ { ; : ' < > ? *");
+                throw new BadRequestException("Your password must contain at least one special character." +
+                        " Please try another. Accepted special characters: ` ~ ! @ # $ % ^ & * ( ) _ - + = ] } [ { ; : ' < > ? *");
             }
         }
     }
 
     public static void validateEmail(String email) {
+        String regex = "^(.+)@(.+)$";
         String pattern =  "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        if(!email.matches(pattern)){
+        if(!email.matches(regex)){
             throw new BadRequestException("Please enter a valid email address.");
         }
     }

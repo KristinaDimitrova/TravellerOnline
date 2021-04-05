@@ -34,14 +34,14 @@ public class ScheduledService {
 
     //Cron : second, minute, hour, day of month, month, day(s) of week
     //@Scheduled(cron = "0 0 1 * * ?", zone = "Europe/Sofia") //every day at 1:00 AM
-    @Scheduled(cron = "10 * * * * ?", zone = "Europe/Sofia")
+    @Scheduled(cron = "10 * 1 * * ?", zone = "Europe/Sofia")
     public void ScheduledAnalysisTopPosts(){
         dao.saveRecordOfMostPopularPosts();
     }
 
     //запази данни за нови потребители за седмицата по възрастова група ->
     //@Scheduled(cron = "0 0 1 * * MON", zone = "Europe/Sofia") every Monday
-    @Scheduled(cron = "10 * * * * ?", zone = "Europe/Sofia") //every minute
+    @Scheduled(cron = "10 * 1 * * ?", zone = "Europe/Sofia") //every minute
     public void ScheduledAnalysisNewSignups(){
         dao.saveRecordSignups();
     }

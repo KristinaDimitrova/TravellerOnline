@@ -54,10 +54,10 @@ public class AbstractController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public MessageDTO onMethodArgumentNotValidException(
+    public MessageDTO handleException(
             MethodArgumentNotValidException e) {
         log.error(e.getMessage());
-        return new MessageDTO(e.getMessage());
+        return new MessageDTO("There seems to be a problem with the input.");
     }
 
 }

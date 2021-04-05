@@ -22,9 +22,9 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-@SQLDelete(sql = "UPDATE users SET email = CONCAT(id, 'null'), username = CONCAT(id, 'null'), is_deleted = 1 WHERE id = ?",
+@SQLDelete(sql = "UPDATE users SET first_name = 'null', last_name = 'null', email = CONCAT(id, 'null'), username = CONCAT(id, 'null'), is_deleted = 1 WHERE id = ?",
         check = ResultCheckStyle.COUNT) //hibernate will execute this query
-@Where(clause = "is_deleted =0") //fixme
+@Where(clause = "is_deleted =0")
 @Entity
 @Table(name="users")
 public class User implements UserDetails {

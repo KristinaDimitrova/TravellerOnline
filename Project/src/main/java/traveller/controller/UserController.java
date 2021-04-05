@@ -9,7 +9,7 @@ import traveller.service.UserService;
 import traveller.utilities.Validator;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -20,13 +20,8 @@ public class UserController extends AbstractController{
     @Autowired
     private SessionManager sessManager;
 
-    @GetMapping(value="/welcome")
-    public String welcomeDeleteMe(@RequestParam(defaultValue = "Moni", value = "name") String username){
-        return "Welcome " + username;
-    }
-
     @PostMapping(value="/singup")
-    public SignUpUserResponseDTO register(@Valid @RequestBody SignupUserDTO dto) {
+    public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
@@ -43,7 +38,7 @@ public class UserController extends AbstractController{
             throw new BadRequestException("Already logged in.");
         }
         if (username.isEmpty() || password.isEmpty()) {
-            throw new BadRequestException("Username or password field is empty.");
+            throw new BadRequestException("Username or password field must not be empty.");
         }
         UserWithoutPasswordDTO dtoResponse =  userService.verifyLogin(username, password);
         sessManager.userLogsIn(session, userService.findByUsername(username).getId());
@@ -84,7 +79,7 @@ public class UserController extends AbstractController{
     @DeleteMapping(value="/users")
     public MessageDTO deleteAccount(HttpSession session) {
         long actorId = sessManager.authorizeLogin(session);
-        userService.deleteUser(actorId);
+        userService.deleteUserByEmail(actorId);
         sessManager.userLogsOut(session);
         return new MessageDTO("Account successfully deleted.");
     }
