@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 @Service
 public class PostService {
@@ -154,8 +155,8 @@ public class PostService {
         return new ResponsePostDTO(postRepo.getPostById(postId));
     }
 
-    public List<ResponsePostDTO> filter(SearchDTO searchDTO) throws SQLException {
-        List<ResponsePostDTO> responseList = new ArrayList<>();
+    public TreeSet<ResponsePostDTO> filter(SearchDTO searchDTO) throws SQLException {
+        TreeSet<ResponsePostDTO> responseList = new TreeSet<>((o1, o2) -> Integer.compare(o2.getLikes(), o1.getLikes()));
         List<Post> posts = postDBDao.filter(searchDTO.getName(), searchDTO.getLocationType());
         for (Post p : posts) {
             responseList.add(new ResponsePostDTO(p));

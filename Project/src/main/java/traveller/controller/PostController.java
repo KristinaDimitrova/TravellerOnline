@@ -14,6 +14,7 @@ import traveller.service.PostService;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 @Log4j2
 @RestController
@@ -74,7 +75,7 @@ public class PostController extends AbstractController {
     }
 
     @PostMapping("posts/filter")
-    public List<ResponsePostDTO> filter(@RequestBody SearchDTO searchDTO, HttpSession session){
+    public Set<ResponsePostDTO> filter(@RequestBody SearchDTO searchDTO, HttpSession session){
         sessionManager.authorizeLogin(session);
         try {
             return postService.filter(searchDTO);

@@ -25,7 +25,7 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
 
     @Override
     public List<Post> getNewsFeed(long id, int page, int resultsPerPage)  {
-        String sql = "SELECT * FROM users AS u\n" +
+        String sql = "SELECT p.id FROM users AS u\n" +
                 "INNER JOIN posts AS p ON u.id = p.owner_id\n" +
                 "INNER JOIN users_subscribe_users AS usu ON u.id = usu.subscribed_id\n" +
                 "WHERE subscriber_id = ? \n" +
@@ -43,10 +43,8 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
                 System.out.println(postId);
                 ids.add(postId);
             }
-            List<Post> newsfeed = new ArrayList<>();
-            newsfeed = postRepository.getPostsByIdIn(ids);
-            System.out.println(newsfeed.size());
-            return newsfeed;
+
+            return new ArrayList<>(postRepository.getPostsByIdIn(ids));
         } catch (SQLException throwables) {
             log.error(throwables.getMessage());
             throwables.printStackTrace();
@@ -57,7 +55,7 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
     @Override
     public List<Post> filter(String name, String locationType) {
         try( Connection c = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection()){
-            StringBuilder sql = new StringBuilder("SELECT p.id, COUNT(ulp.owner_id) AS likes FROM posts AS p \n" +
+            StringBuilder sql = new StringBuilder("SELECT p.id FROM posts AS p \n" +
                     "INNER JOIN users AS u \n" +
                     "ON p.owner_id = u.id\n" +
                     "INNER JOIN location_types AS lt \n" +
@@ -71,20 +69,20 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
             else
             if(locationType == null){
                 sql .append("WHERE u.username LIKE ?  \n" +
-                        "ORDER BY likes DESC, p.created_at DESC") ;
+                        "ORDER BY  p.created_at DESC") ;
                 ps = c.prepareStatement(sql.toString());
                 ps.setString(1, "%"+name+"%");
             }
             else
             if(name == null){
                 sql.append("WHERE lt.name LIKE ?\n" +
-                        "ORDER BY likes DESC, p.created_at DESC");
+                        "ORDER BY p.created_at DESC");
                 ps = c.prepareStatement(sql.toString());
                 ps.setString(1, "%"+locationType+"%");
             }
             else {
                 sql.append("WHERE u.username LIKE ? AND lt.name LIKE ? \n" +
-                        "ORDER BY likes DESC, p.created_at DESC") ;
+                        "ORDER BY p.created_at DESC") ;
                 ps = c.prepareStatement(sql.toString());
                 ps.setString(1, "%"+name+"%");
                 ps.setString(2, "%"+locationType+"%");
@@ -108,6 +106,4 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
             throw new TechnicalIssuesException();
         }
     }
-
-
 }
