@@ -12,6 +12,7 @@ import traveller.model.dto.post.RequestPostDTO;
 import traveller.model.dto.post.ResponsePostDTO;
 import traveller.service.PostService;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class PostController extends AbstractController {
     private SessionManager sessionManager;
 
     @PostMapping("/posts")
-    public ResponsePostDTO createPost(@RequestBody RequestPostDTO postDTO, HttpSession session){
+    public ResponsePostDTO createPost(@Valid @RequestBody RequestPostDTO postDTO, HttpSession session){
         long userId = sessionManager.authorizeLogin(session);
         return postService.addNewPost(postDTO, userId );
     }
@@ -75,7 +76,7 @@ public class PostController extends AbstractController {
     }
 
     @PostMapping("posts/filter")
-    public Set<ResponsePostDTO> filter(@RequestBody SearchDTO searchDTO, HttpSession session){
+    public Set<ResponsePostDTO> filter(@RequestBody @Valid SearchDTO searchDTO, HttpSession session){
         sessionManager.authorizeLogin(session);
         try {
             return postService.filter(searchDTO);

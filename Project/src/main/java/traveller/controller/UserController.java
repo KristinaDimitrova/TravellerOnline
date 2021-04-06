@@ -9,6 +9,7 @@ import traveller.service.UserService;
 import traveller.utilities.Validator;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class UserController extends AbstractController{
     private SessionManager sessManager;
 
     @PostMapping(value="/singup")
-    public SignUpUserResponseDTO register(@RequestBody SignupUserDTO dto) {
+    public SignUpUserResponseDTO register(@Valid @RequestBody SignupUserDTO dto) {
         return userService.insertUser(dto);
     }
 
@@ -31,7 +32,7 @@ public class UserController extends AbstractController{
     }
 
     @PostMapping(value="/users/login") //RequestParam АКО СЕ НАМИРА В формуляра за попълване
-    public UserWithoutPasswordDTO logIn(@RequestBody LoginUserDTO loginUserDTO, HttpSession session){
+    public UserWithoutPasswordDTO logIn(@RequestBody @Valid LoginUserDTO loginUserDTO, HttpSession session){
         String password = loginUserDTO.getPassword();
         String username = loginUserDTO.getUsername();
         if(sessManager.isUserLoggedIn(session)){//ако вече е логнат
@@ -56,7 +57,7 @@ public class UserController extends AbstractController{
     }
 
     @PostMapping(value="/users")
-    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody EditDetailsUserDTO requestDTO){
+    public UserWithoutPasswordDTO editProfile(HttpSession session, @RequestBody @Valid EditDetailsUserDTO requestDTO){
         long actorId = sessManager.authorizeLogin(session);
         return userService.changeDetails(actorId, requestDTO);
     }
