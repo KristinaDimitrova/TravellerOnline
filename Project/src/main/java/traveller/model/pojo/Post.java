@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
-@Component
 @NoArgsConstructor
 @Setter
 @Getter
@@ -42,7 +40,7 @@ public class Post {
     private LocationType locationType;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "owner_id")
     private User owner;
 

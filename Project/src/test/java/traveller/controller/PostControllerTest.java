@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -164,7 +165,7 @@ public class PostControllerTest {
     @Test
     public void testFilter() throws Exception {
         when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
-        when(this.postService.filter((SearchDTO) any())).thenReturn(new ArrayList<ResponsePostDTO>());
+        when(this.postService.filter((SearchDTO) any())).thenReturn(new TreeSet<ResponsePostDTO>());
 
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setLocationType("Location Type");

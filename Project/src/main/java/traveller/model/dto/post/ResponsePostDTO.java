@@ -25,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResponsePostDTO {
+public class ResponsePostDTO  {
     private long id;
     private OwnerDTO owner;
     private String latitude;
