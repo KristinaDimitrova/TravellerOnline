@@ -66,6 +66,8 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
+    private UserWithoutPasswordDTO dtoNoPass;
+
     @Test
     public void testLoadUserByUsername() throws UsernameNotFoundException {
         User user = new User();
@@ -90,25 +92,6 @@ public class UserServiceTest {
         when(this.userRepository.findByUsername(anyString())).thenReturn(user);
         assertSame(user, this.userService.loadUserByUsername("janedoe"));
         verify(this.userRepository).findByUsername(anyString());
-    }
-
-    @Test
-    public void testInsertUser() {
-        // TODO: This test is incomplete.
-        //   Reason: No meaningful assertions found.
-        //   To help Diffblue Cover to find assertions, please add getters to the
-        //   class under test that return fields written by the method under test.
-        //   See https://diff.blue/R004
-
-        this.userService.insertUser(new SignupUserDTO());
-    }
-
-    @Test
-    public void testInsertUser2() {
-        SignupUserDTO signupUserDTO = mock(SignupUserDTO.class);
-        when(signupUserDTO.getAge()).thenReturn(1);
-        this.userService.insertUser(signupUserDTO);
-        verify(signupUserDTO).getAge();
     }
 
     @Test
@@ -265,32 +248,6 @@ public class UserServiceTest {
         this.userService.deleteUser(123L);
         verify(this.userRepository).getById(anyLong());
         verify(this.userRepository).delete((User) any());
-    }
-
-    @Test
-    public void testChangeDetails() {
-        User user = new User();
-        user.setLastName("Doe");
-        user.setRole(Role.USER);
-        user.setEmail("jane.doe@example.org");
-        user.setPassword("iloveyou");
-        user.setId(123L);
-        user.setDeleted(true);
-        user.setAge(1);
-        user.setEnabled(true);
-        user.setFirstName("Jane");
-        user.setPosts(new ArrayList<Post>());
-        user.setDislikedPosts(new HashSet<Post>());
-        user.setFollowedUsers(new ArrayList<User>());
-        user.setUsername("janedoe");
-        user.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        user.setLikedPosts(new HashSet<Post>());
-        user.setLikedComment(new HashSet<Comment>());
-        user.setComments(new HashSet<Comment>());
-        user.setFollowers(new HashSet<User>());
-        when(this.userRepository.getById(anyLong())).thenReturn(user);
-        this.userService.changeDetails(123L, new EditDetailsUserDTO());
-        verify(this.userRepository).getById(anyLong());
     }
 
     @Test

@@ -186,7 +186,7 @@ public class StatsDBDao extends AbstractDao implements StatsDAO {
                 long userId = rows.getInt(USER_ID);
                 User user = userRepo.getById(userId);
                 int subscribers = rows.getInt(SUBSCRIBERS);
-                statsProfiles.add(new StatsProfile(user, subscribers)); //todo map
+                statsProfiles.add(new StatsProfile(user, subscribers));
             }
             return statsProfiles;
         } catch(SQLException e){
@@ -204,11 +204,7 @@ public class StatsDBDao extends AbstractDao implements StatsDAO {
             PreparedStatement ps = conn.prepareStatement(sqlQuery);
             ResultSet rows = ps.executeQuery();
             rows.next();
-            StatsSignups stats = new StatsSignups();
-            stats.setMaxAge(maxAge);
-            stats.setMinAge(minAge);
-            stats.setPeriodDays(intervalDays);
-            stats.setNewAccountsCreated(rows.getInt("sum"));
+            StatsSignups stats = new StatsSignups(minAge,maxAge,rows.getInt("sum"),intervalDays);
             return stats;
         } catch(SQLException e){
            log.error(e.getMessage());

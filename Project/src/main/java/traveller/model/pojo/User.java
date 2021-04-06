@@ -76,7 +76,7 @@ public class User implements UserDetails {
     private Set<Post> dislikedPosts = new HashSet<Post>();
             //COMMENTS
     @JsonBackReference
-    @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL })
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private Set<Comment> comments = new HashSet<>();
             //LIKED COMMENTS
     @ManyToMany(mappedBy = "likers", cascade = { CascadeType.ALL })

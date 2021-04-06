@@ -32,26 +32,28 @@ public class MediaControllerTest {
 
     @Test
     public void testGetVideoById() throws Exception {
-        when(this.sessionManager.authorizeLogin(any())).thenReturn(1L);
-        when(this.mediaService.getVideoById(anyLong())).thenReturn("FunnyCats.mp4".getBytes());
+        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+        when(this.mediaService.getVideoById(anyLong())).thenReturn("AAAAAAAA".getBytes());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/video/{id}", 12345678987654321L);
-        initResultAction(requestBuilder);
+        MockMvcBuilders.standaloneSetup(this.mediaController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("video/mp4"))
+                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("AAAAAAAA")));
     }
 
     @Test
-    public void testGetImageById() throws Exception {   // FIXME: 4/3/2021
-        when(this.sessionManager.authorizeLogin(any())).thenReturn(1L);
-        when(this.mediaService.getImageById(anyLong())).thenReturn("FunnyCats.jpg".getBytes());
+    public void testGetImageById() throws Exception {
+        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+        when(this.mediaService.getImageById(anyLong())).thenReturn("mouse".getBytes());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/image/{id}", 12345678987654321L);
-        initResultAction(requestBuilder);
-    }
-
-    private void initResultAction(MockHttpServletRequestBuilder requestBuilder) throws Exception {
-        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.mediaController)
+        MockMvcBuilders.standaloneSetup(this.mediaController)
                 .build()
-                .perform(requestBuilder);
-        actualPerformResult
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.content().contentType("image/jpg"))
+                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("mouse")));
     }
 }
 

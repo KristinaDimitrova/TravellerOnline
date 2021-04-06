@@ -42,7 +42,7 @@ public class MediaController extends AbstractController{
         return mediaService.getVideoById(videoId);
     }
 
-    @GetMapping (value = "/image/{id}", produces =  "image/*")
+    @GetMapping (value = "/image/{id}", produces =  "image/*") // image/* fails the unit test!
     public byte[] getImageById(@PathVariable(name="id") long imageId, HttpSession session){
         sessionManager.authorizeLogin(session);
         return mediaService.getImageById(imageId);

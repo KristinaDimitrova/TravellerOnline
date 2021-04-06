@@ -39,17 +39,17 @@ public class LocationTypeControllerTest {
 
     @Test
     public void testAddLocationType() throws Exception {
-        when(this.sessionManager.authorizeLogin(any())).thenReturn(1L);
+        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
 
         LocationType locationType = new LocationType();
         locationType.setId(123L);
-        locationType.setName("Mountain");
-        locationType.setPosts(new ArrayList<>());
-
-        when(this.locationTypeService.addLocationType(any())).thenReturn(locationType);
+        locationType.setName("Name");
+        locationType.setPosts(new ArrayList<Post>());
+        when(this.locationTypeService.addLocationType((LocationTypeDTO) any())).thenReturn(locationType);
 
         LocationTypeDTO locationTypeDTO = new LocationTypeDTO();
-        locationTypeDTO.setName("Mountain");
+        locationTypeDTO.setId(123L);
+        locationTypeDTO.setName("Name");
         String content = (new ObjectMapper()).writeValueAsString(locationTypeDTO);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/locationTypes")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -59,32 +59,39 @@ public class LocationTypeControllerTest {
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"id\":123,\"name\":\"Mountain\"}")));
+                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"id\":123,\"name\":\"Name\"}")));
     }
 
     @Test
     public void testGetAllLocationTypes() throws Exception {
-        when(this.sessionManager.authorizeLogin(any())).thenReturn(1L);
-
-        LocationType locationType = new LocationType();
-        locationType.setName("Mountain");
-        locationType.setId(123L);
-        ArrayList<LocationType> list = new ArrayList<>();
-        list.add(locationType);
-
-        when(this.locationTypeService.getAllLocationTypes()).thenReturn(list);
+        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+        when(this.locationTypeService.getAllLocationTypes()).thenReturn(new ArrayList<LocationType>());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/locationTypes/all");
         MockMvcBuilders.standaloneSetup(this.locationTypeController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"id\":123,\"name\":\"Mountain\"}")));
+                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
+    }
+
+    @Test
+    public void testGetAllLocationTypes2() throws Exception {
+        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
+        when(this.locationTypeService.getAllLocationTypes()).thenReturn(new ArrayList<LocationType>());
+        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/locationTypes/all");
+        getResult.contentType("Not all who wander are lost");
+        MockMvcBuilders.standaloneSetup(this.locationTypeController)
+                .build()
+                .perform(getResult)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
     }
 
     @Test
     public void testGetById() throws Exception {
-        when(this.sessionManager.authorizeLogin(any())).thenReturn(1L);
+        when(this.sessionManager.authorizeLogin((javax.servlet.http.HttpSession) any())).thenReturn(1L);
 
         LocationType locationType = new LocationType();
         locationType.setId(123L);
@@ -99,6 +106,5 @@ public class LocationTypeControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("{\"id\":123,\"name\":\"Name\"}")));
     }
-
 }
 

@@ -235,7 +235,7 @@ public class PostServiceTest {
         verify(this.postRepository).getPostById(anyLong());
     }
 
-    @Test
+    @Test //KRISI must push changes todo
     public void testFilter() throws SQLException {
         when(this.postDatabaseDAO.filter(anyString(), anyString())).thenReturn(new ArrayList<Post>());
         assertTrue(this.postService.filter(this.searchDTO).isEmpty());
