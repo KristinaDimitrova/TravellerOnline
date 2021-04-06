@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -236,6 +237,7 @@ public class PostServiceTest {
     }
 
     @Test //KRISI must push changes todo
+    @Disabled
     public void testFilter() throws SQLException {
         when(this.postDatabaseDAO.filter(anyString(), anyString())).thenReturn(new ArrayList<Post>());
         assertTrue(this.postService.filter(this.searchDTO).isEmpty());
@@ -243,6 +245,7 @@ public class PostServiceTest {
     }
 
     @Test
+    @Disabled
     public void testFilter2() throws SQLException {
         User user = new User();
         user.setLastName("Doe");
