@@ -24,29 +24,23 @@ public class ScheduledService {
     @Autowired
     private MediaService mediaService;
 
-
-    //@Scheduled(fixedDelay = 1000 * 60 * 3, initialDelay = 1000 * 60 * 1)
-    //@Scheduled(cron = "0 0 1 1 * ?", zone = "Europe/Sofia") //on every first date at 1 am
-    @Scheduled(cron = "10 * * * * ?", zone = "Europe/Sofia")
+    @Scheduled(cron = "0 1 1 * * ?", zone = "Europe/Sofia") //daily at 1:01 am
     public void ScheduledAnalysisTopInfluencers(){
         dao.saveRecordOfMostPopularUsers();
     }
 
     //Cron : second, minute, hour, day of month, month, day(s) of week
-    @Scheduled(cron = "20 0 * * * ?", zone = "Europe/Sofia") //every day at 1:00 AM
-    //@Scheduled(cron = "10 * 1 * * ?", zone = "Europe/Sofia")
+    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Sofia")
     public void ScheduledAnalysisTopPosts(){
         dao.saveRecordOfMostPopularPosts();
     }
 
-    //запази данни за нови потребители за седмицата по възрастова група ->
-    //@Scheduled(cron = "0 0 1 * * MON", zone = "Europe/Sofia") every Monday
-    @Scheduled(cron = "30 * * * * ?", zone = "Europe/Sofia") //every minute
+    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Sofia") //every day at 1 am
     public void ScheduledAnalysisNewSignups(){
         dao.saveRecordSignups();
     }
 
-    @Scheduled(cron = "0 0 1 * * ?", zone = "Europe/Sofia")
+    //@Scheduled(fixedDelay = 1000 * 60 * 999999999, initialDelay = 1000 * 60 * 999999999)
     public void deleteDemonFilesFromDbAndCloud(){
         List<Image> imagesToDelete = imageRepo.getAllByPostIdIsNull();
         for(Image image : imagesToDelete ){

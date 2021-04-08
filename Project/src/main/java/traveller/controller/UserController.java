@@ -10,6 +10,7 @@ import traveller.utilities.Validator;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -112,7 +113,7 @@ public class UserController extends AbstractController{
     }
 
     @GetMapping(value="/users/{id}")
-    public UserWithoutPasswordDTO findById(@PathVariable long id){
+    public UserWithoutPasswordDTO findById(@NotNull @PathVariable long id){
         return userService.findById(id);
     }
 

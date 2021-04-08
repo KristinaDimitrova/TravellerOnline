@@ -25,11 +25,11 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
 
     @Override
     public List<Post> getNewsFeed(long id, int page, int resultsPerPage)  {
-        String sql = "SELECT p.id FROM users AS u\n" +
-                "INNER JOIN posts AS p ON u.id = p.owner_id\n" +
-                "INNER JOIN users_subscribe_users AS usu ON u.id = usu.subscribed_id\n" +
+        String sql = "SELECT p.id FROM users AS u \n" +
+                "INNER JOIN posts AS p ON u.id = p.owner_id \n" +
+                "INNER JOIN users_subscribe_users AS usu ON u.id = usu.subscribed_id \n" +
                 "WHERE subscriber_id = ? \n" +
-                "ORDER BY p.created_at\n" +
+                "ORDER BY p.created_at DESC\n" +
                 "LIMIT ? OFFSET ?";
         try(Connection c = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
             PreparedStatement ps = c.prepareStatement(sql);){
@@ -40,7 +40,6 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
             ArrayList<Long> ids = new ArrayList<>();
             while (rs.next()){
                 long postId = rs.getLong(1);
-                System.out.println(postId);
                 ids.add(postId);
             }
 
@@ -53,7 +52,7 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
     }
 
     @Override
-    public List<Post> filter(String name, String locationType) {
+    public List<Post> filter(String username, String locationType) {
         try( Connection c = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection()){
             StringBuilder sql = new StringBuilder("SELECT p.id FROM posts AS p \n" +
                     "INNER JOIN users AS u \n" +
@@ -63,18 +62,18 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
                     "LEFT OUTER JOIN users_like_posts AS ulp\n" +
                     "ON(p.id=ulp.post_id)");
             PreparedStatement ps;
-            if(name == null && locationType == null){
+            if(username.equals("") && locationType.equals("")){ //neither can be null because of @NotNull
                 throw new BadRequestException("To fetch results, you must first select a filter.");
             }
             else
-            if(locationType == null){
+            if(locationType.equals("")){ //fetches all posts created by the user
                 sql .append("WHERE u.username LIKE ?  \n" +
                         "ORDER BY  p.created_at DESC") ;
                 ps = c.prepareStatement(sql.toString());
-                ps.setString(1, "%"+name+"%");
+                ps.setString(1, "%"+username+"%");
             }
             else
-            if(name == null){
+            if(username.equals("")){ //fetches all posts with the same location tag
                 sql.append("WHERE lt.name LIKE ?\n" +
                         "ORDER BY p.created_at DESC");
                 ps = c.prepareStatement(sql.toString());
@@ -84,17 +83,13 @@ public class PostDatabaseDAO extends AbstractDao implements PostDAO {
                 sql.append("WHERE u.username LIKE ? AND lt.name LIKE ? \n" +
                         "ORDER BY p.created_at DESC") ;
                 ps = c.prepareStatement(sql.toString());
-                ps.setString(1, "%"+name+"%");
+                ps.setString(1, "%"+username+"%");
                 ps.setString(2, "%"+locationType+"%");
             }
             ResultSet rs =  ps.executeQuery();
             ArrayList<Long> ids = new ArrayList<>();
             while (rs.next()){
                 long postId = rs.getLong(1);
-                //if id is null
-                if(postId<1){
-                    continue;
-                }
                 System.out.println(postId);
                 ids.add(postId);
             }

@@ -23,7 +23,7 @@ public class StatsDBDao extends AbstractDao implements StatsDAO {
     //NB query can execute only if there are at least 5 followed users
     private static final int POP_POSTS_RESULTS = 5;
     private static final int POP_USERS_RESULTS = 5;
-    private static final int RECORD_SIGNUPS_INTERVAL_DAYS = 7;
+    private static final int RECORD_SIGNUPS_INTERVAL_DAYS = 1; //NB HAS TO BE 1
     private static final int RECORD_POP_POSTS_INTERVAL_DAYS = 7;
     private static final String COUNT_NEW_USERS = "new_users_count";
     private static final String POST_ID = "post_id";
@@ -35,7 +35,7 @@ public class StatsDBDao extends AbstractDao implements StatsDAO {
     private UserRepository userRepo;
 
     @Override
-    public void saveRecordOfMostPopularPosts(){ //todo periodically
+    public void saveRecordOfMostPopularPosts(){ //scheduler can be flexible
         String sqlQuerySelectTopPosts = "SELECT p.id AS " + POST_ID + ", p.created_at, u.id AS post_owner_id, " +
                 "COUNT(ulp.owner_id) AS likes FROM posts AS p\n" +
                 "INNER JOIN users AS u\n" +
@@ -119,7 +119,7 @@ public class StatsDBDao extends AbstractDao implements StatsDAO {
     }
 
     @Override
-    public void saveRecordSignups() {
+    public void saveRecordSignups() { //scheduler must execute daily
         String sqlQuerySelectNewUsersByAgeGroup =
                 "SELECT COUNT(id) AS " + COUNT_NEW_USERS + ", "+ AGE +" \n" +
                 "FROM users AS u \n" +
@@ -164,7 +164,6 @@ public class StatsDBDao extends AbstractDao implements StatsDAO {
         }
     }
 
-    //метод който връща брой нови регистрации според възрастова група на последователите
     @Override
     public List<StatsProfile> getFavouriteProfilesByAgeGroup(int minRange, int maxRange) {
         String sqlSelectQuery = "SELECT influencers.id AS "+ USER_ID +", COUNT(subER.username) AS "+SUBSCRIBERS+"\n" +
@@ -195,7 +194,7 @@ public class StatsDBDao extends AbstractDao implements StatsDAO {
         }
     }
 
-    @Override
+    @Override  //метод който връща брой нови регистрации според възрастова група на последователите
     public StatsSignups getSignupsCountByAgeRange(int minAge, int maxAge, int intervalDays) {
         String sqlQuery = "SELECT SUM(count_new_users) AS sum FROM new_users_count_by_age \n" +
                 "WHERE age BETWEEN " + minAge + " AND " + maxAge + " \n" +
